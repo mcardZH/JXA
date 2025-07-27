@@ -23,6 +23,21 @@ import { Reminders } from "./core/Reminders";
 import { Safari } from "./core/Safari";
 import { DVDPlayer } from "./core/DvdPlayer";
 import { iTunes } from "./core/ITunes";
+import { AdobeIllustrator } from "./core/AdobeIllustrator";
+import { AdobePhotoshop2025 } from "./core/AdobePhotoshop2025";
+import { Automator } from "./core/Automator";
+import { HapiGo } from "./core/HapiGo";
+import { MicrosoftEdge } from "./core/MicrosoftEdge";
+import { MicrosoftExcel } from "./core/MicrosoftExcel";
+import { MicrosoftPowerPoint } from "./core/MicrosoftPowerPoint";
+import { MicrosoftWord } from "./core/MicrosoftWord";
+import { Music } from "./core/Music";
+import { Preview } from "./core/Preview";
+import { ScriptDebugger } from "./core/ScriptDebugger";
+import { Shortcuts } from "./core/Shortcuts";
+import { SystemInformation } from "./core/SystemInformation";
+import { TickTick } from "./core/TickTick";
+import { VLC } from "./core/VLC";
 
 export = Application;
 export as namespace Application;
@@ -62,6 +77,22 @@ declare function Application(name: "System Events"): App & Application._SystemEv
 declare function Application(name: "Terminal"): App & Application._Terminal;
 declare function Application(name: "TextEdit"): App & Application._TextEdit;
 declare function Application(name: "VoiceOver"): App & Application._VoiceOver;
+declare function Application(name: "Adobe Illustrator"): App & Application._AdobeIllustrator;
+declare function Application(name: "Adobe Photoshop 2025"): App & Application._AdobePhotoshop2025;
+declare function Application(name: "Automator"): App & Application._Automator;
+declare function Application(name: "HapiGo"): App & Application._HapiGo;
+declare function Application(name: "Microsoft Edge"): App & Application._MicrosoftEdge;
+declare function Application(name: "Microsoft Excel"): App & Application._MicrosoftExcel;
+declare function Application(name: "Microsoft PowerPoint"): App & Application._MicrosoftPowerPoint;
+declare function Application(name: "Microsoft Word"): App & Application._MicrosoftWord;
+declare function Application(name: "Music"): App & Application._Music;
+declare function Application(name: "Preview"): App & Application._Preview;
+declare function Application(name: "Script Debugger"): App & Application._ScriptDebugger;
+declare function Application(name: "Shortcuts"): App & Application._Shortcuts;
+declare function Application(name: "System Information"): App & Application._SystemInformation;
+declare function Application(name: "TickTick"): App & Application._TickTick;
+declare function Application(name: "VLC"): App & Application._VLC;
+
 /**
  * process ID
  */
@@ -145,6 +176,36 @@ declare namespace Application {
 
     export interface _VoiceOver extends VoiceOver {
     }
+
+    export interface _AdobeIllustrator extends AdobeIllustrator { }
+
+    export interface _AdobePhotoshop2025 extends AdobePhotoshop2025 { }
+
+    export interface _Automator extends Automator { }
+
+    export interface _HapiGo extends HapiGo { }
+
+    export interface _MicrosoftEdge extends MicrosoftEdge { }
+
+    export interface _MicrosoftExcel extends MicrosoftExcel { }
+
+    export interface _MicrosoftPowerPoint extends MicrosoftPowerPoint { }
+
+    export interface _MicrosoftWord extends MicrosoftWord { }
+
+    export interface _Music extends Music { }
+
+    export interface _Preview extends Preview { }
+
+    export interface _ScriptDebugger extends ScriptDebugger { }
+
+    export interface _Shortcuts extends Shortcuts { }
+
+    export interface _SystemInformation extends SystemInformation { }
+
+    export interface _TickTick extends TickTick { }
+
+    export interface _VLC extends VLC { }
 
     // Any Value
     export interface AnyValue {

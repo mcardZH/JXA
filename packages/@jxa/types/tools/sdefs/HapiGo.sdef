@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+
+<dictionary title="HapiGo Terminology">
+    <suite name="HapiGo Suite" code="ScHa" description="HapiGo Apple Script suite.">
+        
+        <command name="search" code="HaSrhApp" description="search in HapiGo">
+            <cocoa class="HapigoScriptCommandHandler"/>
+            <direct-parameter description="search app/file/clipboard in HapiGo. If the search mode of HapiGo is mix, the command &quot;search app&quot; is equals to &quot;search file&quot;." type="specifier"/>
+            <parameter name="app" code="sapp" description="the app name to search" type="text" optional="yes">
+              <cocoa key="app"/>
+            </parameter>
+            <parameter name="file" code="sfil" description="the file name to search" type="text" optional="yes">
+              <cocoa key="file"/>
+            </parameter>
+            <parameter name="clipboard" code="clib" description="the keyword to search" type="text" optional="yes">
+              <cocoa key="clipboard"/>
+            </parameter>
+        </command>
+        
+        <command name="translate" code="HaTslate" description="translate in HapiGo">
+            <cocoa class="HapigoScriptCommandHandler"/>
+            <direct-parameter description="any text needs to translate" type="text"/>
+        </command>
+        
+        <command name="snippet" code="HaSnipet" description="run HapiGo snippet">
+            <cocoa class="HapigoScriptCommandHandler"/>
+            <direct-parameter description="run HapiGo snippet by uuid" type="text"/>
+        </command>
+        
+    </suite>
+</dictionary>

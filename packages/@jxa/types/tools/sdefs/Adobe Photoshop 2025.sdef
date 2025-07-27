@@ -1,0 +1,2567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary>
+	<suite name="AdobeScriptAutomation" code="adSU" description="Adobe Photoshop script execution menu">
+		<command name="$$$/AETE/Scripts=Scripts" code="adSUdJsc" description="Photoshop scripting support plugin">
+			<direct-parameter type="#ImR" optional="yes"/>
+			<parameter name="$$$/JavaScript/Name=Name" code="jsNm" type="text" description="The JavaScript name to execute"/>
+			<parameter name="$$$/JavaScript/File=File" code="jsCt" type="text" description="The JavaScript file to execute"/>
+			<parameter name="$$$/JavaScript/Text=Text" code="jsTx" type="text" description="The JavaScript text to execute"/>
+			<parameter name="$$$/JavaScript/Debugging=Debugging" code="XMde" type="boolean" description="should the javascript be executed in debug mode?"/>
+			<parameter name="$$$/JavaScript/Message=Message" code="Msge" type="text" description="the JavaScript parameters"/>
+		</command>
+		<enumeration name="dbex" code="dbex">
+			<enumerator name="never show debugger" code="hnsd" description="never show debugger"/>
+			<enumerator name="show on error" code="hdoe" description="show on error"/>
+			<enumerator name="show before running" code="hbr " description="show before running"/>
+		</enumeration>
+	</suite>
+	<suite name="Core Suite" code="PsCS" description="Suite that applies to all applications">
+		<command name="count" code="corecnte" description="Return the number of elements of a particular class within an object">
+			<direct-parameter type="specifier" description="the object whose elements are to be counted"/>
+			<parameter name="each" code="kocl" type="type" description="the class of the elements to be counted."/>
+			<result type="integer" description="the number of elements"/>
+		</command>
+		<command name="delete" code="coredelo" description="Remove an element from an object">
+			<direct-parameter type="specifier" description="the element to delete"/>
+		</command>
+		<command name="duplicate" code="coreclon" description="Duplicate one or more object(s)">
+			<direct-parameter type="specifier" description="the object(s) to duplicate"/>
+			<parameter name="to" code="insh" type="location specifier" optional="yes" description="the new location for the object(s)"/>
+			<parameter name="with properties" code="prdt" type="record" optional="yes" description="new values for the properties of the duplicated element"/>
+			<result type="specifier" description="to the duplicated object(s)"/>
+		</command>
+		<command name="exists" code="coredoex" description="Verify if an object exists">
+			<direct-parameter type="specifier" description="the object in question"/>
+			<result type="boolean" description="true if it exists, false if not"/>
+		</command>
+		<command name="make" code="corecrel" description="Make a new element">
+			<parameter name="new" code="kocl" type="type" description="the class of the new element."/>
+			<parameter name="at" code="insh" type="location specifier" description="the location at which to insert the element"/>
+			<parameter name="with data" code="data" type="any" optional="yes" description="the initial data for the element"/>
+			<parameter name="with properties" code="prdt" type="record" optional="yes" description="the initial values for the properties of the element"/>
+			<result type="specifier" description="to the new object(s)"/>
+		</command>
+		<command name="move" code="coremove" description="Move object(s) to a new location">
+			<direct-parameter type="specifier" description="the object(s) to move"/>
+			<parameter name="to" code="insh" type="location specifier" description="the new location for the object(s)"/>
+			<result type="specifier" description="to the object(s) after they have been moved"/>
+		</command>
+		<command name="close" code="PsCSclos" description="close the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="saving" code="savo" type="savo" optional="yes" description="specifies whether changes should be saved before closing ( default: ask )"/>
+		</command>
+		<command name="duplicate" code="PsCSclon" description="duplicate this document without parameters">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<result type="document" description="duplicate this document without parameters"/>
+		</command>
+		<command name="open" code="PsCSodoc" description="open the specified document file(s)">
+			<direct-parameter type="any" description="the file(s) to be opened"/>
+			<parameter name="as" code="fltp" type="OpAs" optional="yes" description="open document as the specified type"/>
+			<parameter name="with options" code="FmOp" type="open options" optional="yes" description="options for the file type specified"/>
+			<parameter name="showing dialogs" code="ShwD" type="e050" optional="yes" description="should a dialog be displayed when a file is opened"/>
+			<parameter name="smart object" code="asso" type="boolean" optional="yes" description="create a smart object around the document being opened ( default: false )"/>
+		</command>
+		<command name="print" code="PsCSpdoc" description="print the specified object(s)">
+			<direct-parameter type="any" description="the file(s) or document(s) to be printed"/>
+			<parameter name="source space" code="SrSp" type="e945" optional="yes" description="color space for source ( default: document space )"/>
+			<parameter name="print space" code="PrSp" type="text" optional="yes" description="color space for printer. Can be nothing (meaning same as source) or a string specifying a specific color profile"/>
+			<parameter name="intent" code="Itnt" type="e130" optional="yes" description="if the print space is different from the source space, this argument will be used as the color conversion intent ( default: relative colorimetric )"/>
+			<parameter name="blackpoint compensation" code="BpCp" type="boolean" optional="yes" description="if the print space is different from the source space, this argument indicates if the color conversion should use black point compensation ( default: true )"/>
+		</command>
+		<command name="quit" code="PsCSquit" description="quit the application"/>
+		<command name="save" code="PsCSsave" description="save the specified document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="in" code="kfil" type="file specification" optional="yes" description="the file to save the document in"/>
+			<parameter name="as" code="fltp" type="SvFm" optional="yes" description="The file type to save the document as.  Note: Wireless Bitmap format not supported, for that format, use export and save for web."/>
+			<parameter name="copying" code="SaCp" type="boolean" optional="yes" description="save as copy leaving original open. Unsaved files cannot be saved as copy"/>
+			<parameter name="appending" code="DcXt" type="e300" optional="yes" description="append an extension to the document name"/>
+			<parameter name="with options" code="FmOp" type="save options" optional="yes" description="options for the file type specified"/>
+			<result type="document" description="save the specified document"/>
+		</command>
+		<class name="application" code="capp" description="The Adobe Photoshop application">
+			<element type="document"/>
+			<element type="font"/>
+			<element type="notifier"/>
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="background color" code="BgCr" type="color value"/>
+			<property name="build" code="Bild" type="text" access="r" description="the build number of Adobe Photoshop application"/>
+			<property name="color settings" code="Cset" type="any" description="name of selected color settings&apos; set"/>
+			<property name="current document" code="pADc" type="document" description="the frontmost document"/>
+			<property name="current tool" code="cTol" type="text" description="name of the current tool"/>
+			<property name="display dialogs" code="AUiL" type="e050" description="controls whether or not Photoshop displays dialogs"/>
+			<property name="foreground color" code="FgCr" type="color value"/>
+			<property name="free memory" code="pFMM" type="real" access="r" description="the amount of unused memory available to Adobe Photoshop"/>
+			<property name="frontmost" code="pFmt" type="boolean" access="r" description="is Photoshop the frontmost application?"/>
+			<property name="locale" code="lcal" type="text" access="r" description="language locale of application"/>
+			<property name="macintosh file types" code="mtft" access="r" description="list of file image types Photoshop can open">
+				<type type="text" list="yes"/>
+			</property>
+			<property name="name" code="pnam" type="text" access="r" description="the application&apos;s name"/>
+			<property name="notifiers enabled" code="EN06" type="boolean" description="enable or disable all notifiers"/>
+			<property name="preferences folder" code="prfl" type="alias" access="r" description="full path to the preferences folder"/>
+			<property name="recent files" code="rcfl" access="r" description="files in the recent file list">
+				<type type="file specification" list="yes"/>
+			</property>
+			<property name="scripting build date" code="sbld" type="text" access="r" description="the build date of the scripting interface"/>
+			<property name="scripting version" code="pSvs" type="text" access="r" description="the version of the Scripting interface"/>
+			<property name="settings" code="pPrf" type="settings-object" access="r" description="preference settings"/>
+			<property name="system information" code="SysI" type="text" access="r" description="system information of the host application and machine"/>
+			<property name="version" code="vers" type="text" access="r" description="the version of Adobe Photoshop application"/>
+			<property name="windows file types" code="wnft" access="r" description="list of file image extensions Photoshop can open">
+				<type type="text" list="yes"/>
+			</property>
+		</class>
+		<class name="document" code="docu" description="A document" plural="documents">
+			<element type="art layer"/>
+			<element type="channel"/>
+			<element type="color sampler"/>
+			<element type="count item"/>
+			<element type="history state"/>
+			<element type="layer comp"/>
+			<element type="layer"/>
+			<element type="layer set"/>
+			<element type="path item"/>
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="background layer" code="DbLr" type="art layer" access="r" description="The background layer for the document. Only valid for documents that have a background layer"/>
+			<property name="bits per channel" code="DBch" type="e815" description="number of bits per channel"/>
+			<property name="color profile kind" code="DcpT" type="e090" description="Type of color profile management for document.  Note: If you want to set a custom color profile, do not set a value for color profile kind; rather, set the appropriate color profile name."/>
+			<property name="color profile name" code="DcpN" type="text" description="Name of color profile for document. Valid when no value is specified for color profile kind (to indicate a custom color profile)."/>
+			<property name="component channels" code="CCps" access="r" description="all color component channels for this document">
+				<type type="channel" list="yes"/>
+			</property>
+			<property name="current channels" code="DCnl" description="selected channels for document">
+				<type type="channel" list="yes"/>
+			</property>
+			<property name="current history brush source" code="DCbr" type="history state" description="the current history state to use with the history brush for this document"/>
+			<property name="current history state" code="DChs" type="history state" description="the current history state for this document"/>
+			<property name="current layer" code="crLr" type="layer" description="selected layer for document"/>
+			<property name="file path" code="Dpth" type="alias" access="r" description="full path name of document"/>
+			<property name="height" code="Hght" type="real" access="r" description="height of document (unit value)"/>
+			<property name="histogram" code="Hist" access="r" description="a histogram of values for the composite document (only for RGB, CMYK and &apos;Indexed colors&apos; documents)">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="id" code="ID  " type="integer" access="r" description="the unique ID of this document"/>
+			<property name="info" code="Dinf" type="info-object" access="r" description="document information"/>
+			<property name="initial fill" code="DiFl" type="e110" access="r" description="initial fill of the document. Only valid when used as an option with the &apos;make new document&apos; command"/>
+			<property name="managed" code="dMgd" type="boolean" access="r" description="is the document a workgroup document?"/>
+			<property name="measurement scale" code="cMSc" type="measurement scale" access="r" description="The measurement scale of the document"/>
+			<property name="mode" code="OMde" type="e080" access="r" description="document mode"/>
+			<property name="modified" code="Dmdf" type="boolean" access="r" description="has the document been modified since last save?"/>
+			<property name="name" code="pnam" type="text" access="r" description="the document&apos;s name"/>
+			<property name="pixel aspect ratio" code="Di26" type="real" description="the pixel aspect ration of the document"/>
+			<property name="quick mask mode" code="QMMd" type="boolean" description="is the document in the quick mask mode?"/>
+			<property name="resolution" code="ResL" type="real" access="r" description="the resolution of the document (in pixels per inch)"/>
+			<property name="selection" code="sele" type="selection-object" access="r" description="the document&apos;s selection"/>
+			<property name="width" code="Wdth" type="real" access="r" description="width of document (unit value)"/>
+			<property name="XMP metadata" code="cXMd" type="XMP metadata" access="r" description="XMP metadata associated with the document"/>
+		</class>
+		<enumeration name="e815" code="e815">
+			<enumerator name="eight" code="Eigt"/>
+			<enumerator name="one" code="One "/>
+			<enumerator name="sixteen" code="STen"/>
+			<enumerator name="thirty two" code="Tty2"/>
+		</enumeration>
+	</suite>
+	<suite name="Photoshop Suite" code="8BIM" description="Scripting commands and classes for Adobe Photoshop">
+		<command name="Photoshop open dialog" code="8BIMpsop" description="use the Photoshop open dialog to select files">
+			<result description="use the Photoshop open dialog to select files">
+				<type type="file specification" list="yes"/>
+			</result>
+		</command>
+		<command name="apply" code="8BIMPG01" description="apply the layer comp to the document">
+			<direct-parameter type="layer comp" description="the layer comp object or objects to be operated upon"/>
+		</command>
+		<command name="apply layer style" code="8BIMApLs">
+			<direct-parameter type="art layer" description="the art layer object or objects to be operated upon"/>
+			<parameter name="using" code="Usng" type="text" description="name of the layer style to apply"/>
+		</command>
+		<command name="auto count" code="8BIMCT05" description="automatically counts the objects in an image">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="from" code="from" type="channel" description="channel to use for counting"/>
+			<parameter name="threshold" code="Thld" type="integer" description="threshold to use for counting (range: 0-255) ( 0 - 255 )"/>
+		</command>
+		<command name="batch" code="8BIMBT01" description="run the batch automation routine">
+			<direct-parameter type="text" description="the name of the action to play (note that the case of letters in the Action name is important and must match the case of the name in the Actions palette)"/>
+			<parameter name="from files" code="PDF2" description="list of input files to operate on">
+				<type type="alias" list="yes"/>
+			</parameter>
+			<parameter name="from" code="from" type="text" description="the name of the action set containing the action being played (note that the case of letters in the Action Set name is important and must match the case of the name in the Actions palette)"/>
+			<parameter name="with options" code="FmOp" type="batch options" optional="yes" description="options for Batch"/>
+			<result type="text" description="run the batch automation routine"/>
+		</command>
+		<command name="change mode" code="8BIMChCs" description="change the mode of the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="to" code="to  " type="e089" description="name of mode to change to"/>
+			<parameter name="with options" code="FmOp" type="change mode options" optional="yes" description="options for changing the mode"/>
+		</command>
+		<command name="contract" code="8BIMSCtr" description="contracts the selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="by" code="by  " type="real" description="distance to contract the selection by (unit value)"/>
+		</command>
+		<command name="convert" code="8BIMCvPr" description="convert the document from using one color profile to using an other">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="to profile" code="DsPf" type="text" description="name of color profile to convert to. Either a string specifying a specific color profile or &apos;Working RGB&apos;, &apos;Working CMYK&apos;, &apos;Working Gray&apos;, &apos;Lab Color&apos; meaning one of the working color spaces or Lab color"/>
+			<parameter name="intent" code="Itnt" type="e130" description="conversion intent"/>
+			<parameter name="blackpoint compensation" code="BpCp" type="boolean" optional="yes" description="use black point compensation?"/>
+			<parameter name="dithering" code="pDtr" type="boolean" optional="yes" description="use dither? ( default: true )"/>
+		</command>
+		<command name="convert to shape" code="8BIMCv2s" description="converts the text object and its containing layer to a fill layer with the text changed to a clipping path">
+			<direct-parameter type="text-object" description="the text-object object or objects to be operated upon"/>
+		</command>
+		<command name="create PDF presentation" code="8BIMPDF1" description="create a PDF presentation file">
+			<parameter name="from files" code="PDF2" description="list of input files to include in the output">
+				<type type="alias" list="yes"/>
+			</parameter>
+			<parameter name="to file" code="PDF3" type="file specification" description="location of the output file"/>
+			<parameter name="with options" code="FmOp" type="presentation options" optional="yes" description="options for the PDF presentation"/>
+			<result type="text" description="create a PDF presentation file"/>
+		</command>
+		<command name="create contact sheet" code="8BIMCTSH" description="create a contact sheet from multiple files">
+			<parameter name="from files" code="PDF2" description="list of input files to include">
+				<type type="alias" list="yes"/>
+			</parameter>
+			<parameter name="with options" code="FmOp" type="contact sheet options" optional="yes" description="options for Contact Sheet"/>
+			<result type="text" description="create a contact sheet from multiple files"/>
+		</command>
+		<command name="create photo gallery" code="8BIMwwpg" description="Creates a web photo gallery">
+			<parameter name="from folder" code="PG35" type="any" description="folder to process or an array of files to process"/>
+			<parameter name="to folder" code="PG36" type="alias" description="location for output files"/>
+			<parameter name="with options" code="FmOp" type="gallery options" optional="yes" description="options for the web photo gallery"/>
+			<result type="text" description="Creates a web photo gallery"/>
+		</command>
+		<command name="create photo merge" code="8BIMptmg" description="DEPRECATED. Merges multiple files into one, user interaction required.">
+			<parameter name="from files" code="PDF2" description="list of input files to include">
+				<type type="alias" list="yes"/>
+			</parameter>
+			<result type="text" description="DEPRECATED. Merges multiple files into one, user interaction required."/>
+		</command>
+		<command name="create picture package" code="8BIMPTPK" description="create a picture package from multiple files">
+			<parameter name="from files" code="PDF2" description="list of input files to include">
+				<type type="alias" list="yes"/>
+			</parameter>
+			<parameter name="with options" code="FmOp" type="picture package options" optional="yes" description="options for Picture Package"/>
+			<result type="text" description="create a picture package from multiple files"/>
+		</command>
+		<command name="create work path" code="8BIMCWpt" description="creates a work path based on the text object">
+			<direct-parameter type="text-object" description="the text-object object or objects to be operated upon"/>
+		</command>
+		<command name="crop" code="8BIMCrop" description="crop the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="bounds" code="Bnds" type="list" description="area to crop (unit value)"/>
+			<parameter name="angle" code="Angl" type="real" optional="yes" description="angle of cropping bounds ( default: 0.0 )"/>
+			<parameter name="width" code="Wdth" type="real" optional="yes" description="width of resulting document (unit value)"/>
+			<parameter name="height" code="Hght" type="real" optional="yes" description="height of resulting document (unit value)"/>
+		</command>
+		<command name="deselect" code="8BIMDslt">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+		</command>
+		<command name="doc duplicate" code="8BIMdcdu" description="duplicate this document with parameters">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="name" code="pnam" type="text" optional="yes" description="name for the new document"/>
+			<parameter name="merge layers only" code="MLON" type="boolean" optional="yes" description="duplicate merged layers only"/>
+			<result type="document" description="duplicate this document with parameters"/>
+		</command>
+		<command name="expand" code="8BIMXpnd" description="expand selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="by" code="by  " type="real" description="distance to expand the selection by (unit value)"/>
+		</command>
+		<command name="export" code="8BIMExpr">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="in" code="kfil" type="file specification" description="the file to export to"/>
+			<parameter name="as" code="fltp" type="e640" optional="yes" description="the type of export ( default: Illustrator paths )"/>
+			<parameter name="with options" code="FmOp" type="export options" optional="yes" description="options for the export type specified"/>
+		</command>
+		<command name="feather" code="8BIMFthr" description="feather edges of selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="by" code="by  " type="real" description="amount to feather the edge by (unit value)"/>
+		</command>
+		<command name="feature enabled" code="8BIMften" description="is the feature with the given name enabled?">
+			<parameter name="name" code="pnam" type="text" description="name of the feature"/>
+			<result type="boolean" description="is the feature with the given name enabled?"/>
+		</command>
+		<command name="fill" code="8BIMFill" description="fills the selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="with contents" code="FCnt" type="any" description="a color or a history state"/>
+			<parameter name="blend mode" code="BlMd" type="e925" optional="yes" description="( default: normal )"/>
+			<parameter name="opacity" code="Opct" type="integer" optional="yes" description="( default: 100 )"/>
+			<parameter name="preserving transparency" code="KpTr" type="boolean" optional="yes"/>
+		</command>
+		<command name="flatten" code="8BIMFltn" description="Flattens all visible layers in the document.">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+		</command>
+		<command name="flip canvas" code="8BIMFlCv" description="flip the canvas horizontally or vertically">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="direction" code="Drtn" type="e140" description="which way to flip the canvas"/>
+		</command>
+		<command name="grow" code="8BIMGrow" description="grow selection to include all adjacent pixels falling within the specified tolerance range">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="tolerance" code="TlRc" type="integer" description="( 0 - 255 )"/>
+			<parameter name="antialiasing" code="UsAA" type="boolean"/>
+		</command>
+		<command name="import annotations" code="8BIMIpAn" description="import annotations into the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="from" code="from" type="alias" description="document to import annotations from"/>
+		</command>
+		<command name="invert" code="8BIMIvSl" description="invert the selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+		</command>
+		<command name="link" code="8BIMlkTo" description="link the layer with another layer">
+			<direct-parameter type="layer" description="the layer object or objects to be operated upon"/>
+			<parameter name="with" code="with" type="layer" description="layer to link to"/>
+		</command>
+		<command name="load" code="8BIMLdSl" description="load the selection from a channel">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="from" code="from" type="channel" description="the channel to load the selection from"/>
+			<parameter name="combination type" code="STpe" type="e630" optional="yes" description="how to combine the channel contents with the existing selection ( default: replaced )"/>
+			<parameter name="inverting" code="iVrt" type="boolean" optional="yes" description="select the inverse of the channel contents? ( default: false )"/>
+		</command>
+		<command name="make work path" code="8BIMPT16" description="make this selection item the work path for this document">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="tolerance" code="TlRc" type="real" optional="yes" description="tolerance in pixels"/>
+		</command>
+		<command name="merge" code="8BIMMgLZ" description="Merges an art layer or layer set into the layer below, or merges a spot channel into the component channels. Merging a layer or layer set returns a reference to the resulting layer. Merging a channel does not return any value.">
+			<direct-parameter type="channel" description="the channel object or objects to be operated upon"/>
+		</command>
+		<command name="merge visible layers" code="8BIMMvsb" description="flatten all visible layers in the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+		</command>
+		<command name="purge" code="8BIMPurg" description="purges one or more caches">
+			<direct-parameter type="e150" description="what to purge"/>
+		</command>
+		<command name="rasterize" code="8BIMRstr">
+			<direct-parameter type="art layer" description="the art layer object or objects to be operated upon"/>
+			<parameter name="affecting" code="RzTg" type="e510" description="what to rasterize"/>
+		</command>
+		<command name="recapture" code="8BIMPG02" description="recapture the current layer state(s) for this layer comp">
+			<direct-parameter type="layer comp" description="the layer comp object or objects to be operated upon"/>
+		</command>
+		<command name="record measurements" code="8BIMME04" description="record measurements of document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="source" code="Di12" type="ME00" optional="yes" description="source of the measurements to record"/>
+			<parameter name="data points" code="ME05" optional="yes" description="array of identifiers of data points to record.  Any data points not appropriate for the specified source will be ignored">
+				<type type="text" list="yes"/>
+			</parameter>
+		</command>
+		<command name="refresh" code="8BIMRfsh" description="pause the script until the application refreshes"/>
+		<command name="reset from comp" code="8BIMPG62" description="reset the layer comp state to the document state">
+			<direct-parameter type="layer comp" description="the layer comp object or objects to be operated upon"/>
+		</command>
+		<command name="resize canvas" code="8BIMRzCv" description="change the size of the canvas">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="width" code="Wdth" type="real" optional="yes" description="desired width of canvas (unit value)"/>
+			<parameter name="height" code="Hght" type="real" optional="yes" description="desired height of canvas (unit value)"/>
+			<parameter name="anchor position" code="Achr" type="e160" optional="yes" description="anchor to resize around ( default: middle center )"/>
+		</command>
+		<command name="resize image" code="8BIMRzIm" description="change the size of the image">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="width" code="Wdth" type="real" optional="yes" description="desired width of image (unit value)"/>
+			<parameter name="height" code="Hght" type="real" optional="yes" description="desired height of image (unit value)"/>
+			<parameter name="resolution" code="ResL" type="real" optional="yes" description="(in pixels per inch)"/>
+			<parameter name="resample method" code="RzMt" type="e175" optional="yes" description="what method should be used for resampling pixels ( default: bicubic )"/>
+			<parameter name="amount" code="Amnt" type="integer" optional="yes" description="amount of noise value when using preserve details (range: 0 - 100) ( 0 - 100; default: 0 )"/>
+		</command>
+		<command name="reveal all" code="8BIMRvAl" description="expand document to show clipped sections">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+		</command>
+		<command name="rotate" code="8BIMRota">
+			<direct-parameter type="layer" description="the layer object or objects to be operated upon"/>
+			<parameter name="angle" code="Angl" type="real"/>
+			<parameter name="anchor position" code="Achr" type="e160" optional="yes" description="point to rotate about ( default: middle center )"/>
+		</command>
+		<command name="rotate boundary" code="8BIMRotB" description="rotates the boundary of selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="angle" code="Angl" type="real"/>
+			<parameter name="anchor position" code="Achr" type="e160" optional="yes" description="point to rotate about ( default: middle center )"/>
+		</command>
+		<command name="rotate canvas" code="8BIMRtCv" description="rotate canvas of document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="angle" code="Angl" type="real" description="number of degrees to rotate. A positive angle will rotate the canvas clockwise; a negative value will rotate the canvas counter-clockwise"/>
+		</command>
+		<command name="scale" code="8BIMScle">
+			<direct-parameter type="layer" description="the layer object or objects to be operated upon"/>
+			<parameter name="horizontal scale" code="HrSc" type="real" optional="yes" description="percentage ( default: 100.0 )"/>
+			<parameter name="vertical scale" code="VtSc" type="real" optional="yes" description="percentage ( default: 100.0 )"/>
+			<parameter name="anchor position" code="Achr" type="e160" optional="yes" description="point to rotate about ( default: middle center )"/>
+		</command>
+		<command name="scale boundary" code="8BIMScBd" description="scale the boundary of selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="horizontal scale" code="HrSc" type="real" optional="yes" description="percentage ( default: 100.0 )"/>
+			<parameter name="vertical scale" code="VtSc" type="real" optional="yes" description="percentage ( default: 100.0 )"/>
+			<parameter name="anchor position" code="Achr" type="e160" optional="yes" description="point to scale about ( default: middle center )"/>
+		</command>
+		<command name="select" code="8BIMslct" description="change the selection">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="region" code="SRgn" description="list of corners of the selection (in pixels)">
+				<type type="any" list="yes"/>
+			</parameter>
+			<parameter name="combination type" code="STpe" type="e630" optional="yes" description="how to combine the new selection with the existing selection ( default: replaced )"/>
+			<parameter name="feather amount" code="FAmt" type="real" optional="yes" description="feather amount ( default: 0.0 )"/>
+			<parameter name="antialiasing" code="UsAA" type="boolean" optional="yes" description="whether to use antialiasing ( default: true )"/>
+		</command>
+		<command name="select all" code="8BIMScAl" description="select the entire image">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+		</command>
+		<command name="select border" code="8BIMBrdr" description="select the border of the selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="width" code="Wdth" type="real" description="width of border selection (unit value)"/>
+		</command>
+		<command name="similar" code="8BIMSmlr" description="grow selection to include pixels throughout the image falling within the tolerance range">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="tolerance" code="TlRc" type="integer"/>
+			<parameter name="antialiasing" code="UsAA" type="boolean"/>
+		</command>
+		<command name="smooth" code="8BIMPSth">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="radius" code="Radi" type="integer" description="sample radius in pixels ( 0 - 100 )"/>
+		</command>
+		<command name="split channels" code="8BIMSpCh" description="split channels of the document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<result description="split channels of the document">
+				<type type="document" list="yes"/>
+			</result>
+		</command>
+		<command name="store" code="8BIMSvSl" description="save the selection as a channel">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="into" code="into" type="channel" description="the channel to save the selection to"/>
+			<parameter name="combination type" code="STpe" type="e630" optional="yes" description="how to add the selection to the existing contents of the channel ( default: replaced )"/>
+		</command>
+		<command name="stroke" code="8BIMStke" description="strokes the selection">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="using color" code="UsCr" type="any" description="color to stroke selection with"/>
+			<parameter name="width" code="Wdth" type="integer" description="width of stroke (in pixels)"/>
+			<parameter name="location" code="Lton" type="e920" optional="yes" description="( default: center )"/>
+			<parameter name="blend mode" code="BlMd" type="e925" optional="yes" description="( default: normal )"/>
+			<parameter name="opacity" code="Opct" type="integer" optional="yes" description="( default: 100 )"/>
+			<parameter name="preserving transparency" code="KpTr" type="boolean" optional="yes"/>
+		</command>
+		<command name="translate" code="8BIMMvPs" description="moves the position relative to its current position">
+			<direct-parameter type="layer" description="the layer object or objects to be operated upon"/>
+			<parameter name="delta x" code="OfZX" type="real" optional="yes" description="horizontal transformation (unit value)"/>
+			<parameter name="delta y" code="OfZY" type="real" optional="yes" description="vertical transformation (unit value)"/>
+		</command>
+		<command name="translate boundary" code="8BIMMvBd" description="moves the boundary of selection relative to its current position">
+			<direct-parameter type="selection-object" description="the selection-object object or objects to be operated upon"/>
+			<parameter name="delta x" code="OfZX" type="real" optional="yes" description="horizontal transformation (unit value)"/>
+			<parameter name="delta y" code="OfZY" type="real" optional="yes" description="vertical transformation (unit value)"/>
+		</command>
+		<command name="trap" code="8BIMTrap" description="apply trap to a CMYK document">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="width" code="Wdth" type="integer" description="trap width in pixels"/>
+		</command>
+		<command name="trim" code="8BIMTrim">
+			<direct-parameter type="document" description="the document object or objects to be operated upon"/>
+			<parameter name="basing trim on" code="TrPx" type="e350" optional="yes" description="color or type of pixels to base trim on ( default: top left pixel )"/>
+			<parameter name="top trim" code="TrTp" type="boolean" optional="yes" description="trim away top of document ( default: true )"/>
+			<parameter name="left trim" code="TrLf" type="boolean" optional="yes" description="trim away left of document ( default: true )"/>
+			<parameter name="bottom trim" code="TrBt" type="boolean" optional="yes" description="trim away bottom of document ( default: true )"/>
+			<parameter name="right trim" code="TrRt" type="boolean" optional="yes" description="trim away right of document ( default: true )"/>
+		</command>
+		<command name="unlink" code="8BIMUlnk" description="unlink the layer">
+			<direct-parameter type="layer" description="the layer object or objects to be operated upon"/>
+		</command>
+		<class name="art layer" code="cCLr" description="any layer that can contain data" inherits="layer" plural="art layers">
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="background layer" code="DbLr" type="boolean" description="is the layer a background layer?"/>
+			<property name="fill opacity" code="FOpc" type="real" description="the interior opacity of the layer (between 0.0 and 100.0)"/>
+			<property name="grouped" code="pGwP" type="boolean" description="is the layer grouped with the layer below?. Photoshop CS changed the menu name to Create/Release Clipping Mask"/>
+			<property name="kind" code="Kind" type="e950" description="to create a text layer set this property to &apos;text layer&apos; on an empty art layer of type &apos;normal&apos;"/>
+			<property name="pixels locked" code="PxLc" type="boolean"/>
+			<property name="position locked" code="PtLc" type="boolean"/>
+			<property name="text object" code="pLrT" type="text-object" access="r" description="the text that is associated with the art layer. Only valid for art layers whose &apos;kind&apos; is a text layer"/>
+			<property name="transparent pixels locked" code="TpLc" type="boolean"/>
+		</class>
+		<class name="batch options" code="BT02" description="options for the Batch command">
+			<property name="destination" code="BT06" type="BT14" description="final destination of processed files ( default: none )"/>
+			<property name="destination folder" code="BT37" type="alias" description="folder location when using destination to a folder"/>
+			<property name="error file" code="BT13" type="alias" description="file to log errors encountered, leave this blank to stop for errors"/>
+			<property name="file naming" code="BT08" description="list of file naming options 6 max.">
+				<type type="BT17" list="yes"/>
+			</property>
+			<property name="macintosh compatible" code="BT11" type="boolean" description="make final file name Macintosh compatible ( default: true )"/>
+			<property name="override open" code="BT03" type="boolean" description="override action open commands ( default: false )"/>
+			<property name="override save" code="BT07" type="boolean" description="override save as action steps with destination specified here ( default: false )"/>
+			<property name="startingserial" code="BT09" type="integer" description="starting serial number to use ( default: 1 )"/>
+			<property name="suppress open" code="BT04" type="boolean" description="suppress file open options dialogs ( default: false )"/>
+			<property name="suppressprofile" code="BT05" type="boolean" description="suppress color profile warnings ( default: false )"/>
+			<property name="unix compatible" code="BT12" type="boolean" description="make final file name Unix compatible ( default: true )"/>
+			<property name="windows compatible" code="BT10" type="boolean" description="make final file name Windows compatible ( default: true )"/>
+		</class>
+		<class name="Bitmap mode options" code="cBmC" description="Settings related to changing the document mode to Bitmap" inherits="change mode options">
+			<property name="angle" code="Angl" type="real" description="only valid for &apos;halftone screen&apos; conversions"/>
+			<property name="conversion method" code="CvMt" type="e860" description="( default: diffusion dither )"/>
+			<property name="frequency" code="Fqcy" type="real" description="only valid for &apos;halftone screen&apos; conversions"/>
+			<property name="pattern name" code="PaNm" type="text" description="only valid for &apos;custom pattern&apos; conversions"/>
+			<property name="resolution" code="ResL" type="real" description="output resolution (in pixels per inch) ( default: 72.0 )"/>
+			<property name="screen shape" code="ScSh" type="e870" description="only valid for &apos;halftone screen&apos; conversions"/>
+		</class>
+		<class name="change mode options" code="cBCO" description="used with options on the &apos;change mode&apos; command"/>
+		<class name="channel" code="cCHn" description="A channel in a document. Can be either a component channel representing a color of the document color model or an alpha channel" plural="channels">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="channel color" code="pCCr" type="color value" description="color of the channel (not valid for component channels)"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="histogram" code="Hist" access="r" description="a histogram of values for the channel">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="kind" code="Kind" type="e660" description="type of the channel"/>
+			<property name="name" code="pnam" type="text" description="the channel&apos;s name"/>
+			<property name="opacity" code="Opct" type="real" description="opacity of alpha channels (called solidity for spot channels)"/>
+			<property name="visible" code="pVSb" type="boolean"/>
+		</class>
+		<class name="color sampler" code="CSS0" description="A color sampler in a document. See the color sampler tool." plural="color samplers">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="color sampler color" code="CSS2" type="color value" access="r" description="color of the color sampler"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="position" code="Orgn" type="list" access="r" description="position of the color sampler (unit value)"/>
+		</class>
+		<class name="contact sheet options" code="CS01" description="Options for the Contact Sheet command">
+			<property name="across first" code="CS02" type="boolean" description="place the images horizontally first ( default: true )"/>
+			<property name="auto spacing" code="CS03" type="boolean" description="auto space the images in the contact sheet ( default: true )"/>
+			<property name="best fit" code="CS05" type="boolean" description="rotate images for best fit ( default: false )"/>
+			<property name="caption" code="Di01" type="boolean" description="use the filename as a caption for the image ( default: true )"/>
+			<property name="column count" code="PG77" type="integer" description="contact sheet columns ( default: 5 )"/>
+			<property name="flatten final" code="CS04" type="boolean" description="flatten all layers in the final document ( default: true )"/>
+			<property name="font" code="cFnt" type="PGa2" description="font used for the caption ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="font size used for the caption ( default: 12 )"/>
+			<property name="height" code="Hght" type="integer" description="height of the resulting document in pixels ( default: 720 )"/>
+			<property name="horizontal offset" code="HrOz" type="integer" description="horizontal spacing between images in pixels ( default: 1 )"/>
+			<property name="mode" code="OMde" type="e905" description="document mode (Grayscale, RGB, CMYK or Lab) ( default: RGB )"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the document (in pixels per inch) ( default: 72.0 )"/>
+			<property name="row count" code="PG78" type="integer" description="contact sheet rows ( default: 6 )"/>
+			<property name="vertical offset" code="VtOz" type="integer" description="vertical spacing between images in pixels ( default: 1 )"/>
+			<property name="width" code="Wdth" type="integer" description="width of the resulting document in pixels ( default: 576 )"/>
+		</class>
+		<class name="count item" code="CT03" description="A counted item in a document. See the counting tool." plural="count items">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="position" code="Orgn" type="list" access="r" description="position of count item (unit value)"/>
+		</class>
+		<class name="font" code="cFnt" description="An installed font" plural="fonts">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="family" code="pFFN" type="text" access="r" description="the font&apos;s family"/>
+			<property name="name" code="pnam" type="text" access="r" description="The font&apos;s text face name"/>
+			<property name="PostScript name" code="pPSN" type="text" access="r" description="the font&apos;s PostScript name"/>
+			<property name="style" code="Styl" type="text" access="r" description="the font&apos;s style name"/>
+		</class>
+		<class name="gallery banner options" code="PG96" description="Options for the web photo gallery banner options">
+			<property name="contact info" code="PG51" type="text" description="web photo gallery contact info ( default:  )"/>
+			<property name="date" code="PG52" type="text" description="web photo gallery date ( default:  )"/>
+			<property name="font" code="cFnt" type="PGa2" description="the font setting for the banner text ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="the size of the font for the banner text ( 1 - 7; default: 3 )"/>
+			<property name="photographer" code="PG50" type="text" description="web photo gallery photographer ( default:  )"/>
+			<property name="site name" code="PG49" type="text" description="web photo gallery site name ( default: Adobe Web Photo Gallery )"/>
+		</class>
+		<class name="gallery color options" code="PG99" description="Options for the web photo gallery colors">
+			<property name="active link color" code="PG83" type="RGB color" description="active link color"/>
+			<property name="background color" code="BgCr" type="RGB color" description="background color"/>
+			<property name="banner color" code="PG81" type="RGB color" description="banner color"/>
+			<property name="link color" code="PG84" type="RGB color" description="link color"/>
+			<property name="text color" code="PG82" type="RGB color" description="text color"/>
+			<property name="visited link color" code="PG85" type="RGB color" description="visited link color"/>
+		</class>
+		<class name="gallery images options" code="PG97" description="Options for the web photo gallery images">
+			<property name="border" code="PG60" type="integer" description="the amount of border pixels you want between your images ( 0 - 99; default: 0 )"/>
+			<property name="caption" code="Di01" type="boolean" description="generate a caption for the images ( default: false )"/>
+			<property name="dimension" code="PG57" type="integer" description="resized image dimensions in pixels ( default: 350 )"/>
+			<property name="font" code="cFnt" type="PGa2" description="font for the gallery images text ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="font size for the gallery images text ( 1 - 7; default: 3 )"/>
+			<property name="image quality" code="PG59" type="integer" description="the quality setting for the JPEG image ( 0 - 12; default: 5 )"/>
+			<property name="include copyright" code="PG65" type="boolean" description="include the copyright in the text for the gallery images ( default: false )"/>
+			<property name="include credits" code="PG63" type="boolean" description="include the credits in the text for the gallery images ( default: false )"/>
+			<property name="include file name" code="PG61" type="boolean" description="include the file name in the text for the gallery images ( default: true )"/>
+			<property name="include title" code="PG64" type="boolean" description="include the title in the text for the gallery images ( default: false )"/>
+			<property name="numeric links" code="PG55" type="boolean" description="add numeric links ( default: true )"/>
+			<property name="resize constraint" code="PG58" type="PGa3" description="how should the image be constrained ( default: constrain both )"/>
+			<property name="resize images" code="PG56" type="boolean" description="resize images data ( default: true )"/>
+		</class>
+		<class name="gallery options" code="PG95" description="Options for the web photo gallery command">
+			<property name="banner options" code="PG54" type="gallery banner options" description="options related to banner settings"/>
+			<property name="custom color options" code="PG47" type="gallery color options" description="options related to custom color settings"/>
+			<property name="email address" code="PG39" type="text" description="the email address to show on the web page ( default:  )"/>
+			<property name="images options" code="PG45" type="gallery images options" description="options related to images settings"/>
+			<property name="layout style" code="PG38" type="text" description="the style to use for laying out the web page ( default: Centered Frame 1 - Basic )"/>
+			<property name="preserve all metadata" code="PG53" type="boolean" description="save all of the metadata in the JPEG files ( default: false )"/>
+			<property name="security options" code="PG48" type="gallery security options" description="options related to security settings"/>
+			<property name="short extension" code="PG40" type="boolean" description="short web page extension .htm or long web page extension .html ( default: true )"/>
+			<property name="size attributes" code="PG43" type="boolean" description="add width and height attributes for images ( default: true )"/>
+			<property name="sub folders" code="PG42" type="boolean" description="include all files found in sub folders of the input folder ( default: true )"/>
+			<property name="thumbnail options" code="PG46" type="gallery thumbnail options" description="options related to thumbnail settings"/>
+			<property name="UTF8 encoding" code="PG41" type="boolean" description="web page should use UTF-8 encoding ( default: false )"/>
+		</class>
+		<class name="gallery security options" code="PGa0" description="Options for the web photo gallery security">
+			<property name="content" code="PG86" type="PGa5" description="web photo gallery security content ( default: gallery none )"/>
+			<property name="custom text" code="PG87" type="text" description="web photo gallery security custom text ( default:  )"/>
+			<property name="font" code="cFnt" type="PGa2" description="web photo gallery security font ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="web photo gallery security font size ( minimum 1; default: 36 )"/>
+			<property name="opacity" code="Opct" type="integer" description="web page security opacity as a percent ( default: 100 )"/>
+			<property name="text color" code="PG82" type="RGB color" description="web page security text color"/>
+			<property name="text position" code="PG93" type="PGa7" description="web photo gallery security text position ( default: gallery centered )"/>
+			<property name="text rotate" code="PG94" type="PGa8" description="web photo gallery security text rotate ( default: zero )"/>
+		</class>
+		<class name="gallery thumbnail options" code="PG98" description="Options for the web photo gallery thumbnail creation">
+			<property name="border" code="PG60" type="integer" description="the amount of border pixels you want around your thumbnail images ( 0 - 99; default: 0 )"/>
+			<property name="caption" code="Di01" type="boolean" description="with caption ( default: false )"/>
+			<property name="column count" code="PG77" type="integer" description="web photo gallery thumbnail columns ( default: 5 )"/>
+			<property name="dimension" code="PG57" type="integer" description="web photo gallery thumbnail dimension in pixels ( default: 75 )"/>
+			<property name="font" code="cFnt" type="PGa2" description="web photo gallery font ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="the size of the font for the thumbnail images text ( 1 - 7; default: 3 )"/>
+			<property name="include copyright" code="PG65" type="boolean" description="include copyright for thumbnail ( default: false )"/>
+			<property name="include credits" code="PG63" type="boolean" description="include credits for thumbnail ( default: false )"/>
+			<property name="include file name" code="PG61" type="boolean" description="include file name for thumbnail ( default: false )"/>
+			<property name="include title" code="PG64" type="boolean" description="include title for thumbnail ( default: false )"/>
+			<property name="row count" code="PG78" type="integer" description="web photo gallery thumbnail rows ( default: 3 )"/>
+			<property name="size" code="ptsz" type="PGa4" description="the size of the thumbnail images ( default: gallery medium )"/>
+		</class>
+		<class name="history state" code="cHst" description="A history state for the document" plural="history states">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="name" code="pnam" type="text" access="r" description="the history state&apos;s name"/>
+			<property name="snapshot" code="HSht" type="boolean" access="r" description="is the history state a snapshot?"/>
+		</class>
+		<class name="indexed mode options" code="cIxC" description="Settings related to changing the document mode to Indexed" inherits="change mode options">
+			<property name="colors in palette" code="pPCN" type="integer" description="number of colors in palette (only settable for some palette types)"/>
+			<property name="dither" code="DtTp" type="e230" description="type of dither"/>
+			<property name="dither amount" code="DtAm" type="integer" description="amount of dither. Only valid for diffusion ( 1 - 100 )"/>
+			<property name="forced colors" code="PFcl" type="e200"/>
+			<property name="matte" code="Mtte" type="e880"/>
+			<property name="palette" code="PPlt" type="e210" description="Type of palette ( default: exact )"/>
+			<property name="preserve exact colors" code="DPex" type="boolean"/>
+			<property name="transparency" code="Trpc" type="boolean"/>
+		</class>
+		<class name="info-object" code="cDnf" description="Document information">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="author" code="Di21" type="text"/>
+			<property name="author position" code="Di23" type="text"/>
+			<property name="caption" code="Di01" type="text"/>
+			<property name="caption writer" code="Di02" type="text"/>
+			<property name="category" code="Di06" type="text"/>
+			<property name="city" code="Di15" type="text"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="copyright notice" code="Di20" type="text"/>
+			<property name="copyrighted" code="Di19" type="e850"/>
+			<property name="country" code="Di17" type="text"/>
+			<property name="creation date" code="Di14" type="text"/>
+			<property name="credit" code="Di11" type="text"/>
+			<property name="EXIF" code="Di25" access="r">
+				<type type="any" list="yes"/>
+			</property>
+			<property name="headline" code="Di03" type="text"/>
+			<property name="instructions" code="Di04" type="text"/>
+			<property name="job name" code="Di24" type="text"/>
+			<property name="keywords" code="Di05" description="list of keywords">
+				<type type="text" list="yes"/>
+			</property>
+			<property name="owner url" code="pUrl" type="text"/>
+			<property name="province or state" code="Di16" type="text"/>
+			<property name="source" code="Di12" type="text"/>
+			<property name="supplemental categories" code="Di07">
+				<type type="text" list="yes"/>
+			</property>
+			<property name="title" code="Di22" type="text"/>
+			<property name="transmission reference" code="Di18" type="text"/>
+			<property name="urgency" code="Di08" type="e100"/>
+		</class>
+		<class name="layer" code="cLyr" description="A layer object" plural="layers">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="all locked" code="AlLc" type="boolean"/>
+			<property name="blend mode" code="BlMd" type="e470"/>
+			<property name="bounds" code="Bnds" type="list" access="r" description="Bounding rectangle of the Layer"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="id" code="ID  " type="integer" access="r" description="the unique ID of this layer"/>
+			<property name="itemindex" code="psIx" type="integer" access="r" description="the layer index sans layer groups, how Photoshop would index them"/>
+			<property name="linked layers" code="Lked" access="r">
+				<type type="layer" list="yes"/>
+			</property>
+			<property name="name" code="pnam" type="text" description="the name of the layer"/>
+			<property name="opacity" code="Opct" type="real" description="master opacity of layer ( 0.0 - 100.0 )"/>
+			<property name="visible" code="pVSb" type="boolean"/>
+		</class>
+		<class name="layer comp" code="LC01" description="A layer composition in a document" plural="layer comps">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="appearance" code="LC03" type="boolean" description="use layer appearance"/>
+			<property name="comment" code="LC02" type="any" description="the description of the layer comp"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="name" code="pnam" type="text" description="the name of the layer comp"/>
+			<property name="position" code="Orgn" type="boolean" description="use layer position"/>
+			<property name="selected" code="LC06" type="boolean" access="r" description="the layer comp is currently selected"/>
+			<property name="visibility" code="LC05" type="boolean" description="use layer visibility"/>
+            <property name="childlayercompstate" code="LC07" type="boolean" description="use child layer comp state"/>
+		</class>
+		<class name="layer set" code="cLZt" description="Layer set" inherits="layer" plural="layer sets">
+			<element type="art layer"/>
+			<element type="layer"/>
+			<element type="layer set"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="enabled channels" code="EnCh" description="channels that are enabled for the layer set. Must be a list of component channels">
+				<type type="channel" list="yes"/>
+			</property>
+		</class>
+		<class name="measurement scale" code="cMSc" description="Document Measurement Scale">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="logical length" code="msll" type="real" description="the logical length this scale equates to"/>
+			<property name="logical units" code="mslu" type="text" description="the logical units for this scale"/>
+			<property name="name" code="pnam" type="text" description="the name of this scale"/>
+			<property name="pixel length" code="mspl" type="integer" description="the length in pixels this scale equates to"/>
+		</class>
+		<class name="picture package options" code="PP01" description="options for the Picture Package command">
+			<property name="content" code="PG86" type="PP09" description="content information ( default: no text )"/>
+			<property name="custom text" code="PG87" type="text" description="picture package custom text ( default:  )"/>
+			<property name="flatten final" code="CS04" type="boolean" description="flatten all layers in the final document ( default: true )"/>
+			<property name="font" code="cFnt" type="PGa2" description="font used for the text ( default: Arial )"/>
+			<property name="font size" code="PG74" type="integer" description="font size used for the caption ( default: 12 )"/>
+			<property name="layout" code="PP10" type="text" description="layout to use to generate the picture package ( default: (2)5x7 )"/>
+			<property name="mode" code="OMde" type="e905" description="document mode (Grayscale, RGB, CMYK or Lab) ( default: RGB )"/>
+			<property name="opacity" code="Opct" type="integer" description="web page security opacity as a percent ( default: 100 )"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the document (in pixels per inch) ( default: 72.0 )"/>
+			<property name="text color" code="PG82" type="RGB color" description="text color"/>
+			<property name="text position" code="PG93" type="PGa7" description="text position ( default: gallery centered )"/>
+			<property name="text rotate" code="PG94" type="PGa8" description="text rotate ( default: zero )"/>
+		</class>
+		<class name="presentation options" code="PDF4" description="options for the PDF presentation command">
+			<property name="auto advance" code="PDF7" type="boolean" description="auto advance when viewing ( default: true )"/>
+			<property name="include file name" code="PG61" type="boolean" description="include file name for image ( default: false )"/>
+			<property name="interval" code="PDF8" type="integer" description="time in seconds before auto advancing the view ( default: 5 )"/>
+			<property name="loop" code="PDF9" type="boolean" description="loop after last page ( default: false )"/>
+			<property name="magnification" code="PDFu" type="PDFx" description="magnification type when viewing the image ( default: actual size )"/>
+			<property name="PDF options" code="PDFt" type="PDF save options" description="Options used when creating the PDF file"/>
+			<property name="presentation" code="PDF5" type="boolean" description="true if the file type is presentation false for Multi-Page document ( default: false )"/>
+			<property name="transition" code="PDFa" type="PDFb" description="transition type when switching to the next document ( default: none )"/>
+		</class>
+		<class name="selection-object" code="csel" description="The selection of the document">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="bounds" code="Bnds" type="list" access="r" description="bounding rectangle of the entire selection"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="solid" code="Slid" type="boolean" access="r" description="is the bounding rectangle a solid rectangle"/>
+		</class>
+		<class name="settings-object" code="cPrf" description="Preferences for Photoshop">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="additional plugin folder" code="Pr35" type="alias"/>
+			<property name="append extension" code="Pr13" type="e400"/>
+			<property name="ask before saving layered TIFF" code="Pr14" type="boolean"/>
+			<property name="auto update open documents" code="Pr04" type="boolean"/>
+			<property name="beep when done" code="Pr06" type="boolean"/>
+			<property name="cache levels" code="Pr37" type="integer"/>
+			<property name="color picker" code="CPkr" type="e360"/>
+			<property name="column gutter" code="Pr28" type="real" description="gutter of columns (in points)"/>
+			<property name="column width" code="Pr27" type="real" description="width of columns (in points)"/>
+			<property name="create first snapshot" code="Pr39" type="boolean" description="automatically make first snapshot when a new document is created?"/>
+			<property name="display color channels in color" code="Pr16" type="boolean"/>
+			<property name="dynamic color sliders" code="Pr07" type="boolean"/>
+			<property name="edit log items" code="Pr47" type="Pr53" description="options for edit log items"/>
+			<property name="export clipboard" code="Pr01" type="boolean"/>
+			<property name="font preview size" code="FP04" type="FP00" description="show font previews in the type tool font menus"/>
+			<property name="full size preview" code="FzPr" type="boolean"/>
+			<property name="gamut warning opacity" code="Pr24" type="real"/>
+			<property name="grid size" code="Pr21" type="e420"/>
+			<property name="grid style" code="Pr31" type="e460"/>
+			<property name="grid subdivisions" code="Pr33" type="integer"/>
+			<property name="guide style" code="Pr30" type="e464"/>
+			<property name="icon preview" code="IcPr" type="boolean"/>
+			<property name="image previews" code="Pr12" type="e400"/>
+			<property name="interpolation method" code="Ipla" type="e175"/>
+			<property name="keyboard zoom resizes windows" code="Pr43" type="boolean"/>
+			<property name="Mac OS thumbnail" code="McTb" type="boolean"/>
+			<property name="maximize compatibility" code="pMxC" type="MX00" description="maximize compatibility for Photoshop (PSD) files"/>
+			<property name="maximum RAM use" code="Pr44" type="integer" description="Maximum percentage of available RAM used by Photoshop ( 5 - 100 )"/>
+			<property name="nonlinear history" code="Pr40" type="boolean" description="allow non-linear history?"/>
+			<property name="number of history states" code="Pr11" type="integer" description="number of history states to remember (between 1 and 100)"/>
+			<property name="other cursors" code="Pr20" type="e415"/>
+			<property name="painting cursors" code="Pr19" type="e410"/>
+			<property name="pixel doubling" code="Pr18" type="boolean"/>
+			<property name="point size" code="Pr29" type="e450" description="size of point/pica"/>
+			<property name="recent file list length" code="Pr15" type="integer" description="number of items in the recent file list (between 0 and 30)"/>
+			<property name="ruler units" code="Pr25" type="e440" description="Note: this is the unit that the scripting system will use when receiving and returning values"/>
+			<property name="save log items" code="Pr46" type="Pr49" description="options for saving the history items"/>
+			<property name="save log items file" code="Pr48" type="alias" description="file to save the history log"/>
+			<property name="save palette locations" code="Pr08" type="boolean"/>
+			<property name="show Asian text options" code="Pr05" type="boolean"/>
+			<property name="show English font names" code="Pr09" type="boolean"/>
+			<property name="show slice numbers" code="Pr34" type="boolean"/>
+			<property name="show tool tips" code="Pr03" type="boolean"/>
+			<property name="smart quotes" code="Pr41" type="boolean"/>
+			<property name="type units" code="Pr26" type="e445"/>
+			<property name="use additional plugin folder" code="Pr42" type="boolean"/>
+			<property name="use cache for histograms" code="Pr38" type="boolean"/>
+			<property name="use diffusion dither" code="Pr17" type="boolean"/>
+			<property name="use history log" code="Pr45" type="boolean" description="Turn on and off the history logging"/>
+			<property name="use lowercase extension" code="pSLc" type="boolean" description="should the file extension be lowercase"/>
+			<property name="use Shift key for tool switch" code="Pr10" type="boolean"/>
+			<property name="use video alpha" code="Pr23" type="boolean" description="this option requires hardware support"/>
+			<property name="Windows thumbnail" code="WnTb" type="boolean"/>
+		</class>
+		<class name="text-object" code="cTxt" description="Text object contained in an art layer">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="alternate ligatures" code="ALts" type="boolean" description="use alternate ligatures?"/>
+			<property name="antialias method" code="AAtp" type="e530"/>
+			<property name="auto kerning" code="Akrn" type="e980" description="options for auto kerning"/>
+			<property name="auto leading" code="Aldg" type="boolean" description="whether to use a font&apos;s built-in leading information"/>
+			<property name="auto leading amount" code="AlaM" type="real" description="percentage to use for auto leading"/>
+			<property name="baseline shift" code="Blsh" type="real" description="baseline offset of text (unit value)"/>
+			<property name="capitalization" code="Caps" type="e540" description="the case of the text"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="contents" code="pcnt" type="text" description="the text in the layer"/>
+			<property name="desired glyph scaling" code="DsGs" type="real"/>
+			<property name="desired letter scaling" code="DsLs" type="real"/>
+			<property name="desired word scaling" code="DsWs" type="real"/>
+			<property name="faux bold" code="FxBl" type="boolean" description="use faux bold?"/>
+			<property name="faux italic" code="FxIt" type="boolean" description="use faux italic?"/>
+			<property name="first line indent" code="TFid" type="real" description="(unit value)"/>
+			<property name="font" code="cFnt" type="text" description="text face of the character"/>
+			<property name="height" code="Hght" type="real" description="the height of paragraph text (unit value)"/>
+			<property name="horizontal scale" code="HrSc" type="integer" description="horizontal scaling of characters (in percent)"/>
+			<property name="horizontal warp distortion" code="WHDs" type="real" description="percentage from -100 to 100"/>
+			<property name="hyphen limit" code="HLmt" type="integer" description="maximum number of consecutive hyphens"/>
+			<property name="hyphenate after first" code="HAft" type="integer" description="hyphenate after this many letters"/>
+			<property name="hyphenate before last" code="HBfr" type="integer" description="hyphenate before this many letters"/>
+			<property name="hyphenate capitalized words" code="HCps" type="boolean" description="wheter to hyphenate capitalized words"/>
+			<property name="hyphenate words longer than" code="HLtn" type="integer" description="hyphenate words that have more than this number of letters ( minimum 0 )"/>
+			<property name="hyphenation" code="UHph" type="boolean" description="use hyphenation?"/>
+			<property name="hyphenation zone" code="HZne" type="real" description="the hyphenation zone (unit value)"/>
+			<property name="justification" code="pjst" type="e520" description="paragraph justification"/>
+			<property name="kind" code="Kind" type="e580" description="the type of the text"/>
+			<property name="language" code="Lang" type="e560"/>
+			<property name="leading" code="TLdg" type="real" description="leading (unit value)"/>
+			<property name="left indent" code="TLid" type="real" description="(unit value)"/>
+			<property name="ligatures" code="Ltrs" type="boolean" description="use ligatures?"/>
+			<property name="maximum glyph scaling" code="MsGs" type="real"/>
+			<property name="maximum letter scaling" code="MaLs" type="real"/>
+			<property name="maximum word scaling" code="MaWs" type="real"/>
+			<property name="minimum glyph scaling" code="MiGs" type="real"/>
+			<property name="minimum letter scaling" code="MiLs" type="real"/>
+			<property name="minimum word scaling" code="MiWs" type="real"/>
+			<property name="no break" code="Nobk" type="boolean"/>
+			<property name="old style" code="OdSt" type="boolean" description="use old style?"/>
+			<property name="position" code="Orgn" type="list" description="position of origin (unit value)"/>
+			<property name="right indent" code="TRid" type="real" description="(unit value)"/>
+			<property name="Roman hanging punctuation" code="HPct" type="boolean" description="use Roman Hanging Punctuation?"/>
+			<property name="size" code="ptsz" type="real" description="font size in points"/>
+			<property name="space after" code="TSaf" type="real" description="(unit value)"/>
+			<property name="space before" code="TSBf" type="real" description="(unit value)"/>
+			<property name="strike thru" code="PTru" type="e990" description="options for strik thru of the text"/>
+			<property name="stroke color" code="TClr" type="color value" description="color of text"/>
+			<property name="text composer" code="TCps" type="e590" description="type of text composing engine to use"/>
+			<property name="text direction" code="TDir" type="e140" description="text orientation"/>
+			<property name="tracking" code="Trkn" type="real" description="controls uniform spacing between multiple characters"/>
+			<property name="underline" code="Ulin" type="eA00" description="options for underlining of the text"/>
+			<property name="vertical scale" code="VtSc" type="integer" description="vertical scaling of characters (in percent)"/>
+			<property name="vertical warp distortion" code="WVDs" type="real" description="percentage from -100 to 100"/>
+			<property name="warp bend" code="WBnd" type="real" description="percentage from -100 to 100"/>
+			<property name="warp direction" code="WDir" type="e140"/>
+			<property name="warp style" code="WStl" type="e600"/>
+			<property name="width" code="Wdth" type="real" description="the width of paragraph text (unit value)"/>
+		</class>
+		<class name="XMP metadata" code="cXMd">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="raw data" code="pRMd" type="text" description="raw XML form of file information"/>
+		</class>
+		<enumeration name="OpAs" code="OpAs">
+			<enumerator name="Alias PIX" code="e025"/>
+			<enumerator name="BMP" code="e002"/>
+			<enumerator name="Camera RAW" code="e032"/>
+			<enumerator name="CompuServe GIF" code="e003"/>
+			<enumerator name="DICOM" code="e033"/>
+			<enumerator name="Electric Image" code="e026"/>
+			<enumerator name="EPS" code="e022"/>
+			<enumerator name="EPS PICT preview" code="e023"/>
+			<enumerator name="EPS TIFF Preview" code="e024"/>
+			<enumerator name="Filmstrip" code="e005"/>
+			<enumerator name="JPEG" code="e006"/>
+			<enumerator name="PCX" code="e007"/>
+			<enumerator name="PDF" code="e021"/>
+			<enumerator name="Photo CD" code="e009"/>
+			<enumerator name="Photoshop DCS 1.0" code="e018"/>
+			<enumerator name="Photoshop DCS 2.0" code="e019"/>
+			<enumerator name="Photoshop EPS" code="e004"/>
+			<enumerator name="Photoshop format" code="e000"/>
+			<enumerator name="Photoshop PDF" code="e008"/>
+			<enumerator name="PICT file" code="e010"/>
+			<enumerator name="PICT resource" code="e011"/>
+			<enumerator name="Pixar" code="e012"/>
+			<enumerator name="PNG" code="e013"/>
+			<enumerator name="Portable Bitmap" code="e027"/>
+			<enumerator name="raw" code="e014"/>
+			<enumerator name="Scitex CT" code="e015"/>
+			<enumerator name="SGI RGB" code="e029"/>
+			<enumerator name="SoftImage" code="e030"/>
+			<enumerator name="Targa" code="e016"/>
+			<enumerator name="TIFF" code="e017"/>
+			<enumerator name="Wavefront RLA" code="e028"/>
+			<enumerator name="Wireless Bitmap" code="e031"/>
+		</enumeration>
+		<enumeration name="SvFm" code="SvFm">
+			<enumerator name="Alias PIX" code="e025"/>
+			<enumerator name="BMP" code="e002"/>
+			<enumerator name="CompuServe GIF" code="e003"/>
+			<enumerator name="Electric Image" code="e026"/>
+			<enumerator name="JPEG" code="e006"/>
+			<enumerator name="PCX" code="e007"/>
+			<enumerator name="Photoshop DCS 1.0" code="e018"/>
+			<enumerator name="Photoshop DCS 2.0" code="e019"/>
+			<enumerator name="Photoshop EPS" code="e004"/>
+			<enumerator name="Photoshop format" code="e000"/>
+			<enumerator name="Photoshop PDF" code="e008"/>
+			<enumerator name="PICT file" code="e010"/>
+			<enumerator name="PICT resource" code="e011"/>
+			<enumerator name="Pixar" code="e012"/>
+			<enumerator name="PNG" code="e013"/>
+			<enumerator name="Portable Bitmap" code="e027"/>
+			<enumerator name="raw" code="e014"/>
+			<enumerator name="Scitex CT" code="e015"/>
+			<enumerator name="SGI RGB" code="e029"/>
+			<enumerator name="SoftImage" code="e030"/>
+			<enumerator name="Targa" code="e016"/>
+			<enumerator name="TIFF" code="e017"/>
+			<enumerator name="Wavefront RLA" code="e028"/>
+			<enumerator name="Wireless Bitmap" code="e031"/>
+		</enumeration>
+		<enumeration name="savo" code="savo">
+			<enumerator name="ask" code="ask "/>
+			<enumerator name="no" code="no  "/>
+			<enumerator name="yes" code="yes "/>
+		</enumeration>
+		<enumeration name="e050" code="e050">
+			<enumerator name="always" code="e051"/>
+			<enumerator name="error dialogs" code="e052"/>
+			<enumerator name="never" code="Nevr"/>
+		</enumeration>
+		<enumeration name="e080" code="e080">
+			<enumerator name="bitmap" code="e085"/>
+			<enumerator name="CMYK" code="e083"/>
+			<enumerator name="duotone" code="e088"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="indexed color" code="e086"/>
+			<enumerator name="Lab" code="e084"/>
+			<enumerator name="multichannel" code="e087"/>
+			<enumerator name="RGB" code="e082"/>
+		</enumeration>
+		<enumeration name="e089" code="e089">
+			<enumerator name="bitmap" code="e085"/>
+			<enumerator name="CMYK" code="e083"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="indexed color" code="e086"/>
+			<enumerator name="Lab" code="e084"/>
+			<enumerator name="multichannel" code="e087"/>
+			<enumerator name="RGB" code="e082"/>
+		</enumeration>
+		<enumeration name="e090" code="e090">
+			<enumerator name="custom" code="e092"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="working" code="e091"/>
+		</enumeration>
+		<enumeration name="e110" code="e110">
+			<enumerator name="transparent" code="e113"/>
+			<enumerator name="use background color" code="e112"/>
+			<enumerator name="white" code="e111"/>
+		</enumeration>
+		<enumeration name="e100" code="e100">
+			<enumerator name="four" code="Four"/>
+			<enumerator name="high" code="e107"/>
+			<enumerator name="low" code="e101"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="seven" code="e106"/>
+			<enumerator name="six" code="e105"/>
+			<enumerator name="three" code="e103"/>
+			<enumerator name="two" code="Two "/>
+		</enumeration>
+		<enumeration name="Dori" code="Dori">
+			<enumerator name="landscape" code="e121"/>
+			<enumerator name="portrait" code="e122"/>
+		</enumeration>
+		<enumeration name="e130" code="e130">
+			<enumerator name="absolute colorimetric" code="e134"/>
+			<enumerator name="perceptual" code="e131"/>
+			<enumerator name="relative colorimetric" code="e133"/>
+			<enumerator name="saturation intent" code="e132"/>
+		</enumeration>
+		<enumeration name="e140" code="e140">
+			<enumerator name="horizontal" code="e141"/>
+			<enumerator name="vertical" code="e142"/>
+		</enumeration>
+		<enumeration name="e150" code="e150">
+			<enumerator name="all caches" code="e154"/>
+			<enumerator name="clipboard cache" code="e153"/>
+			<enumerator name="history caches" code="e152"/>
+			<enumerator name="undo caches" code="e151"/>
+		</enumeration>
+		<enumeration name="e160" code="e160">
+			<enumerator name="bottom center" code="e168"/>
+			<enumerator name="bottom left" code="e167"/>
+			<enumerator name="bottom right" code="e169"/>
+			<enumerator name="middle center" code="e165"/>
+			<enumerator name="middle left" code="e164"/>
+			<enumerator name="middle right" code="e166"/>
+			<enumerator name="top center" code="e162"/>
+			<enumerator name="top left" code="e161"/>
+			<enumerator name="top right" code="e163"/>
+		</enumeration>
+		<enumeration name="e175" code="e175">
+			<enumerator name="automatic" code="e183"/>
+			<enumerator name="bicubic" code="e178"/>
+			<enumerator name="bicubic automatic" code="e182"/>
+			<enumerator name="bicubic sharper" code="e179"/>
+			<enumerator name="bicubic smoother" code="e180"/>
+			<enumerator name="bilinear" code="e177"/>
+			<enumerator name="closest neighbor" code="e176"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="preserve details" code="e184"/>
+		</enumeration>
+		<enumeration name="e191" code="e191">
+			<enumerator name="OS2" code="e192"/>
+			<enumerator name="Windows" code="e193"/>
+		</enumeration>
+		<enumeration name="e200" code="e200">
+			<enumerator name="black and white" code="e201"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="primaries" code="e202"/>
+			<enumerator name="web" code="e203"/>
+		</enumeration>
+		<enumeration name="e210" code="e210">
+			<enumerator name="exact" code="e211"/>
+			<enumerator name="local adaptive" code="e217"/>
+			<enumerator name="local perceptual" code="e215"/>
+			<enumerator name="local selective" code="e216"/>
+			<enumerator name="Mac OS system" code="e212"/>
+			<enumerator name="master adaptive" code="e220"/>
+			<enumerator name="master perceptual" code="e218"/>
+			<enumerator name="master selective" code="e219"/>
+			<enumerator name="previous" code="e221"/>
+			<enumerator name="uniform" code="e214"/>
+			<enumerator name="web" code="e203"/>
+			<enumerator name="Windows system" code="e213"/>
+		</enumeration>
+		<enumeration name="e230" code="e230">
+			<enumerator name="diffusion" code="e231"/>
+			<enumerator name="noise" code="e233"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="pattern" code="e232"/>
+		</enumeration>
+		<enumeration name="e250" code="e250">
+			<enumerator name="eight bit Mac OS" code="e254"/>
+			<enumerator name="eight bit TIFF" code="e252"/>
+			<enumerator name="JPEG Mac OS" code="e255"/>
+			<enumerator name="monochrome Mac OS" code="e253"/>
+			<enumerator name="monochrome TIFF" code="e251"/>
+			<enumerator name="none" code="DNne"/>
+		</enumeration>
+		<enumeration name="e260" code="e260">
+			<enumerator name="ASCII" code="e073"/>
+			<enumerator name="binary" code="e071"/>
+			<enumerator name="high quality JPEG" code="e263"/>
+			<enumerator name="low quality JPEG" code="e261"/>
+			<enumerator name="maximum quality JPEG" code="e264"/>
+			<enumerator name="medium quality JPEG" code="e262"/>
+		</enumeration>
+		<enumeration name="e270" code="e270">
+			<enumerator name="optimized" code="e272"/>
+			<enumerator name="progressive" code="e273"/>
+			<enumerator name="standard" code="Stdr"/>
+		</enumeration>
+		<enumeration name="e280" code="e280">
+			<enumerator name="JPEG" code="e006"/>
+			<enumerator name="JPEG 2000 high" code="JPG5"/>
+			<enumerator name="JPEG 2000 lossless" code="JPGA"/>
+			<enumerator name="JPEG 2000 low" code="JPG9"/>
+			<enumerator name="JPEG 2000 med" code="JPG7"/>
+			<enumerator name="JPEG 2000 med high" code="JPG6"/>
+			<enumerator name="JPEG 2000 med low" code="JPG8"/>
+			<enumerator name="JPEG high" code="JPG0"/>
+			<enumerator name="JPEG low" code="JPG4"/>
+			<enumerator name="JPEG med" code="JPG2"/>
+			<enumerator name="JPEG med high" code="JPG1"/>
+			<enumerator name="JPEG med low" code="JPG3"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="ZIP" code="e281"/>
+			<enumerator name="ZIP 4" code="e282"/>
+		</enumeration>
+		<enumeration name="PD01" code="PD01">
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="PDFX1a2001 standard" code="PD02"/>
+			<enumerator name="PDFX1a2003 standard" code="PD03"/>
+			<enumerator name="PDFX32002 standard" code="PD04"/>
+			<enumerator name="PDFX32003 standard" code="PD05"/>
+			<enumerator name="PDFX42008 standard" code="PD33"/>
+		</enumeration>
+		<enumeration name="PD08" code="PD08">
+			<enumerator name="PDF 13" code="PD09"/>
+			<enumerator name="PDF 14" code="PD10"/>
+			<enumerator name="PDF 15" code="PD11"/>
+			<enumerator name="PDF 16" code="PD12"/>
+			<enumerator name="PDF 17" code="PD32"/>
+		</enumeration>
+		<enumeration name="PD16" code="PD16">
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="PDF average" code="PD17"/>
+			<enumerator name="PDF bicubic" code="PD19"/>
+			<enumerator name="PDF subsample" code="PD18"/>
+		</enumeration>
+		<enumeration name="e290" code="e290">
+			<enumerator name="high quality JPEG" code="e263"/>
+			<enumerator name="low quality JPEG" code="e261"/>
+			<enumerator name="maximum quality JPEG" code="e264"/>
+			<enumerator name="medium quality JPEG" code="e262"/>
+			<enumerator name="none" code="DNne"/>
+		</enumeration>
+		<enumeration name="e300" code="e300">
+			<enumerator name="lowercase extension" code="e301"/>
+			<enumerator name="no extension" code="e303"/>
+			<enumerator name="uppercase extension" code="e302"/>
+		</enumeration>
+		<enumeration name="e320" code="e320">
+			<enumerator name="JPEG" code="e006"/>
+			<enumerator name="LZW" code="e321"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="ZIP" code="e281"/>
+		</enumeration>
+		<enumeration name="e325" code="e325">
+			<enumerator name="RLE" code="e326"/>
+			<enumerator name="ZIP" code="e281"/>
+		</enumeration>
+		<enumeration name="e330" code="e330">
+			<enumerator name="IBM PC" code="e331"/>
+			<enumerator name="Mac OS" code="e332"/>
+		</enumeration>
+		<enumeration name="e340" code="e340">
+			<enumerator name="color composite" code="e343"/>
+			<enumerator name="grayscale composite" code="e342"/>
+			<enumerator name="no composite PostScript" code="e341"/>
+		</enumeration>
+		<enumeration name="e350" code="e350">
+			<enumerator name="bottom right pixel" code="e353"/>
+			<enumerator name="top left pixel" code="e352"/>
+			<enumerator name="transparent pixels" code="e351"/>
+		</enumeration>
+		<enumeration name="e360" code="e360">
+			<enumerator name="Adobe color picker" code="e361"/>
+			<enumerator name="Apple color picker" code="e362"/>
+			<enumerator name="plug in color picker" code="e364"/>
+			<enumerator name="Windows color picker" code="e363"/>
+		</enumeration>
+		<enumeration name="e390" code="e390">
+			<enumerator name="all tools" code="e392"/>
+			<enumerator name="all warnings" code="e391"/>
+			<enumerator name="everything" code="e393"/>
+		</enumeration>
+		<enumeration name="e400" code="e400">
+			<enumerator name="ask" code="ask "/>
+			<enumerator name="no" code="no  "/>
+			<enumerator name="yes" code="yes "/>
+		</enumeration>
+		<enumeration name="e410" code="e410">
+			<enumerator name="brush size" code="e413"/>
+			<enumerator name="precise" code="e412"/>
+			<enumerator name="standard" code="Stdr"/>
+		</enumeration>
+		<enumeration name="e415" code="e415">
+			<enumerator name="precise" code="e412"/>
+			<enumerator name="standard" code="Stdr"/>
+		</enumeration>
+		<enumeration name="e420" code="e420">
+			<enumerator name="large" code="Lrge"/>
+			<enumerator name="medium" code="Mdum"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="small" code="Smll"/>
+		</enumeration>
+		<enumeration name="e440" code="e440">
+			<enumerator name="cm units" code="Cntm"/>
+			<enumerator name="inch units" code="Inhs"/>
+			<enumerator name="mm units" code="MlMt"/>
+			<enumerator name="percent units" code="Pcnt"/>
+			<enumerator name="pica units" code="Pcas"/>
+			<enumerator name="pixel units" code="Pxls"/>
+			<enumerator name="point units" code="Pnts"/>
+		</enumeration>
+		<enumeration name="e445" code="e445">
+			<enumerator name="mm units" code="MlMt"/>
+			<enumerator name="pixel units" code="Pxls"/>
+			<enumerator name="point units" code="Pnts"/>
+		</enumeration>
+		<enumeration name="e450" code="e450">
+			<enumerator name="postscript size" code="e451"/>
+			<enumerator name="traditional size" code="e452"/>
+		</enumeration>
+		<enumeration name="e460" code="e460">
+			<enumerator name="dashed line" code="e462"/>
+			<enumerator name="dotted line" code="e463"/>
+			<enumerator name="solid line" code="e461"/>
+		</enumeration>
+		<enumeration name="e464" code="e464">
+			<enumerator name="dashed line" code="e462"/>
+			<enumerator name="solid line" code="e461"/>
+		</enumeration>
+		<enumeration name="e470" code="e470">
+			<enumerator name="color blend" code="e488"/>
+			<enumerator name="color burn" code="e481"/>
+			<enumerator name="color dodge" code="e480"/>
+			<enumerator name="darken" code="e482"/>
+			<enumerator name="darker color" code="e497"/>
+			<enumerator name="difference" code="e484"/>
+			<enumerator name="dissolve" code="e490"/>
+			<enumerator name="divide" code="e499"/>
+			<enumerator name="exclusion" code="e485"/>
+			<enumerator name="hard light" code="e478"/>
+			<enumerator name="hard mix" code="e495"/>
+			<enumerator name="hue blend" code="e486"/>
+			<enumerator name="lighten" code="e483"/>
+			<enumerator name="lighter color" code="e496"/>
+			<enumerator name="linear burn" code="e491"/>
+			<enumerator name="linear dodge" code="e492"/>
+			<enumerator name="linear light" code="e479"/>
+			<enumerator name="luminosity" code="e489"/>
+			<enumerator name="multiply" code="e472"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="overlay" code="e476"/>
+			<enumerator name="pass through" code="e471"/>
+			<enumerator name="pin light" code="e494"/>
+			<enumerator name="saturation blend" code="e487"/>
+			<enumerator name="screen" code="e474"/>
+			<enumerator name="soft light" code="e477"/>
+			<enumerator name="subtract" code="e498"/>
+			<enumerator name="vivid light" code="e493"/>
+		</enumeration>
+		<enumeration name="e925" code="e925">
+			<enumerator name="behind mode" code="e926"/>
+			<enumerator name="clear mode" code="e927"/>
+			<enumerator name="color blend" code="e488"/>
+			<enumerator name="color burn" code="e481"/>
+			<enumerator name="color dodge" code="e480"/>
+			<enumerator name="darken" code="e482"/>
+			<enumerator name="darker color" code="e497"/>
+			<enumerator name="difference" code="e484"/>
+			<enumerator name="dissolve" code="e490"/>
+			<enumerator name="divide" code="e499"/>
+			<enumerator name="exclusion" code="e485"/>
+			<enumerator name="hard light" code="e478"/>
+			<enumerator name="hard mix" code="e495"/>
+			<enumerator name="hue blend" code="e486"/>
+			<enumerator name="lighten" code="e483"/>
+			<enumerator name="lighter color" code="e496"/>
+			<enumerator name="linear burn" code="e491"/>
+			<enumerator name="linear dodge" code="e492"/>
+			<enumerator name="linear light" code="e479"/>
+			<enumerator name="luminosity" code="e489"/>
+			<enumerator name="multiply" code="e472"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="overlay" code="e476"/>
+			<enumerator name="pin light" code="e494"/>
+			<enumerator name="saturation blend" code="e487"/>
+			<enumerator name="screen" code="e474"/>
+			<enumerator name="soft light" code="e477"/>
+			<enumerator name="subtract" code="e498"/>
+			<enumerator name="vivid light" code="e493"/>
+		</enumeration>
+		<enumeration name="e510" code="e510">
+			<enumerator name="all linked layers" code="e516"/>
+			<enumerator name="entire layer" code="e515"/>
+			<enumerator name="fill content" code="e513"/>
+			<enumerator name="layer clipping path" code="e514"/>
+			<enumerator name="shape" code="e512"/>
+			<enumerator name="text contents" code="e511"/>
+		</enumeration>
+		<enumeration name="e520" code="e520">
+			<enumerator name="center" code="cent"/>
+			<enumerator name="center justified" code="JCtr"/>
+			<enumerator name="fully justified" code="JFll"/>
+			<enumerator name="left" code="ALft"/>
+			<enumerator name="left justified" code="JLft"/>
+			<enumerator name="right" code="ARgt"/>
+			<enumerator name="right justified" code="JRgt"/>
+		</enumeration>
+		<enumeration name="e530" code="e530">
+			<enumerator name="crisp" code="e531"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="sharp" code="e534"/>
+			<enumerator name="smoothing" code="e533"/>
+			<enumerator name="strong" code="e532"/>
+		</enumeration>
+		<enumeration name="e540" code="e540">
+			<enumerator name="all caps" code="e541"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="small caps" code="e542"/>
+		</enumeration>
+		<enumeration name="e560" code="e560">
+			<enumerator name="Brazilian Portuguese" code="e563"/>
+			<enumerator name="Canadian French" code="e564"/>
+			<enumerator name="Danish" code="e578"/>
+			<enumerator name="Dutch" code="e577"/>
+			<enumerator name="English UK" code="e576"/>
+			<enumerator name="English USA" code="e561"/>
+			<enumerator name="Finnish" code="e565"/>
+			<enumerator name="French" code="e570"/>
+			<enumerator name="German" code="e571"/>
+			<enumerator name="Italian" code="e566"/>
+			<enumerator name="Norwegian" code="e562"/>
+			<enumerator name="Nynorsk Norwegian" code="e567"/>
+			<enumerator name="Old German" code="e568"/>
+			<enumerator name="Portuguese" code="e572"/>
+			<enumerator name="Spanish" code="e569"/>
+			<enumerator name="Swedish" code="e573"/>
+			<enumerator name="Swiss German" code="e574"/>
+		</enumeration>
+		<enumeration name="e580" code="e580">
+			<enumerator name="paragraph text" code="e582"/>
+			<enumerator name="point text" code="e581"/>
+		</enumeration>
+		<enumeration name="e600" code="e600">
+			<enumerator name="arc" code="e601"/>
+			<enumerator name="arc lower" code="e602"/>
+			<enumerator name="arc upper" code="e603"/>
+			<enumerator name="arch" code="e604"/>
+			<enumerator name="bulge" code="e605"/>
+			<enumerator name="fish" code="e610"/>
+			<enumerator name="fish eye" code="e613"/>
+			<enumerator name="flag" code="e608"/>
+			<enumerator name="inflate" code="e614"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="rise" code="e612"/>
+			<enumerator name="shell lower" code="e606"/>
+			<enumerator name="shell upper" code="e607"/>
+			<enumerator name="squeeze" code="e615"/>
+			<enumerator name="twist" code="e616"/>
+			<enumerator name="wave" code="e609"/>
+		</enumeration>
+		<enumeration name="e590" code="e590">
+			<enumerator name="Adobe every line" code="e592"/>
+			<enumerator name="Adobe single line" code="e591"/>
+		</enumeration>
+		<enumeration name="e980" code="e980">
+			<enumerator name="manual" code="e981"/>
+			<enumerator name="metrics" code="e982"/>
+			<enumerator name="optical" code="e983"/>
+		</enumeration>
+		<enumeration name="e990" code="e990">
+			<enumerator name="off" code="e991"/>
+			<enumerator name="strike box" code="e993"/>
+			<enumerator name="strike height" code="e992"/>
+		</enumeration>
+		<enumeration name="eA00" code="eA00">
+			<enumerator name="left" code="ALft"/>
+			<enumerator name="off" code="e991"/>
+			<enumerator name="right" code="ARgt"/>
+		</enumeration>
+		<enumeration name="e630" code="e630">
+			<enumerator name="diminished" code="e633"/>
+			<enumerator name="extended" code="e632"/>
+			<enumerator name="intersected" code="e634"/>
+			<enumerator name="replaced" code="e631"/>
+		</enumeration>
+		<enumeration name="e640" code="e640">
+			<enumerator name="Illustrator paths" code="e641"/>
+			<enumerator name="save for web" code="e643"/>
+		</enumeration>
+		<enumeration name="e650" code="e650">
+			<enumerator name="all paths" code="e652"/>
+			<enumerator name="document bounds" code="e651"/>
+			<enumerator name="named path" code="e653"/>
+		</enumeration>
+		<enumeration name="e660" code="e660">
+			<enumerator name="component channel" code="e661"/>
+			<enumerator name="masked area channel" code="e662"/>
+			<enumerator name="selected area channel" code="e663"/>
+			<enumerator name="spot color channel" code="e664"/>
+		</enumeration>
+		<enumeration name="e850" code="e850">
+			<enumerator name="copyrighted work" code="e851"/>
+			<enumerator name="public domain" code="e852"/>
+			<enumerator name="unmarked" code="e853"/>
+		</enumeration>
+		<enumeration name="e860" code="e860">
+			<enumerator name="custom pattern" code="e865"/>
+			<enumerator name="diffusion dither" code="e863"/>
+			<enumerator name="halftone screen conversion" code="e864"/>
+			<enumerator name="middle threshold" code="e861"/>
+			<enumerator name="pattern dither" code="e862"/>
+		</enumeration>
+		<enumeration name="e870" code="e870">
+			<enumerator name="halftone cross" code="e875"/>
+			<enumerator name="halftone diamond" code="e872"/>
+			<enumerator name="halftone ellipse" code="e873"/>
+			<enumerator name="halftone line" code="e876"/>
+			<enumerator name="halftone round" code="e871"/>
+			<enumerator name="halftone square" code="e874"/>
+		</enumeration>
+		<enumeration name="e880" code="e880">
+			<enumerator name="background color matte" code="e882"/>
+			<enumerator name="black matte" code="e884"/>
+			<enumerator name="foreground color matte" code="e881"/>
+			<enumerator name="Netscape gray" code="e886"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="semi gray" code="e885"/>
+			<enumerator name="white matte" code="e883"/>
+		</enumeration>
+		<enumeration name="e890" code="e890">
+			<enumerator name="absolute" code="Ablt"/>
+			<enumerator name="relative" code="RlTv"/>
+		</enumeration>
+		<enumeration name="e900" code="e900">
+			<enumerator name="CMYK" code="e083"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="Lab" code="e084"/>
+			<enumerator name="RGB" code="e082"/>
+		</enumeration>
+		<enumeration name="e905" code="e905">
+			<enumerator name="bitmap" code="e085"/>
+			<enumerator name="CMYK" code="e083"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="Lab" code="e084"/>
+			<enumerator name="RGB" code="e082"/>
+		</enumeration>
+		<enumeration name="e910" code="e910">
+			<enumerator name="Lab 16" code="e914"/>
+			<enumerator name="Lab 8" code="e913"/>
+			<enumerator name="RGB 16" code="e912"/>
+			<enumerator name="RGB 8" code="e911"/>
+		</enumeration>
+		<enumeration name="e920" code="e920">
+			<enumerator name="center" code="cent"/>
+			<enumerator name="inside" code="e921"/>
+			<enumerator name="outside" code="e922"/>
+		</enumeration>
+		<enumeration name="e930" code="e930">
+			<enumerator name="CMYK" code="e083"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="HSB" code="e932"/>
+			<enumerator name="Lab" code="e084"/>
+			<enumerator name="RGB" code="e082"/>
+			<enumerator name="RGB Hex" code="e934"/>
+		</enumeration>
+		<enumeration name="e940" code="e940">
+			<enumerator name="before running" code="a942"/>
+			<enumerator name="never" code="Nevr"/>
+			<enumerator name="on runtime error" code="e941"/>
+		</enumeration>
+		<enumeration name="e945" code="e945">
+			<enumerator name="document space" code="e946"/>
+			<enumerator name="proof space" code="a947"/>
+		</enumeration>
+		<enumeration name="e950" code="e950">
+			<enumerator name="black and white layer" code="e972"/>
+			<enumerator name="brightness contrast layer" code="e957"/>
+			<enumerator name="channel mixer layer" code="e960"/>
+			<enumerator name="color balance layer" code="e965"/>
+			<enumerator name="color lookup" code="e974"/>
+			<enumerator name="curves layer" code="e956"/>
+			<enumerator name="exposure layer" code="e969"/>
+			<enumerator name="gradient fill layer" code="e953"/>
+			<enumerator name="gradient map layer" code="e961"/>
+			<enumerator name="hue saturation layer" code="e958"/>
+			<enumerator name="inversion layer" code="e962"/>
+			<enumerator name="levels layer" code="e955"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="pattern fill layer" code="e954"/>
+			<enumerator name="photo filter layer" code="e968"/>
+			<enumerator name="posterize layer" code="e964"/>
+			<enumerator name="selective color layer" code="e959"/>
+			<enumerator name="smart object layer" code="e967"/>
+			<enumerator name="solid fill layer" code="e952"/>
+			<enumerator name="text layer" code="e966"/>
+			<enumerator name="threeD layer" code="e970"/>
+			<enumerator name="threshold layer" code="e963"/>
+			<enumerator name="vibrance layer" code="e973"/>
+			<enumerator name="video layer" code="e971"/>
+		</enumeration>
+		<enumeration name="PDFb" code="PDFb">
+			<enumerator name="blinds horizontal" code="PDFc"/>
+			<enumerator name="blinds vertical" code="PDFd"/>
+			<enumerator name="box in" code="PDFe"/>
+			<enumerator name="box out" code="PDFf"/>
+			<enumerator name="dissolve" code="e490"/>
+			<enumerator name="glitter down" code="PDFg"/>
+			<enumerator name="glitter right" code="PDFh"/>
+			<enumerator name="glitter right down" code="PDFi"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="random" code="PDFj"/>
+			<enumerator name="split horizontal in" code="PDFk"/>
+			<enumerator name="split horizontal out" code="PDFl"/>
+			<enumerator name="split vertical in" code="PDFm"/>
+			<enumerator name="split vertical out" code="PDFn"/>
+			<enumerator name="wipe down" code="PDFo"/>
+			<enumerator name="wipe left" code="PDFp"/>
+			<enumerator name="wipe right" code="PDFq"/>
+			<enumerator name="wipe up" code="PDFr"/>
+		</enumeration>
+		<enumeration name="PGa2" code="PGa2">
+			<enumerator name="Arial" code="PG03"/>
+			<enumerator name="Courier New" code="PG04"/>
+			<enumerator name="Helvetica" code="PG05"/>
+			<enumerator name="Times New Roman" code="PG07"/>
+		</enumeration>
+		<enumeration name="PGa3" code="PGa3">
+			<enumerator name="constrain both" code="PG10"/>
+			<enumerator name="constrain height" code="PG09"/>
+			<enumerator name="constrain width" code="PG08"/>
+		</enumeration>
+		<enumeration name="PGa4" code="PGa4">
+			<enumerator name="gallery custom" code="PG14"/>
+			<enumerator name="gallery large" code="PG13"/>
+			<enumerator name="gallery medium" code="PG12"/>
+			<enumerator name="gallery small" code="PG11"/>
+		</enumeration>
+		<enumeration name="PGa5" code="PGa5">
+			<enumerator name="gallery caption" code="PG19"/>
+			<enumerator name="gallery copyright" code="PG18"/>
+			<enumerator name="gallery credit" code="PG20"/>
+			<enumerator name="gallery custom text" code="PG16"/>
+			<enumerator name="gallery filename" code="PG17"/>
+			<enumerator name="gallery none" code="PG15"/>
+			<enumerator name="gallery title" code="PG21"/>
+		</enumeration>
+		<enumeration name="PP09" code="PP09">
+			<enumerator name="caption text" code="PP05"/>
+			<enumerator name="copyright text" code="PP04"/>
+			<enumerator name="credit text" code="PP06"/>
+			<enumerator name="filename text" code="PP03"/>
+			<enumerator name="no text" code="PP02"/>
+			<enumerator name="origin text" code="PP07"/>
+			<enumerator name="user text" code="PP08"/>
+		</enumeration>
+		<enumeration name="PGa6" code="PGa6">
+			<enumerator name="gallery security black" code="PG22"/>
+			<enumerator name="gallery security custom" code="PG24"/>
+			<enumerator name="gallery security white" code="PG23"/>
+		</enumeration>
+		<enumeration name="PGa7" code="PGa7">
+			<enumerator name="gallery centered" code="PG25"/>
+			<enumerator name="gallery lower left" code="PG27"/>
+			<enumerator name="gallery lower right" code="PG29"/>
+			<enumerator name="gallery upper left" code="PG26"/>
+			<enumerator name="gallery upper right" code="PG28"/>
+		</enumeration>
+		<enumeration name="PGa8" code="PGa8">
+			<enumerator name="clock wise 45" code="PG31"/>
+			<enumerator name="clock wise 90" code="PG32"/>
+			<enumerator name="counter clock wise 45" code="PG33"/>
+			<enumerator name="counter clock wise 90" code="PG34"/>
+			<enumerator name="zero" code="PG30"/>
+		</enumeration>
+		<enumeration name="MX00" code="MX00">
+			<enumerator name="always" code="e051"/>
+			<enumerator name="ask" code="ask "/>
+			<enumerator name="never" code="Nevr"/>
+		</enumeration>
+		<enumeration name="Pr49" code="Pr49">
+			<enumerator name="both" code="Pr52"/>
+			<enumerator name="log file" code="Pr51"/>
+			<enumerator name="metadata" code="Pr50"/>
+		</enumeration>
+		<enumeration name="Pr53" code="Pr53">
+			<enumerator name="concise" code="Pr55"/>
+			<enumerator name="detailed" code="Pr56"/>
+			<enumerator name="sessiononly" code="Pr54"/>
+		</enumeration>
+		<enumeration name="BT14" code="BT14">
+			<enumerator name="folder" code="BT16"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="save and close" code="BT15"/>
+		</enumeration>
+		<enumeration name="BT17" code="BT17">
+			<enumerator name="ddmm" code="BT33"/>
+			<enumerator name="ddmmyy" code="BT32"/>
+			<enumerator name="document name 3" code="BT20"/>
+			<enumerator name="document name lower" code="BT19"/>
+			<enumerator name="document name mixed" code="BT18"/>
+			<enumerator name="extension lower" code="BT34"/>
+			<enumerator name="extension upper" code="BT35"/>
+			<enumerator name="mmdd" code="BT28"/>
+			<enumerator name="mmddyy" code="BT27"/>
+			<enumerator name="serial letter lower" code="BT25"/>
+			<enumerator name="serial letter upper" code="BT26"/>
+			<enumerator name="serial number four" code="BT24"/>
+			<enumerator name="serial number one" code="BT21"/>
+			<enumerator name="serial number three" code="BT23"/>
+			<enumerator name="serial number two" code="BT22"/>
+			<enumerator name="yyddmm" code="BT31"/>
+			<enumerator name="yymmdd" code="BT30"/>
+			<enumerator name="yyyymmdd" code="BT29"/>
+		</enumeration>
+		<enumeration name="LB00" code="LB00">
+			<enumerator name="image highlight" code="LB02"/>
+			<enumerator name="layer mask" code="LB01"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="transparency channel" code="LB17"/>
+		</enumeration>
+		<enumeration name="LB03" code="LB03">
+			<enumerator name="heptagon" code="LB08"/>
+			<enumerator name="hexagon" code="LB07"/>
+			<enumerator name="octagon" code="LB09"/>
+			<enumerator name="pentagon" code="LB06"/>
+			<enumerator name="square" code="e733"/>
+			<enumerator name="triangle" code="LB04"/>
+		</enumeration>
+		<enumeration name="CR38" code="CR38">
+			<enumerator name="adaptive" code="CR41"/>
+			<enumerator name="black white" code="CR44"/>
+			<enumerator name="custom reduction" code="CR35"/>
+			<enumerator name="grayscale" code="e081"/>
+			<enumerator name="macintosh colors" code="CR45"/>
+			<enumerator name="perceptual reduction" code="CR39"/>
+			<enumerator name="restrictive" code="CR42"/>
+			<enumerator name="selective" code="CR40"/>
+			<enumerator name="windows colors" code="CR37"/>
+		</enumeration>
+		<enumeration name="CR02" code="CR02">
+			<enumerator name="camera default" code="CR03"/>
+			<enumerator name="custom settings" code="CR36"/>
+			<enumerator name="selected image" code="CR04"/>
+		</enumeration>
+		<enumeration name="CR05" code="CR05">
+			<enumerator name="as shot" code="CR06"/>
+			<enumerator name="auto" code="CR07"/>
+			<enumerator name="cloudy" code="CR09"/>
+			<enumerator name="custom camera settings" code="CR18"/>
+			<enumerator name="daylight" code="CR08"/>
+			<enumerator name="flash" code="CR13"/>
+			<enumerator name="fluorescent" code="CR12"/>
+			<enumerator name="shade" code="CR10"/>
+			<enumerator name="tungsten" code="CR11"/>
+		</enumeration>
+		<enumeration name="CR46" code="CR46">
+			<enumerator name="Adobe RGB" code="CR47"/>
+			<enumerator name="color match RGB" code="CR48"/>
+			<enumerator name="ProPhoto RGB" code="CR49"/>
+			<enumerator name="sRGB" code="CR50"/>
+		</enumeration>
+		<enumeration name="CR34" code="CR34">
+			<enumerator name="extra large" code="e811"/>
+			<enumerator name="large" code="Lrge"/>
+			<enumerator name="maximum" code="Maxi"/>
+			<enumerator name="medium" code="Mdum"/>
+			<enumerator name="minimum" code="Mini"/>
+			<enumerator name="small" code="Smll"/>
+		</enumeration>
+		<enumeration name="PDFx" code="PDFx">
+			<enumerator name="actual size" code="PDFy"/>
+			<enumerator name="fit page" code="PDFz"/>
+		</enumeration>
+		<enumeration name="crtO" code="crtO">
+			<enumerator name="art box" code="crt6"/>
+			<enumerator name="bleed box" code="crt4"/>
+			<enumerator name="bounding box" code="crt1"/>
+			<enumerator name="crop box" code="crt3"/>
+			<enumerator name="media box" code="crt2"/>
+			<enumerator name="trim box" code="crt5"/>
+		</enumeration>
+		<enumeration name="FP00" code="FP00">
+			<enumerator name="extra large" code="e811"/>
+			<enumerator name="none" code="DNne"/>
+			<enumerator name="preview huge" code="FP05"/>
+			<enumerator name="preview large" code="FP03"/>
+			<enumerator name="preview medium" code="FP02"/>
+			<enumerator name="preview small" code="FP01"/>
+		</enumeration>
+		<enumeration name="ME00" code="ME00">
+			<enumerator name="measure count tool" code="ME02"/>
+			<enumerator name="measure ruler tool" code="ME03"/>
+			<enumerator name="measure selection" code="ME01"/>
+		</enumeration>
+	</suite>
+	<suite name="Open Formats Suite" code="PSOs" description="Classes for specifying options when opening document">
+		<class name="Camera RAW open options" code="CR01" description="Settings related to opening a camera RAW document" inherits="open options">
+			<property name="bits per channel" code="DBch" type="e815" description="number of bits per channel"/>
+			<property name="blue hue" code="CR32" type="integer" description="the blue hue of the shot"/>
+			<property name="blue saturation" code="CR33" type="integer" description="the blue saturation of the shot"/>
+			<property name="brightness" code="Bhtn" type="integer" description="the brightness of the shot"/>
+			<property name="chromatic aberration by" code="CR24" type="integer" description="the chromatic aberration B/Y of the shot"/>
+			<property name="chromatic aberration rc" code="CR23" type="integer" description="the chromatic aberration R/C of the shot"/>
+			<property name="color noise reduction" code="CR22" type="integer" description="the color noise reduction of the shot"/>
+			<property name="color space" code="ClSp" type="CR46" description="colorspace for image"/>
+			<property name="contrast" code="CR19" type="integer" description="the constrast of the shot"/>
+			<property name="exposure" code="CR17" type="real" description="the exposure of the shot"/>
+			<property name="green hue" code="CR30" type="integer" description="the green hue of the shot"/>
+			<property name="green saturation" code="CR31" type="integer" description="the green saturation of the shot"/>
+			<property name="luminance smoothing" code="CR21" type="integer" description="the luminance smoothing of the shot"/>
+			<property name="red hue" code="CR28" type="integer" description="the red hue of the shot"/>
+			<property name="red saturation" code="CR29" type="integer" description="the red saturation of the shot"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the document (in pixels per inch)"/>
+			<property name="saturation" code="pSat" type="integer" description="the saturation of the shot"/>
+			<property name="settings" code="pPrf" type="CR02" description="global settings for all Camera RAW options ( default: camera default )"/>
+			<property name="shadow tint" code="CR27" type="integer" description="the shadow tint of the shot"/>
+			<property name="shadows" code="A501" type="integer" description="the shadows of the shot"/>
+			<property name="sharpness" code="CR20" type="integer" description="the sharpness of the shot"/>
+			<property name="size" code="ptsz" type="CR34" description="size of the new document"/>
+			<property name="temperature" code="CR15" type="integer" description="the temperature of the shot"/>
+			<property name="tint" code="CR16" type="integer" description="the tint of the shot"/>
+			<property name="vignetting amount" code="CR25" type="integer" description="the vignetting amount of the shot"/>
+			<property name="vignetting midpoint" code="CR26" type="integer" description="the vignetting mid point of the shot"/>
+			<property name="white balance" code="CR14" type="CR05" description="white balance options for the image"/>
+		</class>
+		<class name="DICOM open options" code="cDCM" description="Settings related to opening a DICOM document" inherits="open options">
+			<property name="anonymize" code="AnYm" type="boolean" description="Anonymize the patient information"/>
+			<property name="columns" code="ColM" type="integer" description="The number of columns in n-up configuration"/>
+			<property name="reverse" code="RvsE" type="boolean" description="Reverse(Invert) the image"/>
+			<property name="rows" code="RoWs" type="integer" description="The number of rows in n-up configuration"/>
+			<property name="show_overlays" code="OvLy" type="boolean" description="Show Overlays (if present)"/>
+			<property name="windowlevel" code="WleV" type="integer" description="Window Level"/>
+			<property name="windowwidth" code="WWiT" type="integer" description="Window Width"/>
+		</class>
+		<class name="EPS open options" code="cGES" description="Settings related to opening a generic EPS document" inherits="open options">
+			<property name="constrain proportions" code="CPrP" type="boolean" description="constrain proportions of image"/>
+			<property name="height" code="Hght" type="real" description="height of image (unit value)"/>
+			<property name="mode" code="OMde" type="e900" description="the document mode"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the document (in pixels per inch)"/>
+			<property name="use antialias" code="AnAl" type="boolean" description="use antialias?"/>
+			<property name="width" code="Wdth" type="real" description="width of image (unit value)"/>
+		</class>
+		<class name="open options" code="cOpO" description="used with options on the open command"/>
+		<class name="PDF open options" code="cGPF" description="Settings related to opening a generic PDF document" inherits="open options">
+			<property name="bits per channel" code="DBch" type="e815" description="number of bits per channel"/>
+			<property name="constrain proportions" code="CPrP" type="boolean" description="DEPRECATED, no longer used in CS2 ( constrain proportions of image )"/>
+			<property name="crop page" code="crto" type="crtO" description="crop the page"/>
+			<property name="height" code="Hght" type="real" description="DEPRECATED, no longer used in CS2  ( height of image (unit value) )"/>
+			<property name="mode" code="OMde" type="e900" description="the document mode"/>
+			<property name="name" code="pnam" type="text" description="name of the new document"/>
+			<property name="object" code="pPTd" type="integer" description="number of 3d object to open"/>
+			<property name="page" code="pPgN" type="integer" description="number of page or image to open"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the document (in pixels per inch)"/>
+			<property name="suppress warnings" code="spwr" type="boolean" description="supress any warnings that may occur during opening"/>
+			<property name="use 3d object number" code="pUTd" type="boolean" description="3d property refers to using 3d object, if false then UsePageNumber is used"/>
+			<property name="use antialias" code="AnAl" type="boolean" description="use antialias?"/>
+			<property name="use page number" code="pUPg" type="boolean" description="page property refers to page number, if false page property refers to image number"/>
+			<property name="width" code="Wdth" type="real" description="DEPRECATED, no longer used in CS2  ( width of image (unit value) )"/>
+		</class>
+		<class name="Photo CD open options" code="cPCD" description="Settings related to opening a PhotoCD document" inherits="open options">
+			<property name="color profile name" code="DcpN" type="text" description="profile to use when reading the image"/>
+			<property name="color space" code="ClSp" type="e910" description="colorspace for image"/>
+			<property name="orientation" code="Dori" type="Dori"/>
+			<property name="pixel size" code="PxlZ" type="e810" description="dimensions of image"/>
+			<property name="resolution" code="ResL" type="real" description="the resolution of the image (in pixels per inch)"/>
+		</class>
+		<class name="raw format open options" code="cRwF" description="Settings related to opening a raw format document" inherits="open options">
+			<property name="bits per channel" code="DBch" type="integer" description="number of bits for each channel (8 or 16)"/>
+			<property name="byte order" code="TfBo" type="e330" description="only relevant for images with 16 bits per channel"/>
+			<property name="header size" code="HdSz" type="integer"/>
+			<property name="height" code="Hght" type="integer" description="height of image (in pixels)"/>
+			<property name="interleave channels" code="cOdr" type="boolean" description="are the channels in the image interleaved?"/>
+			<property name="number of channels" code="ChNm" type="integer" description="number of channels in image"/>
+			<property name="retain header" code="RtHd" type="boolean" description="retain header when saving?"/>
+			<property name="width" code="Wdth" type="integer" description="width of image (in pixels)"/>
+		</class>
+		<enumeration name="e810" code="e810">
+			<enumerator name="extra large" code="e811"/>
+			<enumerator name="large" code="Lrge"/>
+			<enumerator name="maximum" code="Maxi"/>
+			<enumerator name="medium" code="Mdum"/>
+			<enumerator name="minimum" code="Mini"/>
+			<enumerator name="small" code="Smll"/>
+		</enumeration>
+	</suite>
+	<suite name="Save Formats Suite" code="PSSs" description="Classes for specifying options when saving documents">
+		<class name="BMP save options" code="cSBP" description="Settings related to saving a BMP document" inherits="save options">
+			<property name="bits per sample" code="DBsm" type="e820" description="number of bits per sample ( default: twenty four )"/>
+			<property name="flipped row order" code="FpRo" type="boolean"/>
+			<property name="RLE compression" code="pRLE" type="boolean" description="should RLE compression be used?"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="target operating system" code="pTOS" type="e191" description="target OS. Windows or OS/2 ( default: Windows )"/>
+		</class>
+		<class name="EPS save options" code="cSSP" description="Settings related to saving an EPS document" inherits="save options">
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="encoding" code="EnCd" type="e260" description="type of encoding to use for document ( default: binary )"/>
+			<property name="halftone screen" code="HfTn" type="boolean" description="include halftone screen ( default: false )"/>
+			<property name="image interpolation" code="ImIP" type="boolean" description="use image interpolation ( default: false )"/>
+			<property name="PostScript color management" code="PsCM" type="boolean" description="use Postscript color management ( default: false )"/>
+			<property name="preview type" code="PwTp" type="e250" description="type of preview ( default: monochrome TIFF )"/>
+			<property name="transfer function" code="Tsfr" type="boolean" description="include transfer functions in document ( default: false )"/>
+			<property name="transparent whites" code="TpWh" type="boolean" description="only valid when saving BitMap documents"/>
+			<property name="vector data" code="VcDt" type="boolean" description="include vector data"/>
+		</class>
+		<class name="GIF save options" code="cSGF" description="Settings related to saving a GIF document" inherits="save options">
+			<property name="colors in palette" code="pPCN" type="integer" description="number of colors in palette (only settable for some palette types)"/>
+			<property name="dither" code="DtTp" type="e230" description="type of dither"/>
+			<property name="dither amount" code="DtAm" type="integer" description="amount of dither. Only valid for diffusion ( 1 - 100; default: 75 )"/>
+			<property name="forced colors" code="PFcl" type="e200"/>
+			<property name="interlaced" code="RwOr" type="boolean" description="should rows be interlaced? ( default: false )"/>
+			<property name="matte" code="Mtte" type="e880"/>
+			<property name="palette" code="PPlt" type="e210" description="( default: local selective )"/>
+			<property name="preserve exact colors" code="DPex" type="boolean"/>
+			<property name="transparency" code="Trpc" type="boolean"/>
+		</class>
+		<class name="JPEG save options" code="cSJP" description="Settings related to saving a JPEG document" inherits="save options">
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="format options" code="JPOp" type="e270" description="( default: standard )"/>
+			<property name="matte" code="Mtte" type="e880"/>
+			<property name="quality" code="Qlty" type="integer" description="quality of produced image ( 0 - 12; default: 3 )"/>
+			<property name="scans" code="Scns" type="integer" description="number of scans. Only valid for progressive type JPEG files ( 3 - 5 )"/>
+		</class>
+		<class name="PDF save options" code="cSPF" description="Settings related to saving a pdf document" inherits="save options">
+			<property name="color conversion" code="PD30" type="boolean" description="convert the color profile to a destination profile"/>
+			<property name="description" code="PD27" type="text" description="description of the save options in use"/>
+			<property name="destination profile" code="PD22" type="text" description="describes the final RGB or CMYK output device, such as your monitor or a certain press standard"/>
+			<property name="down sample" code="PD15" type="PD16" description="down sample method to use"/>
+			<property name="down sample limit" code="PD29" type="real" description="limits downsampleing/subsampling to images that exceed this value (in pixels per inch)"/>
+			<property name="down sample size" code="PD28" type="real" description="down sample images to this size if they exceed limit (in pixels per inch)"/>
+			<property name="downgrade color profile" code="pDgP" type="boolean" description="DEPRECATED, no longer used in CS2 ( should the embedded color profile be downgraded to version 2 )"/>
+			<property name="eight convert" code="PD21" type="boolean" description="converts a 16-bit image to 8-bit for better compatibility with other applications"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="embed fonts" code="EmFt" type="boolean" description="DEPRECATED, no longer used in CS2 ( embed fonts? Only valid if a text layer is included )"/>
+			<property name="embed thumbnail" code="PD14" type="boolean" description="Includes a small preview image in Acrobat"/>
+			<property name="encoding" code="EnCd" type="e280" description="ZIP, JPEG and JPEG2000 encoding and compression options"/>
+			<property name="image interpolation" code="ImIP" type="boolean" description="DEPRECATED, no longer used in CS2 ( use image interpolation? )"/>
+			<property name="JPEG quality" code="PJpg" type="integer" description="Only valid for JPEG encoding. Use encoding options instead of this property. Quality of produced image. Only valid for JPEG encoded PDF documents ( 0 - 12 )"/>
+			<property name="output condition" code="PD23" type="text" description="an optional comment field for inserting descriptions of the output condition. The text is stored in the PDF/X file."/>
+			<property name="output condition id" code="PD24" type="text" description="identifier for the output condition"/>
+			<property name="PDF compatibility" code="PD07" type="PD08" description="PDF version to be compatible with"/>
+			<property name="PDF standard" code="PD06" type="PD01" description="PDF Standard to be compatible with"/>
+			<property name="preserve editing" code="PD13" type="boolean" description="Lets you reopen the PDF in Photoshop with native Photoshop data intact"/>
+			<property name="presetfile" code="pfil" type="text" description="preset file to use for settings, may override &apos;save as&apos; dialog settings"/>
+			<property name="profile inclusion policy" code="PD31" type="boolean" description="shows which profiles to include"/>
+			<property name="registry name" code="PD25" type="text" description="URL where the output condition is registered"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="save annotations" code="pSAn" type="boolean" description="save annotations"/>
+			<property name="save layers" code="pSLr" type="boolean" description="save layers"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+			<property name="tile size" code="PD20" type="integer" description="compression option supported only with JPEG2000 compression"/>
+			<property name="transparency" code="Trpc" type="boolean" description="DEPRECATED, no longer used in CS2"/>
+			<property name="use outlines for text" code="TxOl" type="boolean" description="DEPRECATED, no longer used in CS2 ( use outlines for text? Only valid if vector data is included )"/>
+			<property name="vector data" code="VcDt" type="boolean" description="DEPRECATED, no longer used in CS2 ( include vector data )"/>
+			<property name="view" code="PDF6" type="boolean" description="Opens the saved PDF in Acrobat"/>
+			<property name="web optimize" code="PD26" type="boolean" description="Improves performance of PDFs on Web servers"/>
+		</class>
+		<class name="Photoshop DCS 1.0 save options" code="cSD1" description="Settings related to saving a Photoshop DCS 1.0 document" inherits="save options">
+			<property name="DCS" code="DCsc" type="e340" description="( default: color composite )"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="encoding" code="EnCd" type="e260" description="type of encoding to use for document ( default: binary )"/>
+			<property name="halftone screen" code="HfTn" type="boolean" description="include halftone screen ( default: false )"/>
+			<property name="image interpolation" code="ImIP" type="boolean" description="use image interpolation ( default: false )"/>
+			<property name="preview type" code="PwTp" type="e250" description="type of preview ( default: eight bit Mac OS )"/>
+			<property name="transfer function" code="Tsfr" type="boolean" description="include transfer functions in document ( default: false )"/>
+			<property name="vector data" code="VcDt" type="boolean" description="include vector data"/>
+		</class>
+		<class name="Photoshop DCS 2.0 save options" code="cSD2" description="Settings related to saving a Photoshop DCS 2.0 document" inherits="save options">
+			<property name="DCS" code="DCsc" type="e340" description="( default: no composite PostScript )"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="encoding" code="EnCd" type="e260" description="type of encoding to use for document ( default: binary )"/>
+			<property name="halftone screen" code="HfTn" type="boolean" description="include halftone screen ( default: false )"/>
+			<property name="image interpolation" code="ImIP" type="boolean" description="use image interpolation ( default: false )"/>
+			<property name="multifile DCS" code="DCmf" type="boolean" description="( default: false )"/>
+			<property name="preview type" code="PwTp" type="e250" description="type of preview ( default: eight bit Mac OS )"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+			<property name="transfer function" code="Tsfr" type="boolean" description="include transfer functions in document ( default: false )"/>
+			<property name="vector data" code="VcDt" type="boolean" description="include vector data"/>
+		</class>
+		<class name="Photoshop save options" code="cPSS" description="Settings related to saving a Photoshop document" inherits="save options">
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="save annotations" code="pSAn" type="boolean" description="save annotations"/>
+			<property name="save layers" code="pSLr" type="boolean" description="save layers"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+		</class>
+		<class name="PICT file save options" code="cSPt" description="Settings related to saving a PICT document" inherits="save options">
+			<property name="compression" code="pCmp" type="e290" description="( default: none )"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="resolution" code="ResL" type="e840" description="number of bits per pixel"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+		</class>
+		<class name="PICT resource save options" code="cSPr" description="Settings related to saving a PICT resource file" inherits="save options">
+			<property name="compression" code="pCmp" type="e290" description="( default: none )"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="name" code="pnam" type="text" description="name of PICT resource ( default: &quot;&quot; )"/>
+			<property name="resolution" code="ResL" type="e840" description="number of bits per pixel"/>
+			<property name="resource id" code="PtRD" type="integer" description="ID of PICT resource ( default: 128 )"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+		</class>
+		<class name="Pixar save options" code="cSPi" description="Settings related to saving a Pixar document" inherits="save options">
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+		</class>
+		<class name="PNG save options" code="cSPG" description="Settings related to saving a PNG document" inherits="save options">
+			<property name="compression" code="pCmp" type="integer" description="compression used on the image. ( 0 - 9; default: 0 )"/>
+			<property name="interlaced" code="RwOr" type="boolean" description="should rows be interlaced? ( default: false )"/>
+		</class>
+		<class name="raw save options" code="cSRw" description="Settings related to saving a document in raw format" inherits="save options">
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+		</class>
+		<class name="save options" code="BSop" description="used with options on the save command"/>
+		<class name="SGI RGB save options" code="cSGG" description="Settings related to saving a document in the SGI RGB format" inherits="save options">
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+		</class>
+		<class name="Targa save options" code="cSTg" description="Settings related to saving a Target document" inherits="save options">
+			<property name="resolution" code="ResL" type="e845" description="number of bits per pixel ( default: twenty four )"/>
+			<property name="RLE compression" code="pRLE" type="boolean" description="should RLE compression be used? ( default: true )"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+		</class>
+		<class name="TIFF save options" code="cSTf" description="Settings related to saving a TIFF document" inherits="save options">
+			<property name="byte order" code="TfBo" type="e330" description="Default value is &apos;Mac OS&apos; when running on MacOS, and &apos;IBM PC&apos; when running on a PC"/>
+			<property name="embed color profile" code="pSEP" type="boolean" description="embed color profile in document"/>
+			<property name="image compression" code="ImCp" type="e320" description="compression type ( default: none )"/>
+			<property name="interleave channels" code="cOdr" type="boolean" description="are the channels in the image interleaved? ( default: true )"/>
+			<property name="JPEG quality" code="PJpg" type="integer" description="quality of produced image. Only valid for JPEG compressed TIFF documents ( 0 - 12 )"/>
+			<property name="layer compression" code="LyCp" type="e325" description="should only be used when you are saving layers"/>
+			<property name="save alpha channels" code="pSAc" type="boolean" description="save alpha channels"/>
+			<property name="save annotations" code="pSAn" type="boolean" description="save annotations"/>
+			<property name="save image pyramid" code="pPYr" type="boolean" description="( default: false )"/>
+			<property name="save layers" code="pSLr" type="boolean" description="save layers"/>
+			<property name="save spot colors" code="pSSs" type="boolean" description="save spot colors"/>
+			<property name="transparency" code="Trpc" type="boolean"/>
+		</class>
+		<enumeration name="e840" code="e840">
+			<enumerator name="eight" code="Eigt"/>
+			<enumerator name="four" code="Four"/>
+			<enumerator name="sixteen" code="STen"/>
+			<enumerator name="thirty two" code="Tty2"/>
+			<enumerator name="two" code="Two "/>
+		</enumeration>
+		<enumeration name="e845" code="e845">
+			<enumerator name="sixteen" code="STen"/>
+			<enumerator name="thirty two" code="Tty2"/>
+			<enumerator name="twenty four" code="TyFr"/>
+		</enumeration>
+		<enumeration name="e820" code="e820">
+			<enumerator name="A1R5G5B5" code="e828"/>
+			<enumerator name="A4R4G4B4" code="e831"/>
+			<enumerator name="A8R8G8B8" code="e834"/>
+			<enumerator name="eight" code="Eigt"/>
+			<enumerator name="four" code="Four"/>
+			<enumerator name="one" code="One "/>
+			<enumerator name="R5G6B5" code="e829"/>
+			<enumerator name="R8G8B8" code="e832"/>
+			<enumerator name="sixteen" code="STen"/>
+			<enumerator name="thirty two" code="Tty2"/>
+			<enumerator name="twenty four" code="TyFr"/>
+			<enumerator name="X1R5G5B5" code="e827"/>
+			<enumerator name="X4R4G4B4" code="e830"/>
+			<enumerator name="X8R8G8B8" code="e833"/>
+		</enumeration>
+	</suite>
+	<suite name="Export Formats Suite" code="Exps" description="Classes for specifying options when exporting documents">
+		<class name="export options" code="EOB " description="used with options on the export command"/>
+		<class name="Illustrator paths export options" code="AiXp" description="Settings related to exporting Illustrator paths" inherits="export options">
+			<property name="path name" code="TPnm" type="text" description="name of path to export. Only valid if you are exporting a named path"/>
+			<property name="target path" code="TgPt" type="e650" description="which path to export ( default: document bounds )"/>
+		</class>
+		<class name="save for web export options" code="S4WC" description="Settings related to exporting Save For Web files" inherits="export options">
+			<property name="blur" code="F001" type="real" description="apply blur to image to reduce artifacts ( default: 0.0 )"/>
+			<property name="color reduction" code="S4W4" type="CR38" description="color reduction algorithm ( default: selective )"/>
+			<property name="colors in palette" code="pPCN" type="integer" description="number of colors in palette ( default: 256 )"/>
+			<property name="dither" code="DtTp" type="e230" description="type of dither ( default: diffusion )"/>
+			<property name="dither amount" code="DtAm" type="integer" description="amount of dither. Only valid for diffusion ( default: 100 )"/>
+			<property name="interlaced" code="RwOr" type="boolean" description="download in multiple passes, progressive ( default: false )"/>
+			<property name="lossy" code="S4W3" type="integer" description="controls amount of lossiness allowed ( default: 0 )"/>
+			<property name="matte" code="Mtte" type="RGB color" description="defines colors to blend transparent pixels against"/>
+			<property name="optimized size" code="S4W8" type="boolean" description="creates smaller but less compatible files ( default: true )"/>
+			<property name="png eight" code="S4W2" type="boolean" description="if the format is PNG how many bits, true = 8, false = 24 ( default: true )"/>
+			<property name="quality" code="Qlty" type="integer" description="quality of produced image ( default: 60 )"/>
+			<property name="transparency" code="Trpc" type="boolean" description="( default: true )"/>
+			<property name="transparency amount" code="S4W6" type="integer" description="amount of transparency dither ( default: 100 )"/>
+			<property name="transparency dither" code="S4W5" type="e230" description="transparency dither algorithm ( default: none )"/>
+			<property name="web format" code="S4WB" type="SvFm" description="File format to use.  Note: Save For Web only supports Compuserve GIF, JPEG, PNG-8, PNG-24, and BMP formats. ( default: CompuServe GIF )"/>
+			<property name="web snap" code="S4W7" type="integer" description="snaps close colors to web palette based on tolerance ( default: 0 )"/>
+			<property name="with profile" code="S4W9" type="boolean" description="include an ICC profile based on Photoshop color compensation ( default: false )"/>
+		</class>
+	</suite>
+	<suite name="Filter Suite" code="PFts" description="Scripting commands for applying filters to documents">
+		<command name="filter" code="PFtsApft" description="apply a filter to one or more art layers">
+			<direct-parameter type="art layer" description="the art layer object or objects to be operated upon"/>
+			<parameter name="using" code="Usng" type="any" description="name of options class that the method should be invoked with. Must be a name of a class that inherits from filter options"/>
+			<parameter name="with options" code="FmOp" type="filter options" optional="yes" description="options for method"/>
+		</command>
+		<class name="add noise" code="F018" description="apply the add noise filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="real"/>
+			<property name="distribution" code="Dstr" type="e745"/>
+			<property name="monochromatic" code="MChr" type="boolean"/>
+		</class>
+		<class name="average" code="F037" description="apply the average filter" inherits="filter options"/>
+		<class name="blur" code="F001" description="apply the blur filter" inherits="filter options"/>
+		<class name="blur more" code="F002" description="apply the blur more filter" inherits="filter options"/>
+		<class name="clouds" code="F031" description="apply the clouds filter" inherits="filter options"/>
+		<class name="custom filter" code="F026" description="apply the custom filter" inherits="filter options">
+			<property name="characteristics" code="Crtx" description="filter characteristics (array of 25 values - Correspons to a left to right, top to bottom traversal of array presented in the Ui)">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="scaling" code="Sclg" type="integer"/>
+			<property name="offset" code="OfZt" type="integer"/>
+		</class>
+		<class name="deinterlace" code="F035" description="apply the de-interlace filter" inherits="filter options">
+			<property name="eliminate" code="Elnt" type="e755"/>
+			<property name="create new fields by" code="CrFl" type="e760"/>
+		</class>
+		<class name="despeckle" code="F019" description="apply the despeckle filter" inherits="filter options"/>
+		<class name="difference clouds" code="F032" description="apply the difference clouds filter" inherits="filter options"/>
+		<class name="diffuse glow" code="F006" description="apply the diffuse glow filter" inherits="filter options">
+			<property name="graininess" code="Grns" type="integer" description="(range: 0 - 10)"/>
+			<property name="glow amount" code="GlAm" type="integer" description="(range: 0 - 20)"/>
+			<property name="clear amount" code="CLam" type="integer" description="(range: 0 - 20)"/>
+		</class>
+		<class name="displace filter" code="F015" description="apply the displace filter" inherits="filter options">
+			<property name="horizontal scale" code="HrSc" type="integer"/>
+			<property name="vertical scale" code="VtSc" type="integer"/>
+			<property name="kind" code="Kind" type="e725"/>
+			<property name="undefined areas" code="Udae" type="e715"/>
+			<property name="displacement map definition" code="DpFl" type="alias"/>
+		</class>
+		<class name="dust and scratches" code="F020" description="apply the dust and scratches filter" inherits="filter options">
+			<property name="radius" code="Radi" type="integer" description="in pixels"/>
+			<property name="threshold" code="Thld" type="integer"/>
+		</class>
+		<class name="filter options" code="BsFt" description="options used with the filter method"/>
+		<class name="gaussian blur" code="GBlr" description="apply the gaussian blur filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="glass filter" code="F007" description="apply the glass filter" inherits="filter options">
+			<property name="distortion" code="Dton" type="integer" description="(range: 0 - 20)"/>
+			<property name="smoothness" code="StNs" type="integer" description="(range: 1 - 15)"/>
+			<property name="scaling" code="Sclg" type="integer" description="(range: 50 - 200)"/>
+			<property name="invert texture" code="ivTu" type="boolean" description="(default: false )"/>
+			<property name="texture kind" code="Txkd" type="e690"/>
+			<property name="texture definition" code="TxFl" type="alias"/>
+		</class>
+		<class name="high pass" code="F030" description="apply the high pass filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="lens blur" code="LnBl" description="apply the lens blur filter" inherits="filter options">
+			<property name="source" code="Di12" type="LB00" description="source for the depth map (default: none )"/>
+			<property name="focal distance" code="LB11" type="integer" description="blur focal distance for the depth map (default: 0 )"/>
+			<property name="invert depth map" code="LB15" type="boolean" description="invert the depth map (default: false )"/>
+			<property name="iris shape" code="LB16" type="LB03" description="shape of the iris (default: hexagon )"/>
+			<property name="radius" code="Radi" type="integer" description="radius of the iris (default: 15 )"/>
+			<property name="blade curvature" code="LB13" type="integer" description="blade curvature of the iris (default: 0 )"/>
+			<property name="rotation" code="LB14" type="integer" description="rotation of the iris (default: 0 )"/>
+			<property name="brightness" code="Bhtn" type="integer" description="brightness for the specular highlights (default: 0 )"/>
+			<property name="threshold" code="Thld" type="integer" description="threshold for the specular highlights (default: 0 )"/>
+			<property name="amount" code="Amnt" type="integer" description="amount of noise (default: 0 )"/>
+			<property name="distribution" code="Dstr" type="e745" description="distribution value for the noise (default: uniform )"/>
+			<property name="monochromatic" code="MChr" type="boolean" description="is the noise monochromatic (default: false )"/>
+		</class>
+		<class name="lens flare" code="F033" description="apply the lens flare filter" inherits="filter options">
+			<property name="brightness" code="Bhtn" type="integer" description="(range: 10 - 300)"/>
+			<property name="flare center" code="FCtr" type="list" description="position (unit value)"/>
+			<property name="lens type" code="LTpe" type="e750"/>
+		</class>
+		<class name="maximum filter" code="F027" description="apply the maximum filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="median noise" code="F021" description="apply the median noise filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="minimum filter" code="F028" description="apply the minimum filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="motion blur" code="F003" description="apply the motion blur filter" inherits="filter options">
+			<property name="angle" code="Angl" type="integer"/>
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+		</class>
+		<class name="NTSC colors" code="F036" description="apply the NTSC colors filter" inherits="filter options"/>
+		<class name="ocean ripple" code="F008" description="apply the ocean ripple filter" inherits="filter options">
+			<property name="ripple size" code="RpSz" type="integer" description="(range: 1 - 15)"/>
+			<property name="ripple magnitude" code="RpMg" type="integer" description="(range: 0 - 20)"/>
+		</class>
+		<class name="offset filter" code="F029" description="apply the offset filter" inherits="filter options">
+			<property name="horizontal offset" code="HrOz" type="real" description="(unit value)"/>
+			<property name="vertical offset" code="VtOz" type="real" description="(unit value)"/>
+			<property name="undefined areas" code="Udae" type="e718"/>
+		</class>
+		<class name="pinch" code="F009" description="apply the pinch filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="integer" description="(range: -100 - 100)"/>
+		</class>
+		<class name="polar coordinates" code="F010" description="apply the polar coordinates filter" inherits="filter options">
+			<property name="kind" code="Kind" type="e700"/>
+		</class>
+		<class name="radial blur" code="F004" description="apply the radial blur filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="integer" description="from 0 to 100"/>
+			<property name="blur method" code="BMtd" type="e670"/>
+			<property name="quality" code="Qlty" type="e675"/>
+			<property name="blur center" code="Cntr" type="list" description="position (unit value)"/>
+		</class>
+		<class name="ripple" code="F011" description="apply the ripple filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="integer" description="(range: -999 - 999)"/>
+			<property name="ripple size" code="RpSz" type="e710"/>
+		</class>
+		<class name="sharpen" code="F022" description="apply the sharpen filter" inherits="filter options"/>
+		<class name="sharpen edges" code="F023" description="apply the sharpen edges filter" inherits="filter options"/>
+		<class name="sharpen more" code="F024" description="apply the sharpen more filter" inherits="filter options"/>
+		<class name="shear" code="F012" description="apply the shear filter" inherits="filter options">
+			<property name="curve" code="Curv" description="specification of shear curve. List of curve points">
+				<type type="any" list="yes"/>
+			</property>
+			<property name="undefined areas" code="Udae" type="e715"/>
+		</class>
+		<class name="smart blur" code="F005" description="apply the smart blur filter" inherits="filter options">
+			<property name="radius" code="Radi" type="real" description="radius (range: 0 - 1000)"/>
+			<property name="threshold" code="Thld" type="real" description="threshold (range: 0 - 1000)"/>
+			<property name="quality" code="Qlty" type="e680"/>
+			<property name="mode" code="OMde" type="e685"/>
+		</class>
+		<class name="spherize" code="F013" description="apply the spherize filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="integer" description="(range: -100 - 100)"/>
+			<property name="mode" code="OMde" type="e720"/>
+		</class>
+		<class name="texture fill" code="F034" description="apply the texture fill filter" inherits="filter options">
+			<property name="file path" code="Dpth" type="alias" description="texture file. Must be a grayscale Photoshop file"/>
+		</class>
+		<class name="twirl" code="F014" description="apply the twirl filter" inherits="filter options">
+			<property name="angle" code="Angl" type="integer" description="(range: -999 - 999)"/>
+		</class>
+		<class name="unsharp mask" code="F025" description="apply the unsharp mask filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="real"/>
+			<property name="radius" code="Radi" type="real" description="in pixels"/>
+			<property name="threshold" code="Thld" type="integer" description="threshold"/>
+		</class>
+		<class name="wave filter" code="F016" description="apply the wave filter" inherits="filter options">
+			<property name="number of generators" code="GrNm" type="integer" description="number of generators"/>
+			<property name="minimum wavelength" code="MiWl" type="integer"/>
+			<property name="maximum wavelength" code="MaWl" type="integer"/>
+			<property name="minimum amplitude" code="MiAm" type="integer"/>
+			<property name="maximum amplitude" code="MaAm" type="integer"/>
+			<property name="horizontal scale" code="HrSc" type="integer"/>
+			<property name="vertical scale" code="VtSc" type="integer"/>
+			<property name="wave type" code="WvTp" type="e730"/>
+			<property name="undefined areas" code="Udae" type="e715"/>
+			<property name="random seed" code="RdSd" type="integer"/>
+		</class>
+		<class name="zigzag" code="F017" description="apply the zigzag filter" inherits="filter options">
+			<property name="amount" code="Amnt" type="integer" description="(range: -100 - 100)"/>
+			<property name="ridges" code="Rdgs" type="integer"/>
+			<property name="style" code="Styl" type="e740"/>
+		</class>
+		<enumeration name="e670" code="e670">
+			<enumerator name="spin" code="e671"/>
+			<enumerator name="zoom" code="e672"/>
+		</enumeration>
+		<enumeration name="e675" code="e675">
+			<enumerator name="best" code="e678"/>
+			<enumerator name="draft" code="e676"/>
+			<enumerator name="good" code="e677"/>
+		</enumeration>
+		<enumeration name="e680" code="e680">
+			<enumerator name="high" code="e107"/>
+			<enumerator name="low" code="e101"/>
+			<enumerator name="medium" code="Mdum"/>
+		</enumeration>
+		<enumeration name="e685" code="e685">
+			<enumerator name="edge only" code="e686"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="overlay edge" code="e687"/>
+		</enumeration>
+		<enumeration name="e690" code="e690">
+			<enumerator name="blocks" code="e691"/>
+			<enumerator name="canvas" code="e692"/>
+			<enumerator name="frosted" code="e693"/>
+			<enumerator name="texture document" code="e695"/>
+			<enumerator name="tiny lens" code="e694"/>
+		</enumeration>
+		<enumeration name="e700" code="e700">
+			<enumerator name="polar to rectangular" code="e702"/>
+			<enumerator name="rectangular to polar" code="e701"/>
+		</enumeration>
+		<enumeration name="e710" code="e710">
+			<enumerator name="large" code="Lrge"/>
+			<enumerator name="medium" code="Mdum"/>
+			<enumerator name="small" code="Smll"/>
+		</enumeration>
+		<enumeration name="e715" code="e715">
+			<enumerator name="repeat edge pixels" code="e717"/>
+			<enumerator name="wrap around" code="e716"/>
+		</enumeration>
+		<enumeration name="e718" code="e718">
+			<enumerator name="repeat edge pixels" code="e717"/>
+			<enumerator name="set to layer fill" code="e719"/>
+			<enumerator name="wrap around" code="e716"/>
+		</enumeration>
+		<enumeration name="e720" code="e720">
+			<enumerator name="horizontal" code="e141"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="vertical" code="e142"/>
+		</enumeration>
+		<enumeration name="e725" code="e725">
+			<enumerator name="stretch to fit" code="e726"/>
+			<enumerator name="tile" code="e727"/>
+		</enumeration>
+		<enumeration name="e730" code="e730">
+			<enumerator name="sine" code="e731"/>
+			<enumerator name="square" code="e733"/>
+			<enumerator name="triangular" code="e732"/>
+		</enumeration>
+		<enumeration name="e740" code="e740">
+			<enumerator name="around center" code="e741"/>
+			<enumerator name="out from center" code="e742"/>
+			<enumerator name="pond ripples" code="e743"/>
+		</enumeration>
+		<enumeration name="e745" code="e745">
+			<enumerator name="Gaussian" code="e746"/>
+			<enumerator name="uniform" code="e214"/>
+		</enumeration>
+		<enumeration name="e750" code="e750">
+			<enumerator name="Movie Prime" code="e753"/>
+			<enumerator name="Prime 105" code="e752"/>
+			<enumerator name="Prime 35" code="e751"/>
+			<enumerator name="zoom" code="e672"/>
+		</enumeration>
+		<enumeration name="e755" code="e755">
+			<enumerator name="even fields" code="e757"/>
+			<enumerator name="odd fields" code="e756"/>
+		</enumeration>
+		<enumeration name="e760" code="e760">
+			<enumerator name="duplication" code="e761"/>
+			<enumerator name="interpolation" code="e762"/>
+		</enumeration>
+	</suite>
+	<suite name="Adjustment Suite" code="PAds" description="Scripting commands for applying adjustments to documents">
+		<command name="adjust" code="PAdsAdDc" description="apply an adjustment to one or more art layers">
+			<direct-parameter type="art layer" description="the art layer object or objects to be operated upon"/>
+			<parameter name="using" code="Usng" type="any" description="name of options class that the method should be invoked with. Must be a name of a class that inherits from adjustment options"/>
+			<parameter name="with options" code="FmOp" type="adjustment options" optional="yes" description="options for method"/>
+		</command>
+		<class name="adjustment options" code="BsAd" description="options used with the adjust method"/>
+		<class name="automatic contrast" code="Ad02" description="adjust contrast of the selected channels automatically" inherits="adjustment options"/>
+		<class name="automatic levels" code="AB01" description="adjust levels of the selected channels using auto levels option" inherits="adjustment options"/>
+		<class name="brightness and contrast" code="Ad04" description="adjust brightness and constrast" inherits="adjustment options">
+			<property name="brightness level" code="A401" type="integer"/>
+			<property name="contrast level" code="A402" type="integer"/>
+		</class>
+		<class name="color balance" code="Ad05" inherits="adjustment options">
+			<property name="shadows" code="A501" description="list of adjustments for shadows. There must be 3 values in the list">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="midtones" code="A502" description="list of adjustments for midtones. There must be 3 values in the list">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="highlights" code="A503" description="list of adjustments for highlights. There must be 3 values in the list">
+				<type type="integer" list="yes"/>
+			</property>
+			<property name="preserve luminosity" code="A504" type="boolean"/>
+		</class>
+		<class name="curves" code="Ad03" description="adjust curves of the selected channels" inherits="adjustment options">
+			<property name="curve points" code="A301" description="list of curve points (number of points must be between 2 and 14)">
+				<type type="list" list="yes"/>
+			</property>
+		</class>
+		<class name="desaturate" code="Ad06" inherits="adjustment options"/>
+		<class name="equalize" code="Ad09" description="equalize the levels" inherits="adjustment options"/>
+		<class name="inversion" code="iVon" description="inverts the currently selected layer or channels" inherits="adjustment options"/>
+		<class name="levels adjustment" code="Ad01" description="adjust levels of the selected channels" inherits="adjustment options">
+			<property name="input range start" code="A101" type="integer"/>
+			<property name="input range end" code="A102" type="integer"/>
+			<property name="input range gamma" code="A103" type="real"/>
+			<property name="output range start" code="A104" type="integer"/>
+			<property name="output range end" code="A105" type="integer"/>
+		</class>
+		<class name="mix channels" code="Ad08" description="only valid for RGB or CMYK documents" inherits="adjustment options">
+			<property name="output channels" code="A803" description="list of channel specifications. For each component channel that the document has, you must specify a list of adjustment values followed by a &apos;constant&apos; value">
+				<type type="any" list="yes"/>
+			</property>
+			<property name="monochrome mixing" code="A802" type="boolean" description="use monochrome mixing? If this is true you can only specify one channel value (default: false )"/>
+		</class>
+		<class name="photo filter" code="Ad13" inherits="adjustment options">
+			<property name="with contents" code="FCnt" type="color value" description="a color to use for the fill"/>
+			<property name="density" code="AC01" type="integer" description="density of the filter effect as a percent (default: 25 )"/>
+			<property name="preserve luminosity" code="A504" type="boolean" description="(default: true )"/>
+		</class>
+		<class name="posterize" code="Ad10" inherits="adjustment options">
+			<property name="levels" code="AA01" type="integer"/>
+		</class>
+		<class name="selective color" code="Ad07" inherits="adjustment options">
+			<property name="selection method" code="A701" type="e890"/>
+			<property name="reds" code="A702" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="yellows" code="A703" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="greens" code="A704" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="cyans" code="A705" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="blues" code="A706" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="magentas" code="A707" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="whites" code="A708" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="neutrals" code="A709" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+			<property name="blacks" code="A710" description="Array of 4 values: cyan, magenta, yellow, black">
+				<type type="real" list="yes"/>
+			</property>
+		</class>
+		<class name="shadow highlight" code="SH01" inherits="adjustment options">
+			<property name="shadow amount" code="SH02" type="integer" description="percentage from 0 to 100 (default: 50 )"/>
+			<property name="shadow width" code="SH03" type="integer" description="percentage from 0 to 100 for tonal width (0 = narrow), (100 = broad) (default: 50 )"/>
+			<property name="shadow radius" code="SH04" type="integer" description="pixel amount from 0 to 2500 (default: 30 )"/>
+			<property name="highlight amount" code="SH05" type="integer" description="percentage from 0 to 100 (default: 0 )"/>
+			<property name="highlight width" code="SH06" type="integer" description="percentage from 0 to 100 for tonal width (0 = narrow), (100 = broad) (default: 50 )"/>
+			<property name="highlight radius" code="SH07" type="integer" description="pixel amount from 0 to 2500 (default: 30 )"/>
+			<property name="color correction" code="SH08" type="integer" description="adjust the colors in the changed portion of the image (-100 to 100) (default: 20 )"/>
+			<property name="midtone contrast" code="SH09" type="integer" description="amount for the midtone contrast (-100 to 100) (default: 0 )"/>
+			<property name="black clip" code="SH10" type="real" description="fractions of whites to be clipped (default: 0.01 )"/>
+			<property name="white clip" code="SH11" type="real" description="fractions of blacks to be clipped (default: 0.01 )"/>
+		</class>
+		<class name="threshold adjustment" code="Ad11" inherits="adjustment options">
+			<property name="level" code="AA01" type="integer"/>
+		</class>
+	</suite>
+	<suite name="Color Suite" code="PCls" description="Color classes for Adobe Photoshop">
+		<command name="convert color" code="PClsCvCl" description="convert a object from one color model to another">
+			<direct-parameter type="color value" description="color to convert"/>
+			<parameter name="to" code="to  " type="e930" description="color model to convert to"/>
+			<result type="color value" description="convert a object from one color model to another"/>
+		</command>
+		<command name="equal colors" code="PClsClEq" description="are the colors visually equal?">
+			<direct-parameter type="color value" description="The original color with which to compare."/>
+			<parameter name="with" code="with" type="color value" description="The color to which to compare the original color."/>
+			<result type="boolean" description="are the colors visually equal?"/>
+		</command>
+		<command name="web safe color" code="PClsFWcl" description="find the closest web safe color for a color">
+			<parameter name="for" code="for " type="color value" description="Color for which to find the closest web safe color."/>
+			<result type="RGB color" description="find the closest web safe color for a color"/>
+		</command>
+		<class name="CMYK color" code="cCMv" description="A CMYK color specification" inherits="color value">
+			<property name="cyan" code="pCCv" type="real" description="the cyan color value (between 0.0 and 100.0)"/>
+			<property name="magenta" code="pCMv" type="real" description="the magenta color value (between 0.0 and 100.0)"/>
+			<property name="yellow" code="pCYv" type="real" description="the yellow color value (between 0.0 and 100.0)"/>
+			<property name="black" code="pCKv" type="real" description="the black color value (between 0.0 and 100.0)"/>
+		</class>
+		<class name="color value" code="BsCl" description="A color value"/>
+		<class name="gray color" code="cGrv" description="A gray color specification" inherits="color value">
+			<property name="gray value" code="pGrv" type="real" description="the gray value ( 0.0 - 100.0; default: 0.0 )"/>
+		</class>
+		<class name="HSB color" code="cHBv" description="An HSB color specification" inherits="color value">
+			<property name="hue" code="pHue" type="real" description="the hue value (between 0.0 and 360.0)"/>
+			<property name="saturation" code="pSat" type="real" description="the saturation value (between 0.0 and 100.0)"/>
+			<property name="brightness" code="Bhtn" type="real" description="the brightness value (between 0.0 and 100.0)"/>
+		</class>
+		<class name="Lab color" code="cLbv" description="An Lab color specification" inherits="color value">
+			<property name="value_L" code="pLbL" type="real" description="the L-value (between 0.0 and 100.0)"/>
+			<property name="value_a" code="pLba" type="real" description="the a-value (between -128.0 and 127.0)"/>
+			<property name="value_b" code="pLbb" type="real" description="the b-value (between -128.0 and 127.0)"/>
+		</class>
+		<class name="no color" code="cNCl" description="represents a missing color" inherits="color value"/>
+		<class name="RGB color" code="cRGv" description="An RGB color specification" inherits="color value">
+			<property name="red" code="pRRv" type="real" description="the red color value ( 0.0 - 255.0; default: 255.0 )"/>
+			<property name="green" code="pRGv" type="real" description="the green color value ( 0.0 - 255.0; default: 255.0 )"/>
+			<property name="blue" code="pRBv" type="real" description="the blue color value ( 0.0 - 255.0; default: 255.0 )"/>
+		</class>
+		<class name="RGB hex color" code="cRHv" description="A hexadecimal specification of an RGB color" inherits="color value">
+			<property name="hex value" code="pHxv" type="text" description="the hex representation of the color. (Example &apos;10FF4B&apos;)"/>
+		</class>
+	</suite>
+	<suite name="Path Suite" code="Pats" description="Classes for working with art path items">
+		<command name="create selection" code="PatsPT13" description="make a selection from this path">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+			<parameter name="feather amount" code="FAmt" type="real" optional="yes" description="the feather amount in pixels"/>
+			<parameter name="antialiasing" code="UsAA" type="boolean" optional="yes" description="use anti aliasing for the selection"/>
+			<parameter name="operation" code="PT07" type="e630" optional="yes" description="the operation mode for the selection"/>
+		</command>
+		<command name="deselect" code="PatsDslt" description="unselect this path item, no paths items are selected">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+		</command>
+		<command name="fill path" code="PatsPT14" description="fill the path with the following information">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+			<parameter name="with contents" code="FCnt" type="any" optional="yes" description="color of the fill for this path"/>
+			<parameter name="blend mode" code="BlMd" type="e925" optional="yes" description="blending mode of the fill for this path"/>
+			<parameter name="opacity" code="Opct" type="real" optional="yes" description="opacity of the fill for this path"/>
+			<parameter name="preserving transparency" code="KpTr" type="boolean" optional="yes" description="preserve the transparency of the file for this path"/>
+			<parameter name="feather amount" code="FAmt" type="real" optional="yes" description="the feather amount in pixels"/>
+			<parameter name="antialiasing" code="UsAA" type="boolean" optional="yes" description="use anti aliasing for the selection"/>
+			<parameter name="whole path" code="WoPt" type="boolean" optional="yes" description="use all subpaths when doing fill"/>
+		</command>
+		<command name="make clipping path" code="PatsPT17" description="make this path item the clipping path for this document">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+			<parameter name="flatness" code="PT10" type="real" optional="yes" description="Flatness in device pixels.  Tells the PostScript printer how to approximate curves. (0.2 - 100)."/>
+		</command>
+		<command name="select" code="Patsslct" description="make this path item the active or selected path item">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+		</command>
+		<command name="stroke path" code="PatsPT15" description="stroke the path with the following information">
+			<direct-parameter type="path item" description="the path item object or objects to be operated upon"/>
+			<parameter name="tool" code="PT08" type="PT23" optional="yes" description="tool to use when stroking the path"/>
+			<parameter name="simulate pressure" code="PT09" type="boolean" optional="yes" description="simulate the pressure when using the tool"/>
+		</command>
+		<class name="path item" code="PT03" description="An artwork path item" plural="path items">
+			<element type="sub path item"/>
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="entire path" code="PT52" access="r" description="all the path item&apos;s sub paths">
+				<type type="sub path info" list="yes"/>
+			</property>
+			<property name="kind" code="Kind" type="PT21"/>
+			<property name="name" code="pnam" type="text" description="the name of the path item"/>
+		</class>
+		<class name="path point" code="PT04" description="A point on a path" plural="path points">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="anchor" code="PT18" type="list" access="r" description="the position (coordinates) of the anchor point"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="kind" code="Kind" type="PT22" access="r" description="the type of point: smooth/corner"/>
+			<property name="left direction" code="PT19" type="list" access="r" description="location of the left direction point (in position)"/>
+			<property name="right direction" code="PT20" type="list" access="r" description="location of the right direction point (out position)"/>
+		</class>
+		<class name="path point info" code="PT53" description="Path point information (returned by entire path dataClassProperty of path item class)">
+			<property name="anchor" code="PT18" type="list" description="the position of the anchor (in coordinates)"/>
+			<property name="kind" code="Kind" type="PT22" description="the point type, smooth/corner"/>
+			<property name="left direction" code="PT19" type="list" description="location of the left direction point (in position)"/>
+			<property name="right direction" code="PT20" type="list" description="location of the right direction point (out position)"/>
+		</class>
+		<class name="sub path info" code="PT54" description="Sub path information (returned by entire path dataClassProperty of path item class)">
+			<property name="closed" code="PT50" type="boolean" description="is this path closed?"/>
+			<property name="entire sub path" code="PT56" description="all the sub path item&apos;s path points">
+				<type type="path point info" list="yes"/>
+			</property>
+			<property name="operation" code="PT07" type="PT45" description="sub path operation on other sub paths"/>
+		</class>
+		<class name="sub path item" code="PT43" description="An artwork sub path item" plural="sub path items">
+			<element type="path point"/>
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="closed" code="PT50" type="boolean" access="r" description="is this path closed?"/>
+			<property name="container" code="ctnr" type="specifier" access="r" description="the object&apos;s container"/>
+			<property name="entire sub path" code="PT56" access="r" description="all the sub path item&apos;s path points">
+				<type type="path point info" list="yes"/>
+			</property>
+			<property name="operation" code="PT07" type="PT45" access="r" description="sub path operation on other sub paths"/>
+		</class>
+		<enumeration name="PT21" code="PT21">
+			<enumerator name="clipping" code="PT05"/>
+			<enumerator name="normal" code="Nrml"/>
+			<enumerator name="text mask" code="PT58"/>
+			<enumerator name="vector mask" code="PT57"/>
+			<enumerator name="work" code="PT06"/>
+		</enumeration>
+		<enumeration name="PT45" code="PT45">
+			<enumerator name="shape add" code="PT46"/>
+			<enumerator name="shape intersect" code="PT48"/>
+			<enumerator name="shape subtract" code="PT49"/>
+			<enumerator name="shape xor" code="PT47"/>
+		</enumeration>
+		<enumeration name="PT22" code="PT22">
+			<enumerator name="corner point" code="PT24"/>
+			<enumerator name="smooth point" code="PT25"/>
+		</enumeration>
+		<enumeration name="PT23" code="PT23">
+			<enumerator name="art history brush tool" code="PT34"/>
+			<enumerator name="background eraser tool" code="PT29"/>
+			<enumerator name="blur tool" code="PT36"/>
+			<enumerator name="brush tool" code="PT27"/>
+			<enumerator name="burn tool" code="PT39"/>
+			<enumerator name="clone stamp tool" code="PT30"/>
+			<enumerator name="color replacement tool" code="PT41"/>
+			<enumerator name="dodge tool" code="PT38"/>
+			<enumerator name="eraser tool" code="PT28"/>
+			<enumerator name="healing brush tool" code="PT32"/>
+			<enumerator name="history brush tool" code="PT33"/>
+			<enumerator name="pattern stamp tool" code="PT31"/>
+			<enumerator name="pencil tool" code="PT26"/>
+			<enumerator name="sharpen tool" code="PT37"/>
+			<enumerator name="smudge tool" code="PT35"/>
+			<enumerator name="sponge tool" code="PT40"/>
+		</enumeration>
+	</suite>
+	<suite name="Notifier Suite" code="EN03" description="Classes for working with notifiers">
+		<class name="notifier" code="EN02" description="The parameters of the notifie" plural="notifiers">
+			<property name="best type" code="pbst" type="type" access="r" description="the best type for the object&apos;s value"/>
+			<property name="class" code="pcls" type="type" access="r" description="the object&apos;s class"/>
+			<property name="default type" code="deft" type="type" access="r" description="the default type for the object&apos;s value"/>
+			<property name="index" code="pidx" type="integer" access="r" description="the index of this instance of the object"/>
+			<property name="properties" code="pALL" type="record" description="all of this object&apos;s properties returned in a single record"/>
+			<property name="event" code="EN04" type="text" access="r" description="The id of the event, four characters or a unique string"/>
+			<property name="event class" code="EN07" type="text" access="r" description="The class id the event applies to, four characters or a unique string. Allows you to distinguish between the same event applied to different classes."/>
+			<property name="event file" code="EN05" type="alias" access="r" description="The file to execute when the event occurs"/>
+		</class>
+	</suite>
+	<suite name="Miscellaneous Standards Suite" code="misc" description="Miscellaneous standard commands and classes">
+		<command name="clear" code="miscdelo" description="clear current selection"/>
+		<command name="copy" code="misccopy" description="copy current selection to the clipboard"/>
+		<command name="copy merged" code="misckMrg" description="copy current selection to the clipboard. Include data in all visible layers."/>
+		<command name="cut" code="misccut " description="cut current selection to the clipboard"/>
+		<command name="do action" code="miscDoAc" description="play an action from the Actions Palette">
+			<direct-parameter type="text" description="the name of the action to play (note that the case of letters in the Action name is important and must match the case of the name in the Actions palette)"/>
+			<parameter name="from" code="from" type="text" description="the name of the action set containing the action being played (note that the case of letters in the Action Set name is important and must match the case of the name in the Actions palette)"/>
+		</command>
+		<command name="do javascript" code="miscDjxM" description="execute a JavaScript">
+			<direct-parameter type="any" description="JavaScript code or file to execute"/>
+			<parameter name="with arguments" code="JArg" optional="yes" description="arguments to pass to the JavaScript routine">
+				<type type="any" list="yes"/>
+			</parameter>
+			<parameter name="show debugger" code="JXMd" type="e940" optional="yes" description="when should a debugger be shown? ( default: never )"/>
+			<result type="text" description="execute a JavaScript"/>
+		</command>
+		<command name="paste" code="miscpast" description="paste clipboard into the current document">
+			<parameter name="clipping to selection" code="ICSl" type="boolean" optional="yes" description="should contents be clipped to the current selection? ( default: false )"/>
+		</command>
+	</suite>
+	<suite name="Type Names Suite" code="tpnm" description="unit value terminology for this application" hidden="yes">
+		<class name="millimeters" code="ÅMMå" hidden="yes"/>
+		<class name="points" code="ÅPSå" hidden="yes">
+			<synonym name="pts"/>
+		</class>
+		<class name="picas" code="ÅSPå" hidden="yes"/>
+		<class name="traditional points" code="ÅPTå" hidden="yes"/>
+		<class name="traditional picas" code="ÅPCå" hidden="yes"/>
+		<class name="ciceros" code="ÅCRå" hidden="yes"/>
+		<class name="percent" code="ÅPNå" hidden="yes"/>
+		<class name="pixels" code="ÅPXå" hidden="yes"/>
+		<class name="real or length unit" code="LLGp" hidden="yes"/>
+		<class name="real, or length or pixel unit" code="PLGp" hidden="yes"/>
+		<class name="real, or length, pixel, or percent unit" code="PcLG" hidden="yes"/>
+	</suite>
+</dictionary>

@@ -28,7 +28,7 @@ export namespace Calendar {
    /**
     * An unique calendar key
     */
-   uid(): string;
+   calendarIdentifier(): string;
    /**
     * This is the calendar title.
     */
@@ -114,7 +114,7 @@ export namespace Calendar {
   */
 
  /**
-  * This class represents an 'open file' alarm.
+  * This class represents an 'open file' alarm. Starting with OS X 10.14, it is not possible to create new open file alarms or view URLs for existing open file alarms. Trying to save or modify an open file alarm will result in a save error. Editing other aspects of events or reminders that have existing open file alarms is allowed as long as the alarm isn't modified.
   */
  export interface OpenFileAlarm {
    /**
@@ -210,7 +210,7 @@ export namespace Calendar {
     */
    location(): string;
    /**
-    * An unique todo key.
+    * An unique event key.
     */
    uid(): string;
    /**
@@ -229,16 +229,7 @@ export namespace Calendar {
  /**
   * This class represents iCal.
   */
- export interface Application {
-   /**
-    * Obsolete
-    */
-   progression(): any;
-   /**
-    * Obsolete
-    */
-   allowCancel(): boolean;
- }
+ export interface Application {}
     
     // Records
 

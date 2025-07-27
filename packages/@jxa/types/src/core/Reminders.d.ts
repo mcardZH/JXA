@@ -10,17 +10,17 @@ export namespace Reminders {
   */
 
  /**
-  * an account in the Notes application
+  * An account in the Reminders application
   */
  export interface Account {
    /**
-    * the name of the account
-    */
-   name(): string;
-   /**
-    * the unique identifier of the account
+    * The unique identifier of the account
     */
    id(): string;
+   /**
+    * The name of the account
+    */
+   name(): string;
  }
 
  /**
@@ -30,21 +30,29 @@ export namespace Reminders {
   */
 
  /**
-  * a list in the Reminders application
+  * A list in the Reminders application
   */
- export interface List {
+ export interface List extends Item {
    /**
-    * the name of the list
-    */
-   name(): string;
-   /**
-    * the unique identifier of the list
+    * The unique identifier of the list
     */
    id(): string;
    /**
-    * the container of the list
+    * The name of the list
+    */
+   name(): string;
+   /**
+    * The container of the list
     */
    container(): any;
+   /**
+    * The color of the list
+    */
+   color(): string;
+   /**
+    * The emblem icon name of the list
+    */
+   emblem(): string;
  }
 
  /**
@@ -54,54 +62,66 @@ export namespace Reminders {
   */
 
  /**
-  * a reminder in the Reminders application
+  * A reminder in the Reminders application
   */
- export interface Reminder {
+ export interface Reminder extends Item {
    /**
-    * the name of the reminder
+    * The name of the reminder
     */
    name(): string;
    /**
-    * the unique identifier of the reminder
+    * The unique identifier of the reminder
     */
    id(): string;
    /**
-    * the notes attached to the reminder
-    */
-   body(): string;
-   /**
-    * Is the reminder completed?
-    */
-   completed(): boolean;
-   /**
-    * the completion date of the reminder
-    */
-   completionDate(): any;
-   /**
-    * the container of the reminder
+    * The container of the reminder
     */
    container(): any;
    /**
-    * the creation date of the reminder
+    * The creation date of the reminder
     */
    creationDate(): any;
    /**
-    * the due date of the reminder
-    */
-   dueDate(): any;
-   /**
-    * the modification date of the reminder
+    * The modification date of the reminder
     */
    modificationDate(): any;
    /**
-    * the remind date of the reminder
+    * The notes attached to the reminder
+    */
+   body(): string;
+   /**
+    * Whether the reminder is completed
+    */
+   completed(): boolean;
+   /**
+    * The completion date of the reminder
+    */
+   completionDate(): any;
+   /**
+    * The due date of the reminder; will set both date and time
+    */
+   dueDate(): any;
+   /**
+    * The all-day due date of the reminder; will only set a date
+    */
+   alldayDueDate(): any;
+   /**
+    * The remind date of the reminder
     */
    remindMeDate(): any;
    /**
-    * the priority of the reminder
+    * The priority of the reminder; 0: no priority, 1–4: high, 5: medium, 6–9: low
     */
    priority(): number;
+   /**
+    * Whether the reminder is flagged
+    */
+   flagged(): boolean;
  }
+  
+  export interface Item {
+    
+  }
     
     // CLass Extension
  /**
@@ -111,15 +131,15 @@ export namespace Reminders {
   */
 
  /**
-  * the Reminders application
+  * The Reminders application
   */
  export interface Application {
    /**
-    * the account currently active in the Reminders application
+    * The default account in the Reminders application
     */
    defaultAccount(): any;
    /**
-    * the list currently active in the Reminders application
+    * The default list in the Reminders application
     */
    defaultList(): any;
  }
@@ -128,22 +148,14 @@ export namespace Reminders {
 
     // Function options
 
-
 }
 export interface Reminders extends Reminders.Application {
     // Functions
 
      /**
-      * Open a Reminder in the UI
-      * @param directParameter the Reminders URL
-      * 
-      */
-     getURL(directParameter: string, ): void;
-
-     /**
-      * Show an object in the UI
+      * Show an object in the Reminders UI
       * @param directParameter The object to be shown
-      * @return The object shown.
+      * @return The object shown
       */
      show(directParameter: {}, ): void;
 }

@@ -37,6 +37,10 @@ export namespace Safari {
     * The name of the tab.
     */
    name(): string;
+   /**
+    * The pid of the WebContent process backing the tab, if it exists.
+    */
+   pid(): number;
  }
 
  /**
@@ -162,6 +166,9 @@ export namespace Safari {
 
 
 
+
+
+
 }
 export interface Safari extends Safari.Application {
     // Functions
@@ -218,4 +225,25 @@ export interface Safari extends Safari.Application {
       * 
       */
      dispatchMessageToExtension(directParameter: any, ): void;
+
+     /**
+      * Make sure that all in-memory structures are in-sync with their on-disk counterparts.
+
+      * 
+      */
+     syncAllPlistToDisk(): void;
+
+     /**
+      * Show Safari's Privacy Report
+
+      * 
+      */
+     showPrivacyReport(): void;
+
+     /**
+      * Show Safari Credit Card Settings.
+
+      * 
+      */
+     showCreditCardSettings(): void;
 }

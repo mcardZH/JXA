@@ -1,0 +1,2075 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Script Debugger 5 Terminology">
+  <!-- AppleScript-Objective-C support -->
+  <suite name="Intrinsics Override" code="Intr">
+    <value-type name="text" plural="text" code="ctxt" description="A Unicode string value.">
+      <cocoa class="NSString"/>
+      <!-- Because I have to redefine 'text' here (see bug 14217), I need to copy in 
+				 Matt's description of 'text' because this defintion hides the definition in 
+				 sdefTypes.sdef
+			-->
+      <synonym name="string" code="TEXT"/>
+      <synonym name="international text" code="itxt"/>
+      <synonym name="Unicode text" code="utxt"/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+				The <span class="keyword">text</span> datatype is the modern string type. It is Unicode, so it can include any character (in contrast to the original <span class="keyword">string</span> datatype, which was usually MacRoman). However, the <span class="keyword">read</span> and <span class="keyword">write</span> scripting addition commands still interpret <span class="code">as text</span> or <span class="code">as string</span> (or nothing) to mean MacRoman; to get UTF-16, say <span class="code">as Unicode text</span>, and to get UTF-8, say <span class="code">as «class utf8»</span>.</p>
+			<p>A literal string is delimited by quotation marks, with the empty string symbolized by <span class="code">""</span>.
+			</p><div class="indent">
+			<pre><span class="code">set s to "howdy"
+class of s -- <b>text</b></span></pre></div>
+			<p>The following are the <b>properties</b> of a text string. They are read-only.</p>
+<dl>
+	<dt><span class="keyword">length</span></dt>
+		<dd>The number of characters of the string. You can get this same information by sending the <span class="code">count</span> message to the string.</dd>
+	<dt><span class="keyword">quoted form</span></dt>
+		<dd>A rendering of the string suitable for handing to the shell as an argument to a command. The string is wrapped in single quotation marks and internal quotation marks are escaped.</dd>
+	<dt><span class="keyword">id</span></dt>
+		<dd>The codepoints of the Unicode characters constituting the string: an integer or list of integers. The reverse operation, from a list of integers to text, is through the <span class="code">string id</span> specifier.</dd>
+</dl>
+			<p>The following are the <b>elements</b> of a string. They cannot be set, because a string cannot be mutated in place.
+			</p>
+<dl>
+	<dt><span class="keyword">character</span></dt>
+		<dd>A string representing a single character of the string.</dd>
+	<dt><span class="keyword">word</span></dt>
+		<dd>A string representing a single word of the string. It has no spaces or other word-boundary punctuation.</dd>
+	<dt><span class="keyword">paragraph</span></dt>
+		<dd>A string representing a single paragraph (or line) of the string. It has no line breaks. AppleScript treats a return, a newline, or both together (CRLF) as a line break.</dd>
+	<dt><span class="keyword">text</span></dt>
+		<dd>A run of text. Its purpose is to let you obtain a single continuous string using a range element specifier:</dd>
+</dl>
+<div class="indent"><pre><span class="code">words 1 thru 3 of "Now is the winter" -- <b>{"Now", "is", "the"}</b>
+text from word 1 to word 3 of "Now is the winter" -- <b>"Now is the"</b></span></pre></div>
+<dl>
+	<dt><span class="keyword">text item</span></dt>
+		<dd>A &#8220;field&#8221; of text, where the field delimiter is AppleScript&#8217;s <span class="code">text item delimiters</span> property (or, if <span class="code">text item delimiters</span> is a list, any item of that list).</dd>
+</dl>
+			]]></html>
+      </documentation>
+    </value-type>
+  </suite>
+  <!-- STANDARD SUITE -->
+  <suite name="Standard Suite" code="core" description="Common classes and commands for all applications.">
+      <enumeration name="open options" code="oOp!">
+          <enumerator name="script source" code="oODo" description="Show the script's source."/>
+          <enumerator name="script dictionary" code="oODi" description="Open the script as a dictionary."/>
+      </enumeration>
+    <command name="open" code="aevtodoc" description="Open a document or supplementary window.">
+      <direct-parameter description="The file(s) or windows(s) to be opened.">
+        <type type="file"/>
+        <type type="file" list="yes"/>
+        <type type="specifier"/>
+        <type type="specifier" list="yes"/>
+      </direct-parameter>
+      <parameter name="recovering text" code="RCoV" type="boolean" optional="yes" description="Open a script file by recovering its backup text.">
+        <cocoa key="RecoverText"/>
+      </parameter>
+      <parameter name="in window" code="OPwd" type="script window" optional="yes" description="Open the script in a new tab within a particular script window. If provided, overrides the value for the ‘prefer tab’ parameter.">
+        <cocoa key="OpenInWindow"/>
+      </parameter>
+        <parameter name="prefer tab" code="tOp!" type="tabbing options" optional="yes" description="Whether to try to open the document as a tab in an existing window, or open it in a window of its own. The default value is ‘default’, which uses the value set in Script Debugger's preferences. This parameter is ignored if the ‘in window’ parameter is present.">
+         <cocoa key="PreferTab"/>
+       </parameter>
+      <parameter name="showing" code="oOp!" type="open options" optional="yes" description="Open the script's source code or its dictionary. Default is to show a dialog if a dictionary is found, otherwise open the script's source.">
+       <cocoa key="ForceScriptOrDictionary"/>
+     </parameter>
+     <result description="A reference to the resulting document, or missing value for a dictionary.">
+        <type type="specifier"/>
+      </result>
+    </command>
+    <enumeration name="save options" code="savo">
+      <enumerator name="yes" code="yes " description="Save the file."/>
+      <enumerator name="no" code="no  " description="Do not save the file."/>
+      <enumerator name="ask" code="ask " description="Ask the user whether to save the file."/>
+    </enumeration>
+    <enumeration name="tabbing options" code="bOp!">
+        <enumerator name="yes" code="yes " description="Open documents as tabs if there is an existing window."/>
+        <enumerator name="no" code="no  " description="Open documents in their own windows."/>
+        <enumerator name="default" code="cOp!" description="Follow the default preferences setting."/>
+    </enumeration>
+    <command name="close" code="coreclos" description="Close a document or window.">
+      <cocoa class="NSCloseCommand"/>
+      <direct-parameter type="specifier" description="The document(s) or window(s) to close."/>
+      <parameter name="saving" code="savo" type="save options" optional="yes" description="Whether changes should be saved before closing.">
+        <cocoa key="SaveOptions"/>
+      </parameter>
+      <parameter name="saving in" code="kfil" type="file" optional="yes" description="The file in which to save the document.">
+        <cocoa key="File"/>
+      </parameter>
+      <parameter name="as" code="fltp" type="script types" optional="yes" description="The format for the saved file.">
+        <cocoa key="FileType"/>
+      </parameter>
+      <parameter name="line endings" code="ASle" type="line ending types" optional="yes" description="The type of line endings to use (when saving as a text script).">
+        <cocoa key="LineEndings"/>
+      </parameter>
+      <parameter name="stay open" code="ASso" type="boolean" optional="yes" description="Whether the application should stay open after running at launch (when saving as an application).">
+        <cocoa key="StayOpen"/>
+      </parameter>
+      <parameter name="show startup screen" code="ASss" type="boolean" optional="yes" description="Whether the application should display its description as a splash screen on launch (when saving as an application).">
+        <cocoa key="ShowStartup"/>
+      </parameter>
+      <documentation>
+        <html><![CDATA[
+			<p>
+				When closing a document or script window from a script running within Script Debugger itself, the <span class="code">saving</span> parameter must be included and its value must not be <span class="code">ask</span>, because the script cannot pause while the user interacts with a dialog.
+			</p>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="save" code="coresave" description="Save a document.">
+      <direct-parameter type="specifier" description="The document(s) or window(s) to save."/>
+      <parameter name="in" code="kfil" type="file" optional="yes" description="The file in which to save the document.">
+        <cocoa key="File"/>
+      </parameter>
+      <parameter name="as" code="fltp" type="script types" optional="yes" description="The format for the saved file.">
+        <cocoa key="FileType"/>
+      </parameter>
+      <parameter name="run only" code="ASro" type="boolean" optional="yes" description="Whether the script should be exported as run-only (without bytecode, thus making decompilation and editing impossible).">
+        <cocoa key="RunOnly"/>
+      </parameter>
+      <parameter name="line endings" code="ASle" type="line ending types" optional="yes" description="The type of line endings to use (when saving as a text script).">
+        <cocoa key="LineEndings"/>
+      </parameter>
+      <parameter name="stay open" code="ASso" type="boolean" optional="yes" description="Whether the application should stay open after running at launch (when saving as an application).">
+        <cocoa key="StayOpen"/>
+      </parameter>
+      <parameter name="show startup screen" code="ASss" type="boolean" optional="yes" description="Whether the application should display its description as a splash screen on launch (when saving as an application).">
+        <cocoa key="ShowStartup"/>
+      </parameter>
+      <parameter name="bundle run only" code="ASrb" type="boolean" optional="yes" description="Whether bundled scripts and libraries should be also be exported as run-only (without bytecode, thus making decompilation and editing impossible). Only applies to script bundles and applets.">
+        <cocoa key="RunOnlyBundle"/>
+      </parameter>
+    </command>
+    <enumeration name="printing error handling" code="enum">
+      <enumerator name="standard" code="lwst" description="Standard PostScript error handling."/>
+      <enumerator name="detailed" code="lwdt" description="Print a detailed report of PostScript errors."/>
+    </enumeration>
+    <record-type name="print settings" code="pset">
+      <property name="copies" code="lwcp" type="integer" description="The number of copies of a document to be printed.">
+        <cocoa key="NSCopies"/>
+      </property>
+      <property name="collating" code="lwcl" type="boolean" description="Whether printed copies should be collated.">
+        <cocoa key="NSMustCollate"/>
+      </property>
+      <property name="starting page" code="lwfp" type="integer" description="The first page of the document to be printed.">
+        <cocoa key="NSFirstPage"/>
+      </property>
+      <property name="ending page" code="lwlp" type="integer" description="The last page of the document to be printed.">
+        <cocoa key="NSLastPage"/>
+      </property>
+      <property name="pages across" code="lwla" type="integer" description="Number of logical pages laid across a physical page.">
+        <cocoa key="NSPagesAcross"/>
+      </property>
+      <property name="pages down" code="lwld" type="integer" description="Number of logical pages laid out down a physical page.">
+        <cocoa key="NSPagesDown"/>
+      </property>
+      <property name="error handling" code="lweh" type="printing error handling" description="How errors are handled.">
+        <cocoa key="NSDetailedErrorReporting"/>
+      </property>
+      <property name="fax number" code="faxn" type="text" description="For fax number.">
+        <cocoa key="NSFaxNumber"/>
+      </property>
+      <property name="target printer" code="trpr" type="text" description="For target printer.">
+        <cocoa key="NSPrinterName"/>
+      </property>
+    </record-type>
+    <command name="print" code="aevtpdoc" description="Print a document or window.">
+      <direct-parameter description="The file(s), document(s), or window(s) to be printed.">
+        <type type="file" list="yes"/>
+        <type type="specifier"/>
+      </direct-parameter>
+      <parameter name="with properties" code="prdt" type="print settings" optional="yes" description="The print settings to use.">
+        <cocoa key="PrintSettings"/>
+      </parameter>
+      <parameter name="print dialog" code="pdlg" type="boolean" optional="yes" description="Whether the print dialog should be shown.">
+        <cocoa key="ShowPrintDialog"/>
+      </parameter>
+    </command>
+    <command name="quit" code="aevtquit" description="Quit the application.">
+      <cocoa class="NSQuitCommand"/>
+      <parameter name="saving" code="savo" type="save options" optional="yes" description="Whether changed documents should be saved before closing.">
+        <cocoa key="SaveOptions"/>
+      </parameter>
+    </command>
+    <command name="count" code="corecnte" description="Return the number of elements of a particular class within an object.">
+      <cocoa class="NSCountCommand"/>
+      <direct-parameter type="specifier" description="The object whose elements are to be counted."/>
+      <parameter name="each" code="kocl" type="type" optional="yes" description="The class of objects to be counted.">
+        <cocoa key="ObjectClass"/>
+      </parameter>
+      <result type="integer" description="The number of elements."/>
+    </command>
+    <command name="delete" code="coredelo" description="Delete an object.">
+      <cocoa class="NSDeleteCommand"/>
+      <direct-parameter type="specifier" description="The object to delete."/>
+    </command>
+    <command name="duplicate" code="coreclon" description="Copy object(s) and put the copies at a new location.">
+      <cocoa class="NSCloneCommand"/>
+      <direct-parameter type="specifier" description="The object(s) to duplicate."/>
+      <parameter name="to" code="insh" type="location specifier" optional="yes" description="The location for the new object(s).">
+        <cocoa key="ToLocation"/>
+      </parameter>
+      <parameter name="with properties" code="prdt" type="record" optional="yes" description="Properties to be set in the new duplicated object(s).">
+        <cocoa key="WithProperties"/>
+      </parameter>
+      <result type="specifier" description="A reference to the newly created object(s)."/>
+    </command>
+    <command name="exists" code="coredoex" description="Verify if an object exists.">
+      <cocoa class="NSExistsCommand"/>
+      <direct-parameter type="any" description="The object in question."/>
+      <result type="boolean" description="True if it exists, false if not."/>
+    </command>
+    <command name="make" code="corecrel" description="Make a new object.">
+      <cocoa class="NSCreateCommand"/>
+      <parameter name="new" code="kocl" type="type" description="The class of the new object.">
+        <cocoa key="ObjectClass"/>
+      </parameter>
+      <parameter name="at" code="insh" type="location specifier" optional="yes" description="The location at which to insert the object.">
+        <cocoa key="Location"/>
+      </parameter>
+      <parameter name="with contents" code="data" type="any" optional="yes" description="The initial contents of the object.">
+        <cocoa key="ObjectData"/>
+      </parameter>
+      <parameter name="prefer tab" code="tOp!" type="tabbing options" optional="yes" description="When creating a new document, whether it should appear as a tab in an existing window, or in a window of its own. The default value is ‘default’, which uses the value set in Script Debugger's preferences.">
+       <cocoa key="PreferTab"/>
+     </parameter>
+      <parameter name="using template" code="tUt!" type="boolean" optional="yes" description="When creating a new document, whether it should be based on your default template, as set in General Preferences.">
+       <cocoa key="UsingTemplate"/>
+     </parameter>
+      <parameter name="with properties" code="prdt" type="record" optional="yes" description="The initial values for properties of the object.">
+        <cocoa key="KeyDictionary"/>
+      </parameter>
+      <result type="specifier" description="A reference to the newly created object."/>
+    </command>
+    <command name="move" code="coremove" description="Move object(s) to a new location.">
+      <cocoa class="NSMoveCommand"/>
+      <direct-parameter type="specifier" description="The object(s) to move."/>
+      <parameter name="to" code="insh" type="location specifier" description="The new location for the object(s).">
+        <cocoa key="ToLocation"/>
+      </parameter>
+      <result type="specifier" description="A reference to the moved object(s)."/>
+    </command>
+    
+    <class name="application" code="capp" description="The application’s top-level scripting object.">
+      <cocoa class="NSApplication"/>
+      <property name="name" code="pnam" type="text" access="r" description="The name of the application."/>
+      <property name="frontmost" code="pisf" type="boolean" access="r" description="Whether the application is active (frontmost).">
+        <cocoa key="isActive"/>
+      </property>
+      <property name="version" code="vers" type="text" access="r" description="The version of the application."/>
+      <property name="option is down" code="pOdn" type="boolean" access="r" description="Whether the Option key is being held down.">
+        <cocoa key="AEOptionIsDown"/>
+      </property>
+      <property name="shift is down" code="pSdn" type="boolean" access="r" description="Whether the Shift key is being held down.">
+        <cocoa key="AEShiftIsDown"/>
+      </property>
+      <property name="control is down" code="pCdn" type="boolean" access="r" description="Whether the Control key is being held down.">
+        <cocoa key="AEControlIsDown"/>
+      </property>
+      <property name="script background color no longer supported" code="pEbg" type="color"  hidden="yes" description="No longer supported.">
+        <cocoa key="AEEditorBGColor"/>
+      </property>
+      <property name="properties" type="record" code="pALL" description="All the object’s properties returned as a record.">
+        <cocoa key="scriptingProperties"/>
+      </property>
+      <property name="scripts menu folder" code="pSCR" type="file" access="r" description="The user’s Scripts folder (in Application Support).">
+        <cocoa key="AEScriptsFolder"/>
+      </property>
+      <property name="clippings menu folder" code="pCLP" type="file" access="r" description="The user’s Clippings folder (in Application Support).">
+        <cocoa key="AEClippingsFolder"/>
+      </property>
+      <property name="templates folder" code="pTPL" type="file" access="r" description="The user’s Templates folder (in Application Support).">
+        <cocoa key="AETemplatesFolder"/>
+      </property>
+      <property name="apply handler formatting no longer supported" code="pChf" type="boolean" hidden="yes" description="No longer supported.">
+          <cocoa key="AEApplyHandlerFormatting"/>
+      </property>
+      <property name="handler color no longer supported" code="colH" type="color"  hidden="yes" description="No longer supported.">
+          <cocoa key="AECustomHandlerColor"/>
+      </property>
+      <property name="open in tabs deprecated" code="oTBs" type="boolean" description="Whether documents should open in tabs rather than in separate windows by default. Deprecated, replaced by the ‘prefer tabs’ property.">
+          <cocoa key="AEOpenInTabs"/>
+      </property>
+      <property name="browsing versions" code="pVbr" type="boolean" access="r" description="Whether the version broswer is showing.">
+          <cocoa key="AEBrowsingVersions"/>
+      </property>
+      <property name="current theme" code="pCuT" type="text" description="The name of the active color theme. Changing the value will change the active color theme.">
+          <cocoa key="AECurrentTheme"/>
+      </property>
+      <property name="available themes" code="pAcT" access="r" description="A list of the available color themes.">
+          <cocoa key="AEAvailableThemes"/>
+          <type type="text" list="yes"/>
+      </property>
+      <property name="can notarize" code="exSz" access="r" description="Whether the computer has the software required and suitable developer certificate to support notarization.">
+          <cocoa key="AECanNotarize"/>
+          <type type="boolean"/>
+      </property>
+      <property name="lock applets" code="pALm" description="Whether the main script in applets should be locked after saving.">
+          <cocoa key="AELockMainScpt"/>
+          <type type="boolean"/>
+      </property>
+     <property name="export destination" code="exSd" description="A fixed destination to be used when directly exporting any file run-only.">
+         <cocoa key="AEExportDestination"/>
+         <type type="file"/>
+     </property>
+     <property name="export destination fixed" code="exSf" description="Whether all files should be directly exported to one designated folder, rather than to within their own container.">
+         <cocoa key="AEExportDestinationFixed"/>
+         <type type="boolean"/>
+     </property>
+     <property name="export folder name" code="exSn" description="The name used for the immediate containing folder of a run-only export. This can include the following placeholders: [[filename]], [[short-date]], [[date]], [[GMT-date]], [[version]], and [[build]].">
+         <cocoa key="AEExportFolderName"/>
+         <type type="text"/>
+     </property>
+    <property name="prefer tabs" code="pOp!" type= "tabbing options" description="Whether the default behavior is to try to open documents as tabs in an existing window, or to open them in windows of their own. The default value is ‘default’, which uses the value set in System Preferences.">
+        <cocoa key="AEPreferTabs"/>
+    </property>
+    <property name="version control friendly" code="pCVS" description="Whether .scptd files should be saved with their source internally in both .rtf and .scpt format. When opening, the .rtf format is always preferred.">
+        <cocoa key="AECVSFriendlyFormat"/>
+        <type type="boolean"/>
+    </property>
+    <property name="include notes on export" code="pNot" description="If a bundle contains a file called “SD Script Notes.rtfd” in its Resources folder, it will be excluded from the exported version. Check this option if you want any such file to be copied separately to the export folder.">
+        <cocoa key="AEAddProtectedNotesOnExport"/>
+        <type type="boolean"/>
+    </property>
+    <property name="include source on export" code="pCso" description="Whether a copy of the document’s source should be added to the export folder when a document is exported run-only. The file will have the same name as the export folder, with an extension of .applescript.">
+        <cocoa key="AESaveCopyOfSourceOnExport"/>
+        <type type="boolean"/>
+    </property>
+    <property name="search uses regex" code="seRx" description="Whether search strings should be interpreted as regular expressions.">
+        <cocoa key="AESearchUsesRegEx"/>
+        <type type="boolean"/>
+    </property>
+    <property name="search matches words" code="seMw" description="Whether searches should match whole words.">
+        <cocoa key="AESearchMatchWords"/>
+        <type type="boolean"/>
+    </property>
+    <property name="search ignores case" code="seIc" description="Whether searches should be case-sensitive.">
+        <cocoa key="AESearchIgnoreCase"/>
+        <type type="boolean"/>
+    </property>
+    <property name="search wraps" code="seWr" description="Whether searches should loop to the top of a document.">
+        <cocoa key="AESearchWraps"/>
+        <type type="boolean"/>
+    </property>
+    <property name="search string" code="seSt" description="The string to look for in a find or replace.">
+        <cocoa key="AESearchString"/>
+        <type type="text"/>
+    </property>
+    <property name="search replace string" code="seRs" description="The replace string used in a find-and-replace.">
+        <cocoa key="AESearchReplaceString"/>
+        <type type="text"/>
+    </property>
+    <property name="escapes white space" code="ceWs" description="Whether compiling escapes tabs and line breaks in strings.">
+        <cocoa key="AECompileEscapesWhiteSpace"/>
+        <type type="boolean"/>
+    </property>
+<element type="class" hidden="yes"/>
+      <!-- supports ASObjC compilation -->
+      <element type="document" access="rw">
+        <cocoa key="orderedDocuments"/>
+        <accessor style="name"/>
+        <accessor style="index"/>
+        <accessor style="id"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <element type="window" access="rw">
+        <cocoa key="orderedSDWindows"/>
+      </element>
+      <element type="script window" access="rw" description="To create an empty script window, make a new document.">
+        <cocoa key="orderedScriptWindows"/>
+      </element>
+      <element type="dictionary window" access="rw" description="When you make a new dictionary window, it is empty; set its file spec to specify an application.">
+        <cocoa key="orderedDictionaryWindows"/>
+      </element>
+      <element type="explorer window" access="rw" description="To create an explorer window, open a result value. For example, you could tell a document to open last result, or tell an event log entry to open event result.">
+        <cocoa key="orderedViewerWindows"/>
+      </element>
+      <element type="event log window" access="rw" description="To open an event log window, tell a document to make new event log window.">
+        <cocoa key="orderedEventLogWindows"/>
+      </element>
+<!-- Not in SD8
+<element type="AppleScript format" access="r">
+        <cocoa key="orderedAppleScriptFormats"/>
+        <accessor style="name"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+-->
+      <responds-to command="open">
+        <cocoa method="handleOpenScriptCommand:"/>
+      </responds-to>
+      <responds-to command="print">
+        <cocoa method="handlePrintScriptCommand:"/>
+      </responds-to>
+      <responds-to command="quit">
+        <cocoa method="handleQuitScriptCommand:"/>
+      </responds-to>
+    </class>
+    <class name="document" code="docu" description="A document.">
+      <cocoa class="ScriptDocument"/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			Script Debugger&#8217;s native document type is a script, open for editing, execution, and debugging. Its window is a <a class="internal" href="ref:///script window">script window</a>. Thus the document class may be thought of as representing simultaneously a file on disk, a script, and the display of that script in a window. Document numbering is volatile, representing the current front-to-back ordering of open documents.
+			</p>
+			]]></html>
+      </documentation>
+      <property name="properties" type="record" code="pALL" description="All the object’s properties returned as a record.">
+        <cocoa key="scriptingProperties"/>
+      </property>
+      <property name="name" code="pnam" type="text" access="r" description="The document’s name.">
+        <cocoa key="displayName"/>
+      </property>
+      <property name="id" code="ID  " type="text" access="r" description="The document’s unique ID.">
+          <cocoa key="uniqueID"/>
+      </property>
+      <property name="bundle ID" code="bndI" type="text" access="rw" description="The document’s bundle ID">
+        <cocoa key="saveBundleID"/>
+      </property>
+      <property name="legacy script libraries" code="lgSn" access="r" description="A list of legacy Script Debugger library files linked to the document">
+          <cocoa key="AEScriptLibrarieNames"/>
+          <type type="text" list="yes"/>
+      </property>
+      <property name="legacy script library files" code="lgSL" access="r" description="A list of legacy Script Debugger library files linked to the document">
+          <cocoa key="AEScriptLibraries"/>
+          <type type="file" list="yes"/>
+      </property>
+        <property name="copyright" code="copR" type="text" access="rw" description="The document’s copyright string">
+            <cocoa key="copyright"/>
+        </property>
+        <property name="marketing version" code="marV" type="text" access="rw" description="The document’s marketing version string">
+            <cocoa key="marketingVersion"/>
+        </property>
+        <property name="build number" code="bld#" access="rw" description="The document’s build number">
+            <cocoa key="buildNumber"/>
+            <type type="text"/>
+            <type type="integer"/>
+        </property>
+        <property name="autoincrement build number" code="bld$" type="boolean" access="rw" description="Automatically increment the document's build number when saving?">
+            <cocoa key="AEutoIncrementOnSaving"/>
+        </property>
+        <property name="autoincrement build number on export" code="bld^" type="boolean" access="rw" description="Automatically increment the document's build number when exporting?">
+            <cocoa key="AEAutoIncrementOnExport"/>
+        </property>
+        <property name="scripting definition" code="SDEF" access="rw" description="The name of the bundle document’s scripting definition file (missing value is none set).">
+            <cocoa key="AESDEFName"/>
+            <type type="text"/>
+            <type type="missing value"/>
+        </property>
+        <property name="applet icon" code="picF" access="rw" description="The name of the application document’s icon (.icns) file.">
+            <cocoa key="AEIconName"/>
+            <type type="text"/>
+            <type type="missing value"/>
+        </property>
+      <property name="modified" code="imod" type="boolean" access="r" description="Whether the document been modified since it was last saved.">
+        <cocoa key="isDocumentEdited"/>
+      </property>
+      <property name="file spec" type="file" code="pFil" access="r" description="The file’s location on disk (missing value if not saved).">
+        <cocoa key="AEFileURL"/>
+      </property>
+      <property name="user data" type="any" code="pUSR" description="Any value you want to associate with a document. (This information is not saved with the document.)">
+        <cocoa key="userData"/>
+      </property>
+      <property name="script type" type="script types" code="pFTP" description="The document’s file format.">
+        <cocoa key="AEScriptType"/>
+      </property>
+      <property name="show startup" code="pSHS" type="boolean" description="Whether the application should display its description as a splash screen on launch (if the script type is an application).">
+        <cocoa key="showStartup"/>
+      </property>
+      <property name="stay open" code="pSOP" type="boolean" description="Whether the application should stay open after running at launch (if the script type is an application).">
+          <cocoa key="stayOpen"/>
+      </property>
+<!--      <property name="script manifest XML" code="pMsX" type="text" description="The script’s dependencies, as described in its manifest, in XML format." access="r">
+        <cocoa key="AEManifestXML"/>
+      </property>
+      <property name="script manifest" code="pMsR" type="script manifest info" description="The script’s dependencies, as a script manifest info object." access="r">
+        <cocoa key="AEManifest"/>
+      </property> -->
+      <property name="execution state" type="execution states" code="pSTT" description="What the script is currently doing (stopped, paused, running, etc.)." access="r">
+        <cocoa key="AEDebuggerState"/>
+      </property>
+      <property name="compiled" code="pCPL" type="boolean" description="Whether the script has been compiled." access="r">
+        <cocoa key="AECompiled"/>
+      </property>
+      <property name="has open handler" code="pOPH" type="boolean" description="Whether the script has an open handler." access="r">
+        <cocoa key="AEHasOpenHandler"/>
+      </property>
+      <property name="has quit handler" code="pQTH" type="boolean" description="Whether the script has a quit handler." access="r">
+        <cocoa key="AEHasQuitHandler"/>
+      </property>
+      <property name="has idle handler" code="pIDH" type="boolean" description="Whether the script has an idle handler." access="r">
+        <cocoa key="AEHasIdleHandler"/>
+      </property>
+      <property name="last error number" code="pLEN" type="integer" description="Numeric code of the script’s most recent compilation or runtime error (or missing value if the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorNumber"/>
+      </property>
+      <property name="last error message" code="pLEM" type="text" description="Text message of the script’s most recent compilation or runtime error (or missing value if the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorMessage"/>
+      </property>
+      <property name="last error range" code="pLER" description="Content and position of the script’s most recent compilation or runtime error (or missing value if the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorRange"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The last error range is effectively a selection within the script. If you ask for it as text (or nothing), you get the troublesome text. If you ask for it as a point, you get a list containing a pair of integers, the starting offset and the length of that text within the script. See the discussion of the <a class="internal" href="ref:///selection-object">selection-object</a> class.
+				</p>
+				]]></html>
+        </documentation>
+        <type type="selection-object"/>
+        <type type="point"/>
+        <type type="text"/>
+        <!--<type type="specifier"/>-->
+      </property>
+      <property name="last error partial result" code="pLEp" type="any" description="Partial result of the script’s most recent runtime error, as displayed in the error dialog’s Partial Result pane (or missing value if there was no partial result, or the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorPartialResult"/>
+      </property>
+      <property name="last error offending object" code="pLEo" type="any" description="Offending object of the script’s most recent runtime error, as displayed in the error dialog’s Offending Object pane (or missing value if there was no offending object, or the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorOffendingObject"/>
+      </property>
+      <property name="last error application" code="pLEa" type="any" description="Application of the script’s most recent runtime error, as displayed in the error dialog’s Application pane (or missing value if there was no application, or the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorApplication"/>
+      </property>
+      <property name="last error expected type" code="pLEx" type="any" description="Expected type of the script’s most recent runtime error, as displayed in the error dialog’s Expected Type pane (or missing value if there was no expected type, or the script has compiled/run successfully)." access="r">
+        <cocoa key="AELastErrorExpectedType"/>
+      </property>
+      <property name="default target" code="pTRG" type="file" description="File URL of the script’s implicit target application (or missing value if none).">
+        <cocoa key="AEDefaultTarget"/>
+      </property>
+      <property name="script" code="scpt" type="any" description="A copy of the entire script object represented by the script.">
+        <cocoa key="AEScript"/>
+        <documentation>
+          <html><![CDATA[
+				<p>Manipulation of a script&#8217;s script property is effectively a live, on-the-fly analog of <span class="code">load script</span> and <span class="code">store script</span>. What you&#8217;re manipulating is the script object comprising the entire top level of the script: its properties, its script objects, and its handlers, including its implicit run handler. You can copy it into your script and alter it, get and set its properties, run it or call its handlers, and so forth. You can also replace a script&#8217;s script property with a different script object, one that has been generated by altering the original script object or one that is completely different and unrelated.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="last result" code="pRES" type="value-object" description="The result produced by the script the last time it was run, or by the most recently executed line in debug mode (or missing value if the script has not been run)." access="r">
+        <cocoa key="AELastResult"/>
+      </property>
+      <property name="parent script" code="pScc" type="document" description="The document that is to serve as the script’s implicit parent (or missing value if none).">
+        <cocoa key="AEParentScript"/>
+      </property>
+      <property name="debugger enabled" code="pDBx" type="boolean" description="Whether the script is in debug mode.">
+        <cocoa key="AEDebuggingEnabled"/>
+      </property>
+      <property name="break on breakpoints" code="pBPe" type="boolean" description="Whether the script will pause at breakpoints in debug mode.">
+        <cocoa key="AEBreakOnBreakpoints"/>
+      </property>
+      <property name="break on exceptions" code="pB++" type="boolean" description="Whether the script will pause at handled runtime errors in debug mode.">
+        <cocoa key="breakOnExceptions"/>
+      </property>
+      <property name="show raw syntax" code="pSHr" type="boolean" description="Whether raw (“chevron”) Apple event codes are displayed in the script.">
+        <cocoa key="AEChevronSyntax"/>
+      </property>
+      <!-- material repeated in both document and script window -->
+
+      <property name="selection" code="psel" description="The current selection within the script’s source text.">
+        <cocoa key="AESelection"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				If you <span class="code">get selection</span>, you are handed the selected text. If you ask for <span class="code">selection as point</span> or <span class="code">character range of selection</span>, you get a list of two integers, the character offset after the insertion point or the start of the selection (the first character offset is 1) and the count of characters in the selection. Similarly, you can <span class="code">set selection</span> to alter the selected text, but if what you set the selection to is a list of two integers, or if you <span class="code">set character range of selection</span> to such a list, you reposition the selection.
+				</p>
+				]]></html>
+        </documentation>
+        <type type="selection-object"/>
+        <type type="point"/>
+        <type type="text"/>
+        <!--<type type="specifier"/>-->
+      </property>
+      <property name="show code coverage" code="pSHp" type="boolean" description="Whether code coverage marks are displayed in the gutter of the script (in debug mode).">
+        <cocoa key="AECodeCoverage"/>
+      </property>
+      <property name="navigation bar visible" type="boolean" code="pNBV" description="Whether the navigation bar is visible above the script.">
+        <cocoa key="AEShowNavigationBar"/>
+      </property>
+      <property name="tab width" code="pSBw" type="integer" description="Width of the panes and inspectors tab to the right of the script (0 if tab display mode is none).">
+        <cocoa key="AESidebarWidth"/>
+      </property>
+      <property name="tab display mode" type="tab modes" code="pSBm" description="Which set of panes and inspectors is displayed to the right of the script.">
+        <cocoa key="AESidebarMode"/>
+      </property>
+      <property name="result format" code="pRx0" description="Which view (best, source, or AEPrint) the result explorer is in.">
+        <cocoa key="AEResultDisplayFormat"/>
+        <type type="explorer view types"/>
+      </property>
+      <property name="result wrap lines" code="pRx1" type="boolean" description="Whether line wrapping is turned on for the result pane of the script.">
+        <cocoa key="AEResultWrapLines"/>
+      </property>
+      <property name="result show invisibles" code="pRx2" type="boolean" description="Whether invisible characters are displayed in the result pane of the script.">
+        <cocoa key="AEResultShowInvisibles"/>
+      </property>
+      <property name="result show tab stops" code="pRx3" type="boolean" description="Whether tab stops are displayed in the result pane of the script.">
+        <cocoa key="AEResultShowTabStops"/>
+      </property>
+      <property name="result show spaces" code="pRx4" type="boolean" description="Whether space characters are displayed as dots in the result pane of the script (assuming invisible characters are being displayed in the result pane).">
+        <cocoa key="AEResultShowSpaces"/>
+      </property>
+      <property name="result pretty print" code="pRx5" type="boolean" description="Whether lists and records are pretty-printed in the result pane of the script.">
+        <cocoa key="AEResultPrettyPrint"/>
+      </property>
+      <property name="result show raw syntax" code="pRx6" type="boolean" description="Whether raw (“chevron”) Apple event codes are displayed in the result pane of the script.">
+        <cocoa key="AEResultChevronSyntax"/>
+      </property>
+      <property name="result bar visible" code="pRBv" type="boolean" description="Whether the result bar is visible above the script.">
+          <cocoa key="AEResultBarVisible"/>
+      </property>
+      <property name="event log visible" code="pEV1" type="boolean" description="Whether the event log pane is open below the script.">
+        <cocoa key="AEEventLogVisible"/>
+      </property>
+      <property name="event log height" code="pEV2" type="integer" description="The height of the event log pane below the script.">
+        <cocoa key="AEEventLogHeight"/>
+      </property>
+
+
+      <property name="event log level" code="pEVy" type="integer" description="The accumulated sum of start log and stop log commands.">
+        <cocoa key="AELogLevel"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The log level starts out at 1 when a script begins executing. Each <span class="code">stop log</span> command decrements it (and returns the new level); each <span class="code">start log</span> command increments it (and returns the new level). When the log level is 0 or less, no logging takes place.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="event log scope bar visible" code="pEV3" type="boolean" description="Whether the scope bar is visible in the event log.">
+        <cocoa key="AEEventLogScopeVisible"/>
+      </property>
+      <property name="append to log" code="pLAP" type="boolean" description="Whether logged data should be appended to the current contents of the event log the next time the script runs.">
+        <cocoa key="AEAppendToLog"/>
+      </property>
+      <property name="event log format" code="pLgF" description="Display format for events in the event log (source code, raw code, or AEPrint).">
+        <cocoa key="AEEventLogFormat"/>
+        <type type="log format types"/>
+      </property>
+      <property name="event result explorer visible" code="pRVv" type="boolean" description="Whether the second pane of the event log is open, exploring the result of the selected event.">
+        <cocoa key="AEShowResultViewer"/>
+      </property>
+      <property name="event result explorer width" code="pRVw" type="integer" description="The width of the second pane of the event log, exploring the result of the selected event.">
+        <cocoa key="AEResultViewerWidth"/>
+      </property>
+      <property name="selection ASObjC range" code="prnC" description="The position of the selection as a zero-based Cocoa range. Can be a list of two items or a record in the form {location:x, |length|:y}. Use this instead of the selection's &#8220;character range&#8221; if working in AppleScriptObjC.">
+          <type type="any"/>
+          <cocoa key="AECocoaRange"/>
+           <documentation>
+              <html><![CDATA[
+                  <p>
+                  If you <span class="code">get selection ASObjC range</span>, the result will be returned as a list, <span class="code">{x, y}</span>. If you <span class="code">get selection ASObjC range as record</span>, it will be returned as a record in the form <span class="code">{location:x, |length|:y}</span>. When using <span class="code">set selection ASObjC range</span>, you can pass either a list or record.
+                  </p>
+              ]]></html>
+          </documentation>
+     </property>
+
+      <!-- end repeated material -->
+      <property name="timer duration" type="real" code="pTMd" description="The total duration displayed in the timer." access="r">
+        <cocoa key="AETimerDuration"/>
+      </property>
+      <property name="event count" type="integer" code="pEVc" description="The Apple event count displayed in the timer." access="r">
+        <cocoa key="AEEventCount"/>
+      </property>
+      <property name="source text" code="pSTX" type="text" description="The script’s content, as text.">
+        <cocoa key="AESourceText"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The source text property accesses a script&#8217;s entire content as text. You can fetch the text, analyze it, alter it, and set it. When you set a script&#8217;s source text, you change the entire script. To change just a part of a script, use the selection. You might fetch the source text in order to analyze the script&#8217;s text, then set the selection&#8217;s character range to where you want to change some text, and finally set the selection to some other text.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="description" code="pDSC" type="text" description="The text of the script’s description.">
+        <cocoa key="AEDescriptionText"/>
+      </property>
+      <property name="used script libraries" code="pUSl" description="The name of script libraries declared in use statements." access="r">
+          <type type="text" list="yes"/>
+          <cocoa key="AEUsedLibraries"/>
+      </property>
+      <property name="used script library files" code="pUSp" description="The script libraries declared in use statements as file references." access="r">
+          <type type="file" list="yes"/>
+          <cocoa key="AEUsedLibraryFiles"/>
+      </property>
+      <property name="embedded script libraries" code="pEsl" description="The name of all script libraries embedded in the script's bundle. Returns missing value if the document is unsaved or not a bundle format (.scptd or .app)." access="r">
+          <type type="text" list="yes"/>
+          <cocoa key="AEEmbeddedLibraries"/>
+      </property>
+     <property name="used frameworks" code="pUFr" description="The name of frameworks declared in use statements." access="r">
+          <type type="text" list="yes"/>
+          <cocoa key="AEUsedFrameworks"/>
+      </property>
+      <property name="used framework files" code="pUFp" description="The frameworks declared in use statements as file references." access="r">
+          <type type="file" list="yes"/>
+          <cocoa key="AEUsedFrameworkFiles"/>
+      </property>
+      <property name="used scripting additions" code="pUFs" description="The name of scripting additions used by this document." access="r">
+          <type type="text" list="yes"/>
+          <cocoa key="AEUsedOsax"/>
+      </property>
+      <property name="used scripting addition files" code="pUFa" description="The scripting additions used by this document as file references." access="r">
+          <type type="file" list="yes"/>
+          <cocoa key="AEUsedOsaxFiles"/>
+      </property>
+      <property name="used applications" code="pUAs" description="The name of applications used by this document." access="r">
+          <type type="text" list="yes"/>
+          <cocoa key="AEUsedApplications"/>
+      </property>
+      <property name="codesign identity" code="csID" access="rw" description="The document’s code sign identity. When running under macOS 11 Big Sur or later, ‘missing value’ means applets will be signed to run locally, which is the minimum requirement for universal apps. Under earlier version of macOS, ‘missing value’ means do not sign applets.">
+        <cocoa key="AECodesignIdentity"/>
+        <type type="text"/>
+        <type type="missing value"/>
+      </property>
+      <property name="codesign on export only" code="pCse" type="boolean" description="Whether codesigning is restricted to exporting run-only versions, or used for both saving and exporting. When saving under macOS 11 Big Sur or later, applets will still be signed even if this is false, as required for universal applets, but in such cases saving will sign the applet to run locally, ignoring any designated codesign identity. Applies only to applets (.app files), unless ‘codesign bundles too’ is true. ">
+          <cocoa key="AECodesignOnExportOnly"/>
+      </property>
+      <property name="codesign bundles too" code="pCsb" type="boolean" description="Whether the codesigning settings for applets should also be applied to compiled script bundles (.scptd files).">
+          <cocoa key="AECodesignBundles"/>
+      </property>
+      <property name="allow arbitrary loads" code="pAal" type="boolean" description="When true, App Transport Security is disabled for an applet via an Info.plist NSAppTransportSecurity key entry. If an applet is configured with more complex settings than simply allowing arbitary loads, the property will return missing value.">
+          <cocoa key="AEAllowArbitraryLoads"/>
+      </property>
+      <property name="background only" code="pBao" type="boolean" description="When true, an applet will run as a faceless background application.">
+          <cocoa key="AEBackgroundOnly"/>
+      </property>
+      <property name="embed used libraries" code="pEml" type="boolean" description="If true when exporting an applet as run-only, any required libraries found in '~/Library/Script Libraries' or '/Library/Script Libraries' will be copied to the applet's Script Libraries folder.">
+          <cocoa key="AEEmbedUsedLibraries"/>
+      </property>
+      <property name="embed used frameworks" code="pEmf" type="boolean" description="If true when exporting an applet as run-only, any required non-Apple frameworks will be copied to the applet's Frameworks folder.">
+          <cocoa key="AEEmbedUsedFrameworks"/>
+      </property>
+      <property name="embed run only" code="pEmr" type="boolean" description="If true when exporting an applet as run-only, any embedded scripts and Script Libraries will be made run-only.">
+          <cocoa key="AEMakeBundledScriptsToROOnExport"/>
+      </property>
+      <property name="minimum supported OS" code="pMos" type="text" description="For applets this sets the minimum version of macOS they will run under. Values should be in the format '10.n' or '10.n.n'. To remove, set to an empty string.">
+          <cocoa key="AEMinimumSupportedOS"/>
+      </property>
+      <property name="droplet extensions" code="pDex" description="A list of the extensions (no dots) for files that a user will able to drag and drop on a droplet. An single entry consisting of an * means all types; an empty list means none.">
+          <type type="text" list="yes"/>
+          <cocoa key="AEDropletExtensions"/>
+      </property>
+      <property name="droplet UTIs" code="pUts" description="A list of the Uniform Type Identifiers (UTIs) for conforming files that a user will able to drag and drop on a droplet. An empty list means none.">
+          <type type="text" list="yes"/>
+          <cocoa key="AEDropletUTIs"/>
+      </property>
+     <property name="export name" code="exPn" description="A name (less extension) to be used for the run-only version when performing a direct export. An empty string signifies that the name will be based on the exporting document's name.">
+         <type type="text"/>
+         <cocoa key="AEExportName"/>
+     </property>
+     <property name="show code folding" code="psCf" type="boolean" description="Whether code folding indicators should appear in the gutter of the document's windows.">
+       <cocoa key="AEShowCodeFolding"/>
+     </property>
+     <!-- This is just here for compatibility with the Script Editor which defines this property on its document class.  Its absence
+				 has caused problems for some scripters. -->
+      <property name="path" code="ppth" type="text" access="r" description="Its location on disk, if it has one, as a POSIX path string." hidden="yes">
+        <cocoa key="fileName"/>
+      </property>
+      <!-- Script Editor properties -->
+      <property name="wrap lines" code="pWRl" type="boolean" description="Whether line wrapping is turned on for the script.">
+        <cocoa key="wrapLines"/>
+      </property>
+      <property name="show invisibles" code="pSHi" type="boolean" description="Whether invisible characters are displayed in the script.">
+        <cocoa key="showInvisibles"/>
+      </property>
+      <property name="show tab stops" code="pSHt" type="boolean" description="Whether tab stops are displayed in the script.">
+        <cocoa key="showTabStops"/>
+      </property>
+      <property name="show spaces" code="pSHs" type="boolean" description="Whether space characters are displayed as dots in the script (assuming invisible characters are being displayed).">
+        <cocoa key="showSpaces"/>
+      </property>
+      <property name="show line numbers" code="pSHl" type="boolean" description="Whether line numbers are displayed in the gutter of the script.">
+        <cocoa key="showLineNumbers"/>
+      </property>
+      <property name="event log window" code="cELw" type="event log window" description="The event log window associated with the script (or missing value if the event log window is not open)." access="r">
+        <cocoa key="AEEventLogWindow"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				To open a document&#8217;s event log window, tell the document to <span class="code">make new event log window</span>.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <!-- Other window properties -->
+      <property name="toolbar visible" type="boolean" code="pTBV" description="Whether the document window’s toolbar is visible.">
+        <cocoa key="AEToolbarVisible"/>
+      </property>
+        <element type="script property">
+            <cocoa key="orderedScriptProperties"/>
+            <accessor style="index | name | range | relative | test"/>
+        </element>
+        <element type="script handler">
+            <cocoa key="orderedScriptHandlers"/>
+            <accessor style="index | name | range | relative | test"/>
+        </element>
+<!--
+        <element type="browser item">
+            <accessor style="id | index | name | range | relative | test"/>
+        </element>
+-->
+      <element type="window" access="r">
+        <cocoa key="orderedWindows"/>
+      </element>
+      <element type="script window" access="r">
+        <cocoa key="orderedScriptWindows"/>
+      </element>
+      <element type="event log entry" access="r">
+        <cocoa key="orderedEventLogEntries"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <element type="event log target" access="r">
+        <cocoa key="orderedEventLogTargets"/>
+        <accessor style="name"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <responds-to command="close">
+        <cocoa method="handleCloseScriptCommand:"/>
+      </responds-to>
+      <responds-to command="print">
+        <cocoa method="handlePrintScriptCommand:"/>
+      </responds-to>
+      <responds-to command="save">
+        <cocoa method="handleSaveScriptCommand:"/>
+      </responds-to>
+      <responds-to command="compile">
+        <cocoa method="handleCompileCommand:"/>
+      </responds-to>
+      <responds-to command="execute">
+        <cocoa method="handleExecuteCommand:"/>
+      </responds-to>
+      <responds-to command="halt">
+        <cocoa method="handleHaltCommand:"/>
+      </responds-to>
+      <responds-to command="pause">
+        <cocoa method="handlePauseCommand:"/>
+      </responds-to>
+      <responds-to command="step into">
+        <cocoa method="handleStepIntoCommand:"/>
+      </responds-to>
+      <responds-to command="step out">
+        <cocoa method="handleStepOutCommand:"/>
+      </responds-to>
+      <responds-to command="step over">
+        <cocoa method="handleStepOverCommand:"/>
+      </responds-to>
+    <responds-to command="direct export">
+      <cocoa method="handleDirectExportCommand:"/>
+    </responds-to>
+    <responds-to command="search">
+      <cocoa method="handleSearchCommand:"/>
+    </responds-to>
+    </class>
+    <class name="window" code="cwin" description="A window; the superclass for Script Debugger’s actual window types.">
+      <cocoa class="NSWindow"/>
+      <property name="name" code="pnam" type="text" access="r" description="The window’s title.">
+        <cocoa key="title"/>
+      </property>
+      <property name="id" code="ID  " type="integer" access="r" description="The window’s unique ID.">
+        <cocoa key="uniqueID"/>
+      </property>
+      <property name="index" code="pidx" type="integer" description="The index of the window, ordered front to back. To change the order of windows, set a window’s index.">
+        <cocoa key="AEOrderedIndex"/>
+      </property>
+      <property name="bounds" code="pbnd" type="rectangle" description="The window’s bounding rectangle (left, top, right, bottom, measured from the upper left of the screen).">
+        <cocoa key="boundsAsQDRect"/>
+      </property>
+      <property name="closeable" code="hclb" type="boolean" access="r" description="Whether the window has a close box.">
+        <cocoa key="hasCloseBox"/>
+      </property>
+      <property name="minimizable" code="ismn" type="boolean" access="r" description="Whether the window can be minimized.">
+        <cocoa key="isMiniaturizable"/>
+      </property>
+      <property name="minimized" code="pmnd" type="boolean" description="Whether the window is currently minimized.">
+        <cocoa key="isMiniaturized"/>
+      </property>
+      <property name="resizable" code="prsz" type="boolean" access="r" description="Whether the window can be resized.">
+        <cocoa key="isResizable"/>
+      </property>
+      <property name="visible" code="pvis" type="boolean" access="r" description="Whether the window - or in the case of script window tab, its parent window - is currently visible.">
+        <cocoa key="isVisible"/>
+      </property>
+      <property name="zoomable" code="iszm" type="boolean" access="r" description="Whether the window can be zoomed.">
+        <cocoa key="isZoomable"/>
+      </property>
+      <property name="zoomed" code="pzum" type="boolean" description="Whether the window is currently zoomed.">
+          <cocoa key="isZoomed"/>
+      </property>
+      <property name="full screen" code="pFsc" type="boolean" description="Whether the window is showing full screen.">
+          <cocoa key="AEFullScreen"/>
+      </property>
+      <property name="properties" code="pALL" type="record" description="All the object’s properties returned as a record." access="r">
+        <cocoa key="scriptingProperties"/>
+      </property>
+      <responds-to command="close">
+        <cocoa method="handleCloseScriptCommand:"/>
+      </responds-to>
+      <responds-to command="print">
+        <cocoa method="handlePrintScriptCommand:"/>
+      </responds-to>
+    </class>
+    <value-type name="color" code="colr">
+      <cocoa class="NSColor"/>
+    </value-type>
+    <class name="selection-object" code="tsel" description="A way to refer to a range of text.">
+      <!-- Matt: selection-object is now used in a few places (eg. event log entry's 'source text') to return a range of text within a script's source text. -->
+      <cocoa class="SDTextSelection"/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			You won&#8217;t work explicitly with any objects whose class is selection-object; you can fetch the selection as text (the default) or as a point (a starting offset and a length). But the properties of the selection-object do apply to the selection, so you can get and set the selection&#8217;s contents and character range, and these are equivalent to getting and setting the selection as text and as a point, respectively.
+			</p>
+			]]></html>
+      </documentation>
+      <type type="text"/>
+      <property name="contents" type="text" code="pcnt" description="The selected text. Set this to replace the text with different text.">
+        <cocoa key="AEContents"/>
+      </property>
+      <property name="character range" type="point" code="prng" description="The position of the selection, expressed as a list: {character offset, length}. Set this to reposition the selection.">
+        <cocoa key="AERange"/>
+      </property>
+    </class>
+    <class name="value-object" code="valo" description="An Apple event reply; used for a script result or a logged event result.">
+      <cocoa class="RKExplorerAbstractNode"/>
+      <type type="any"/>
+      <!-- For Matt: this object represents a value a script returns or operates on.  Examples: script's result, Apple Event result, etc. -->
+      <property name="contents" type="any" code="pcnt" description="The actual value; it should not be necessary to use this property." access="r">
+        <cocoa key="AEContents"/>
+      </property>
+      <property name="name" type="text" code="pnam" description="The value’s label." access="r">
+        <cocoa key="AEName"/>
+        <documentation>
+          <html><![CDATA[
+			<p>
+			For a script result, this will be "Result". For an event result, it will be the code that generated the result, as shown in the event log.
+			</p>
+			]]></html>
+        </documentation>
+      </property>
+      <property name="changed" type="boolean" code="pCHX" description="Whether the value has changed since the last time it was generated.">
+        <cocoa key="AEIsChanged"/>
+      </property>
+      <property name="window" type="explorer window" code="cwin" description="The explorer window displaying this value (missing value if none)." access="r">
+        <cocoa key="AEWindow"/>
+        <documentation>
+          <html><![CDATA[
+			<p>
+			To create an explorer window, open the value. For example, you could tell a document to <span class="code">open last result</span>, or tell an event log entry to <span class="code">open event result</span>.
+			</p>
+			]]></html>
+        </documentation>
+      </property>
+      <property name="application" type="file" code="capp" description="File URL of the target application that generated this reply." access="r">
+        <cocoa key="AEApplication"/>
+      </property>
+      <responds-to command="open">
+        <cocoa method="handleOpenScriptCommand:"/>
+      </responds-to>
+      <responds-to command="refresh">
+        <cocoa method="handleRefreshScriptCommand:"/>
+      </responds-to>
+    </class>
+    <value-type name="point" code="QDpt" description="A text range.">
+      <cocoa class="SDRange"/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			The point value type is a two-item list describing the location of a range of text. The first item of the list is the character offset where the range of text begins; a character offset is located before its character, and the first character offset in the document is 1. The second item of the list is the length of the text range (which may be zero, if the text range is an insertion point).
+			</p>
+			]]></html>
+      </documentation>
+      <!-- 'point' is used because AppleScript does not allow us to define list-based value-types -->
+    </value-type>
+  </suite>
+  <!-- TEXT SUITE -->
+  <!--
+	<suite name="Text Suite" code="TEXT"
+		description="A set of basic classes for text processing.">
+
+		<cocoa name="NSTextSuite"/>
+
+
+		<class name="rich text" plural="rich text" code="ricT" description="Rich (styled) text">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="color" code="colr" type="color"
+				description="The color of the first character.">
+				<cocoa key="foregroundColor"/>
+			</property>
+			<property name="font" code="font" type="text"
+				description="The name of the font of the first character.">
+				<cocoa key="fontName"/>
+			</property>
+			<property name="size" code="ptsz" type="integer"
+				description="The size in points of the first character.">
+				<cocoa key="fontSize"/>
+			</property>
+			<element type="character"/>
+			<element type="paragraph"/>
+			<element type="word"/>
+			<element type="attribute run"/>
+			<element type="insertion point">
+				<cocoa key="LNSInsertionPoints"/>
+			</element>
+		</class>
+
+		<class name="character" code="cha "
+			description="This subdivides the text into characters.">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="color" code="colr" type="color"
+				description="The color of the first character.">
+				<cocoa key="foregroundColor"/>
+			</property>
+			<property name="font" code="font" type="text"
+				description="The name of the font of the first character.">
+				<cocoa key="fontName"/>
+			</property>
+			<property name="size" code="ptsz" type="integer"
+				description="The size in points of the first character.">
+				<cocoa key="fontSize"/>
+			</property>
+			<property name="character range" type="point" code="prng" description="The range of characters in the object" access="r">
+				<cocoa key="AERange"/>
+			</property>
+			<property name="can be breakpoint" type="boolean" code="cbBP" description="Is this object part of a paragraph that can be a breakpoint?" access="r">
+				<cocoa key="AECanBeBreakpoint"/>
+			</property>
+			<property name="breakpoint" type="breakpoint states" code="stBP" description="???">
+				<cocoa key="AEBreakpoint"/>
+			</property>
+			<element type="character"/>
+			<element type="paragraph"/>
+			<element type="word"/>
+			<element type="attribute run"/>
+			<element type="insertion point">
+				<cocoa key="LNSInsertionPoints"/>
+			</element>
+		</class>
+
+		<class name="paragraph" code="cpar"
+			description="This subdivides the text into paragraphs.">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="color" code="colr" type="color"
+				description="The color of the first character.">
+				<cocoa key="foregroundColor"/>
+			</property>
+			<property name="font" code="font" type="text"
+				description="The name of the font of the first character.">
+				<cocoa key="fontName"/>
+			</property>
+			<property name="size" code="ptsz" type="integer"
+				description="The size in points of the first character.">
+				<cocoa key="fontSize"/>
+			</property>
+			<property name="character range" type="point" code="prng" description="The range of characters in the object" access="r">
+				<cocoa key="AERange"/>
+			</property>
+			<property name="can be breakpoint" type="boolean" code="cbBP" description="Is this object part of a paragraph that can be a breakpoint?" access="r">
+				<cocoa key="AECanBeBreakpoint"/>
+			</property>
+			<property name="breakpoint" type="breakpoint states" code="stBP" description="???">
+				<cocoa key="AEBreakpoint"/>
+			</property>
+			<element type="character"/>
+			<element type="paragraph"/>
+			<element type="word"/>
+			<element type="attribute run"/>
+			<element type="insertion point">
+				<cocoa key="LNSInsertionPoints"/>
+			</element>
+		</class>
+
+		<class name="word" code="cwor"
+			description="This subdivides the text into words.">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="color" code="colr" type="color"
+				description="The color of the first character.">
+				<cocoa key="foregroundColor"/>
+			</property>
+			<property name="font" code="font" type="text"
+				description="The name of the font of the first character.">
+				<cocoa key="fontName"/>
+			</property>
+			<property name="size" code="ptsz" type="integer"
+				description="The size in points of the first character.">
+				<cocoa key="fontSize"/>
+			</property>
+			<property name="character range" type="point" code="prng" description="The range of characters in the object" access="r">
+				<cocoa key="AERange"/>
+			</property>
+			<property name="can be breakpoint" type="boolean" code="cbBP" description="Is this object part of a paragraph that can be a breakpoint?" access="r">
+				<cocoa key="AECanBeBreakpoint"/>
+			</property>
+			<property name="breakpoint" type="breakpoint states" code="stBP" description="???">
+				<cocoa key="AEBreakpoint"/>
+			</property>
+			<element type="character"/>
+			<element type="paragraph"/>
+			<element type="word"/>
+			<element type="attribute run"/>
+			<element type="insertion point">
+				<cocoa key="LNSInsertionPoints"/>
+			</element>
+		</class>
+
+		<class name="attribute run" code="catr"
+			description="This subdivides the text into chunks that all have the same attributes.">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="color" code="colr" type="color"
+				description="The color of the first character.">
+				<cocoa key="foregroundColor"/>
+			</property>
+			<property name="font" code="font" type="text"
+				description="The name of the font of the first character.">
+				<cocoa key="fontName"/>
+			</property>
+			<property name="size" code="ptsz" type="integer"
+				description="The size in points of the first character.">
+				<cocoa key="fontSize"/>
+			</property>
+			<property name="character range" type="point" code="prng" description="The range of characters in the object" access="r">
+				<cocoa key="AERange"/>
+			</property>
+			<property name="can be breakpoint" type="boolean" code="cbBP" description="Is this object part of a paragraph that can be a breakpoint?" access="r">
+				<cocoa key="AECanBeBreakpoint"/>
+			</property>
+			<property name="breakpoint" type="breakpoint states" code="stBP" description="???">
+				<cocoa key="AEBreakpoint"/>
+			</property>
+			<element type="character"/>
+			<element type="paragraph"/>
+			<element type="word"/>
+			<element type="attribute run"/>
+			<element type="insertion point">
+				<cocoa key="LNSInsertionPoints"/>
+			</element>
+		</class>
+
+		<class name="insertion point" code="cins" description="A position between two characters." inherits="rich text">
+			<cocoa class="NSTextStorage"/>
+			<type type="text"/>
+			<property name="character range" type="point" code="prng" description="The range of characters in the object" access="r">
+				<cocoa key="AERange"/>
+			</property>
+			<property name="can be breakpoint" type="boolean" code="cbBP" description="Is this object part of a paragraph that can be a breakpoint?" access="r">
+				<cocoa key="AECanBeBreakpoint"/>
+			</property>
+			<property name="breakpoint" type="breakpoint states" code="stBP" description="???">
+				<cocoa key="AEBreakpoint"/>
+			</property>
+		</class>
+
+	</suite>
+-->
+  <!-- SCRIPT DEBUGGER SUITE -->
+  <suite name="Script Debugger Suite" code="asDB">
+    <!--
+		<enumeration name="breakpoint states" code="bpST">
+			<enumerator name="yes" code="yes " description="A breakpoint is set on this paragraph."/>
+			<enumerator name="no" code="no  " description="A breakpoint is set not on this paragraph."/>
+			<enumerator name="temporary breakpoint" code="tmpB" description="A temporary breakpoint is set on this paragraph."/>
+			<enumerator name="inactive breakpoint" code="iacB" description="An inactive breakpoint is set on this paragraph."/>
+		</enumeration>
+		-->
+    <enumeration name="hierarchy types" code="ADHT" description="The type of diagram shown in a dictionary window’s diagram pane.">
+      <enumerator name="containment" code="asHE" description="The element containment diagram."/>
+      <enumerator name="inheritance" code="asHI" description="The class inheritance diagram."/>
+    </enumeration>
+    <enumeration name="tab modes" code="eSBm" description="Tabs of panes and inspectors in a script window.">
+      <enumerator name="none" code="none" description="No panes or inspectors are showing."/>
+      <enumerator name="result and variables tab" code="eSB0" description="The Result &amp; Variables Tab is showing."/>
+      <enumerator name="resources tab" code="eSB1" description="The Resources Tab is showing."/>
+      <enumerator name="inspectors tab" code="eSB2" description="The Inspectors Tab is showing."/>
+    </enumeration>
+    <!--
+		<enumeration name="alias types" code="ALKD" description="the type of alias Script Debugger uses to refer to the library">
+			<enumerator name="absolute" code="abso" description="an absolute alias"/>
+			<enumerator name="relative to document" code="prel" description="relative to owning document"/>
+			<enumerator name="relative to editor" code="erel" description="relative to Script Debugger"/>
+		</enumeration>
+-->
+    <enumeration name="execution states" code="ASDS" description="What a script is doing.">
+      <enumerator name="executing" code="asDR" description="The script is executing."/>
+      <enumerator name="stopped" code="asDS" description="The script is doing nothing; it is editable."/>
+      <enumerator name="compiling" code="asDx" description="The script is in the middle of compilation."/>
+      <enumerator name="loading" code="asDL" description="The script is in the middle of loading or storing."/>
+      <enumerator name="paused" code="asDP" description="The script is paused in debug mode."/>
+    </enumeration>
+    <enumeration name="dictionary view modes" code="ASDV" description="Display mode of a dictionary window.">
+      <enumerator name="dictionary view" code="aeDV" description="Dictionary mode."/>
+      <enumerator name="explorer view" code="aeDX" description="Explorer mode."/>
+      <enumerator name="object model view" code="aeDG" description="Object Model mode."/>
+    </enumeration>
+    <enumeration name="script types" code="ASFT" description="Formats in which a script can be saved.">
+      <enumerator name="text script" code="asTs" description="Text."/>
+      <enumerator name="compiled script" code="asCS" description="Compiled script file."/>
+      <enumerator name="bundled compiled script" code="asCB" description="Compiled script bundle."/>
+      <enumerator name="script application" code="asXB" description="Apple applet or droplet."/>
+      <enumerator name="enhanced application" code="asXE" description="Enhanced applet or droplet."/>
+    </enumeration>
+    <enumeration name="log format types" code="ASLG" description="Logging formats.">
+      <enumerator name="source code" code="kSRC" description="Log As Source."/>
+      <enumerator name="AEPrint" code="avAP" description="Log As AEPrint."/>
+      <enumerator name="raw code" code="asRE" description="Log As Raw (Chevron) Events."/>
+    </enumeration>
+    <enumeration name="explorer view types" code="ASRT" description="Ways of viewing the value of an explorer.">
+      <enumerator name="source code" code="kSRC" description="Source view (Desc view for AppleScriptObjC)."/>
+      <enumerator name="AEPrint" code="avAP" description="AEPrint view."/>
+      <enumerator name="best" code="best" description="Best view."/>
+    </enumeration>
+    <enumeration name="parameter type" code="PRXT" description="handler parameter type.">
+        <enumerator name="positional parameter" code="kPM0" description="A positional parameter: handlerName(p1, p2, ...)"/>
+        <enumerator name="named parameter" code="kPM1" description="A named parameter: handlerName given {name:varName, ...}"/>
+        <enumerator name="keyword parameter" code="kPM3" description="A keyword parameter: handlerName over p1 through p2 ..."/>
+        <enumerator name="direct parameter" code="kPM2" description="Direct parameter to event handler: open theFiles"/>
+    </enumeration>
+    <enumeration name="handler type" code="HDXT" description="handler type.">
+        <enumerator name="subroutine handler" code="kHM0" description="A AppleScript handler (subroutine)"/>
+        <enumerator name="event handler" code="kHM1" description="An event handler"/>
+    </enumeration>
+    <enumeration name="line ending types" code="LNED" description="Line ending conversions when saving as a text file.">
+      <enumerator name="legacy endings" code="eXX1" description="Converts all line endings and linefeeds to carriage returns."/>
+      <enumerator name="macOS endings" code="eXX2" description="No conversion; line endings are linefeeds."/>
+      <enumerator name="DOS endings" code="eXX3" description="No longer supported. Will trigger error."/>
+      <enumerator name="mixed endings" code="eXX4" description="Deprecated. Uses 'macOS endings' instead."/>
+    </enumeration>
+    <!--
+		<enumeration name="key form types" code="KEYf" description="the key forms available for this element collection">
+			<enumerator name="key by index" code="eXY1" description="key by object index"/>
+			<enumerator name="key relative" code="eXY2" description="key relative to other objects"/>
+			<enumerator name="key test" code="eXY3" description="key using a test (whose)"/>
+			<enumerator name="key by range" code="eXY4" description="key using a range of object indexes"/>
+			<enumerator name="key by property" code="eXY5" description="key by property name"/>
+			<enumerator name="key by name" code="eXY6" description="key by object name"/>
+			<enumerator name="key by unique ID" code="exY7" description="key by unique ID value"/>
+		</enumeration>
+-->
+    <enumeration name="dictionary search options" code="DSOP" description="Options for searching a dictionary, corresponding to the search field pop-up checkboxes.">
+      <enumerator name="search suites" code="eX11" description="Search Suites."/>
+      <enumerator name="search classes" code="eX12" description="Search Classes."/>
+      <enumerator name="search events" code="eX13" description="Search Events."/>
+      <enumerator name="search commands" code="eX14" description="Search Commands."/>
+      <enumerator name="search types" code="eX15" description="Search Types."/>
+      <enumerator name="search records" code="eX16" description="Search Records."/>
+      <enumerator name="search enumerations" code="eX17" description="Search Enumerations."/>
+      <enumerator name="search names" code="eX18" description="Search Names."/>
+      <enumerator name="search descriptions" code="eX19" description="Search Descriptions."/>
+      <enumerator name="search synonyms" code="eX1a" description="Search Synonyms."/>
+      <enumerator name="search Apple event codes" code="eX1b" description="Search Apple Event codes."/>
+      <documentation>
+        <html><![CDATA[
+				<p>Search options can be combined into a list; setting the dictionary window&#8217;s search string performs the search:</p>
+<pre><span class="code">tell dictionary window "Finder Dictionary"
+    set search options to {search names, search descriptions, search classes}
+    set search string to "folder" -- <i>performs the search</i>
+end tell
+</span></pre>
+<!-- [tmi!]
+<p>To manipulate the list of search options relative to the existing list (rather than hard-coding a new list from scratch), use the <code>difference of</code> command from Late Night Software&#8217;s <a href="https://www.latenightsw.com/freeware/RecordTools/index.html">List &amp; Record Tools scripting addition</a>:</p>
+<pre><span class="code">tell dictionary "Finder"
+    <i>-- get the existing search options</i>
+    set theOptions to get search options
+    <i>-- remove unwanted options</i>
+    set theOptions to difference of theOptions ¬
+        and {search descriptions, search synonyms}
+    <i>-- apply the new options</i>
+    set search options to theOptions
+    <i>-- search for a term</i>
+    set search string to "folder"
+end tell
+-->
+</span></pre>
+			]]></html>
+      </documentation>
+    </enumeration>
+<!--    <record-type name="script manifest info" code="__MF" description="A script’s dependencies, as presented in its Manifest."> 
+      <property name="applications used" code="__Ap" type="file" access="r" description="Applications needed by the script."/>
+      <property name="scripting additions used" code="__Ad" type="file" access="r" description="Scripting additions needed by the script."/>
+      <property name="unknown Apple events" code="_8Ev" access="r" description="Unrecognized Apple events appearing in the script.">
+        <type type="text" list="yes"/>
+      </property>
+    </record-type> -->
+    <class name="script window" code="SCPT" inherits="window" description="The window displaying a document.">
+      <cocoa class="SD8ScriptWindow"/>
+      <documentation>
+        <html><![CDATA[
+				<p>
+					A script window can contain multiple documents (scripts) as tabs. Script window properties that are really document properties apply to the current document (the frontmost tab).
+				</p>
+				]]></html>
+      </documentation>
+      <!-- Generic window properties -->
+      <property name="current document" code="cDOC" type="document" access="rw" description="The script document being displayed in this window (in the frontmost tab, if the window has multiple documents).">
+        <cocoa key="currentTab"/>
+      </property>
+      <property name="toolbar visible" code="pTBV" type="boolean" description="Whether the window’s toolbar is visible.">
+        <cocoa key="AEToolbarVisible"/>
+      </property>
+      <!-- script window only properties -->
+      <property name="tab index" code="pitx" type="integer" description="The index of a script window tab within its parent script window, from left to right. If there are no tabs, the index will be 1.">
+          <cocoa key="AETabOrderedIndex"/>
+      </property>
+      <property name="tabbed" code="ptaB" type="boolean" description="Whether the window belongs to a window with more than one tab. If the window is tabbed, setting this property to false will detach this window so it becomes a top-level window by itself.">
+          <cocoa key="AEIsTabbed"/>
+      </property>
+      <property name="parent window" code="pwiN" type="script window" description="The top-level script window this window belongs to. If the window has no tabs, or it is the active tab, the parent will be the window itself. Use this property to move script windows and tabs to other script windows.">
+          <cocoa key="AEParentWindow"/>
+      </property>
+      <property name="parent bounds" code="pbnD" type="rectangle" description="The parent window’s bounding rectangle (left, top, right, bottom, measured from the upper left of the screen).">
+        <cocoa key="AEBoundsAsQDRect"/>
+      </property>
+      <property name="content visible" code="pviS" type="boolean" access="r" description="Whether a script window is visible, or in the case of a script window tab, whether it is the visible tab.">
+        <cocoa key="AEIsVisible"/>
+      </property>
+
+
+      <!-- material repeated in both document and script window -->
+
+      <property name="selection" code="psel" description="The current selection within the script’s source text.">
+        <cocoa key="AESelection"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				If you <span class="code">get selection</span>, you are handed the selected text. If you ask for <span class="code">selection as point</span> or <span class="code">character range of selection</span>, you get a list of two integers, the character offset after the insertion point or the start of the selection (the first character offset is 1) and the count of characters in the selection. Similarly, you can <span class="code">set selection</span> to alter the selected text, but if what you set the selection to is a list of two integers, or if you <span class="code">set character range of selection</span> to such a list, you reposition the selection.
+				</p>
+				]]></html>
+        </documentation>
+        <type type="selection-object"/>
+        <type type="point"/>
+        <type type="text"/>
+        <!--<type type="specifier"/>-->
+      </property>
+      <property name="show code coverage" code="pSHp" type="boolean" description="Whether code coverage marks are displayed in the gutter of the script (in debug mode).">
+        <cocoa key="AECodeCoverage"/>
+      </property>
+      <property name="navigation bar visible" type="boolean" code="pNBV" description="Whether the navigation bar is visible above the script.">
+        <cocoa key="AEShowNavigationBar"/>
+      </property>
+      <property name="status bar visible" type="boolean" code="pSTV" description="Whether the status bar is visible below the script.">
+          <cocoa key="AEShowStatusBar"/>
+      </property>
+      <property name="tab width" code="pSBw" type="integer" description="Width of the panes and inspectors tab to the right of the script (0 if tab display mode is none).">
+        <cocoa key="AESidebarWidth"/>
+      </property>
+      <property name="tab display mode" type="tab modes" code="pSBm" description="Which set of panes and inspectors is displayed to the right of the script.">
+        <cocoa key="AESidebarMode"/>
+      </property>
+      <property name="result format" code="pRx0" description="Which view (best, source, or AEPrint) the result explorer is in.">
+        <cocoa key="AEResultDisplayFormat"/>
+        <type type="explorer view types"/>
+      </property>
+      <property name="result wrap lines" code="pRx1" type="boolean" description="Whether line wrapping is turned on for the result pane of the script.">
+        <cocoa key="AEResultWrapLines"/>
+      </property>
+      <property name="result show invisibles" code="pRx2" type="boolean" description="Whether invisible characters are displayed in the result pane of the script.">
+        <cocoa key="AEResultShowInvisibles"/>
+      </property>
+      <property name="result show tab stops" code="pRx3" type="boolean" description="Whether tab stops are displayed in the result pane of the script.">
+        <cocoa key="AEResultShowTabStops"/>
+      </property>
+      <property name="result show spaces" code="pRx4" type="boolean" description="Whether space characters are displayed as dots in the result pane of the script (assuming invisible characters are being displayed in the result pane).">
+        <cocoa key="AEResultShowSpaces"/>
+      </property>
+      <property name="result pretty print" code="pRx5" type="boolean" description="Whether lists and records are pretty-printed in the result pane of the script.">
+        <cocoa key="AEResultPrettyPrint"/>
+      </property>
+      <property name="result show raw syntax" code="pRx6" type="boolean" description="Whether raw (“chevron”) Apple event codes are displayed in the result pane of the script.">
+        <cocoa key="AEResultChevronSyntax"/>
+      </property>
+      <property name="result bar visible" code="pRBv" type="boolean" description="Whether the result bar is visible above the script.">
+          <cocoa key="AEResultBarVisible"/>
+      </property>
+      <property name="event log visible" code="pEV1" type="boolean" description="Whether the event log pane is open below the script.">
+        <cocoa key="AEEventLogVisible"/>
+      </property>
+      <property name="event log height" code="pEV2" type="integer" description="The height of the event log pane below the script.">
+        <cocoa key="AEEventLogHeight"/>
+      </property>
+
+
+      <property name="event log level" code="pEVy" type="integer" description="The accumulated sum of start log and stop log commands.">
+        <cocoa key="AELogLevel"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The log level starts out at 1 when a script begins executing. Each <span class="code">stop log</span> command decrements it (and returns the new level); each <span class="code">start log</span> command increments it (and returns the new level). When the log level is 0 or less, no logging takes place.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="event log scope bar visible" code="pEV3" type="boolean" description="Whether the scope bar is visible in the event log.">
+        <cocoa key="AEEventLogScopeVisible"/>
+      </property>
+      <property name="append to log" code="pLAP" type="boolean" description="Whether logged data should be appended to the current contents of the event log the next time the script runs.">
+        <cocoa key="AEAppendToLog"/>
+      </property>
+      <property name="event log format" code="pLgF" description="Display format for events in the event log (source code, raw code, or AEPrint).">
+        <cocoa key="AEEventLogFormat"/>
+        <type type="log format types"/>
+      </property>
+      <property name="event result explorer visible" code="pRVv" type="boolean" description="Whether the second pane of the event log is open, exploring the result of the selected event.">
+        <cocoa key="AEShowResultViewer"/>
+      </property>
+      <property name="event result explorer width" code="pRVw" type="integer" description="The width of the second pane of the event log, exploring the result of the selected event.">
+        <cocoa key="AEResultViewerWidth"/>
+      </property>
+      <property name="progress bar can appear" code="pPSw" type="boolean" description="Whether the window displays a progress bar when its script uses AppleScript's progress properties.">
+          <cocoa key="AEProgressShowing"/>
+      </property>
+      <property name="selection ASObjC range" code="prnC" description="The position of the selection as a zero-based Cocoa range. Can be a list of two items or a record in the form {location:x, |length|:y}. Use this instead of the selection's &#8220;character range&#8221; if working in AppleScriptObjC.">
+         <type type="any"/>
+          <cocoa key="AECocoaRange"/>
+          <documentation>
+              <html><![CDATA[
+                  <p>
+                  If you <span class="code">get selection ASObjC range</span>, the result will be returned as a list, <span class="code">{x, y}</span>. If you <span class="code">get selection ASObjC range as record</span>, it will be returned as a record in the form <span class="code">{location:x, |length|:y}</span>. When using <span class="code">set selection ASObjC range</span>, you can pass either a list or record.
+                  </p>
+              ]]></html>
+          </documentation>
+      </property>
+
+      <!-- end repeated material -->
+      <element type="document">
+        <cocoa key="orderedDocuments"/>
+      </element>
+    <element type="script window tab" access="r">
+        <cocoa key="AETabbedWindows"/>
+        <accessor style="name"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+    </element>
+    </class>
+    
+    <class name="script window tab" code="Twin" inherits="script window" description="A tab belonging to a window.">
+        <cocoa class="ScriptWindow"/>
+    </class>
+
+
+    <class name="script handler" code="cSCh" description="A handler in a script/script object.">
+        <cocoa class="SDScriptHandler"/>
+        
+        <property name="class" type="type" code="pcls" description="The object&#8217;s class." access="r">
+            <cocoa key="AEClass"/>
+        </property>
+        <property name="index" code="pidx" description="The handler&#8217;s index." access="r">
+            <type type="integer"/>
+        </property>
+        <property name="name" code="pnam" description="The name of the handler." access="r">
+            <cocoa key="name"/>
+            <type type="text"/>
+        </property>
+        <property name="container" code="ctnr" description="The object containing this object." access="r">
+            <cocoa key="AEContainer"/>
+            <synonym name="parent" code="pare" hidden="yes"/>
+            <type type="specifier"/>
+        </property>
+        <property name="contents" code="pcnt" description="The contents of the handler." hidden="yes"> <!-- replaced by 'source text', see #752 -->
+            <cocoa key="AEContents"/>
+            <type type="text"/>
+        </property>
+        <property name="source text" code="pSTX" type="text" description="The handler’s contents, as text.">
+            <cocoa key="AESourceText"/>
+            <type type="text"/>
+        </property>
+        <property name="handler type" code="hppT" description="The type of handler." access="r">
+            <cocoa key="AEHandlerType"/>
+            <type type="handler type"/>
+        </property>
+        <property name="properties" code="pALL" description="All the object&#8217;s properties returned as a record." access="r">
+            <type type="record"/>
+            <cocoa key="scriptingProperties"/>
+        </property>
+
+        <element type="handler parameter">
+            <cocoa key="orderedHandlerParameters"/>
+            <accessor style="index | name | range | relative | test"/>
+        </element>
+
+    </class>
+
+    <class name="handler parameter" code="cHPm" description="A parameter to a handler.">
+        <cocoa class="SDHandlerParameter"/>
+        
+        <property name="class" type="type" code="pcls" description="The object&#8217;s class." access="r">
+            <cocoa key="AEClass"/>
+        </property>
+        <property name="index" code="pidx" description="The parameter&#8217;s index." access="r">
+            <type type="integer"/>
+        </property>
+        <property name="name" code="pnam" description="The name of the parmeter." access="r">
+            <cocoa key="name"/>
+            <type type="text"/>
+        </property>
+        <property name="variable name" code="pvnm" description="The parameter's variable name within the handler." access="r">
+            <cocoa key="AEVariableName"/>
+            <type type="text"/>
+        </property>
+        <property name="parameter type" code="pppT" description="The type of parameter." access="r">
+            <cocoa key="AEParameterType"/>
+            <type type="parameter type"/>
+        </property>
+<!--
+        <property name="positional parameter" code="pppm" description="Is this a positional parameter: handlerName(p1, p2, ...) or named: handler given {paramName:p1, paramName:p2, ...}." access="r">
+            <cocoa key="AEPositional"/>
+            <type type="boolean"/>
+        </property>
+        <property name="keyword parameter" code="ppkm" description="For named parameters, is the name a keyword (over, through, etc.)." access="r">
+            <cocoa key="AEKeyword"/>
+            <type type="boolean"/>
+        </property>
+        <property name="direct object parameter" code="ppdm" description="For event handlers, is this a direct obect parameter?" access="r">
+            <cocoa key="AEDirectObject"/>
+            <type type="boolean"/>
+        </property>
+-->
+        <property name="container" code="ctnr" description="The object containing this object." access="r">
+            <cocoa key="AEContainer"/>
+            <synonym name="parent" code="pare" hidden="yes"/>
+            <type type="specifier"/>
+        </property>
+        <property name="properties" code="pALL" description="All the object&#8217;s properties returned as a record." access="r">
+            <type type="record"/>
+            <cocoa key="scriptingProperties"/>
+        </property>
+        
+    </class>
+
+    <class name="script property" code="cSCp" plural="script properties" description="A property in a script/script object.">
+        <cocoa class="SDScriptProperty"/>
+        
+        <property name="class" type="type" code="pcls" description="The object&#8217;s class." access="r">
+            <cocoa key="AEClass"/>
+        </property>
+        <property name="index" code="pidx" description="The property&#8217;s index." access="r">
+            <type type="integer"/>
+        </property>
+        <property name="name" code="pnam" description="The name of the property." access="r">
+            <type type="text"/>
+        </property>
+        <property name="contents" code="pcnt" description="The contents of the property.">
+            <cocoa key="AEContents"/>
+            <type type="any"/>
+        </property>
+        <property name="source text" code="pSTX" type="text" description="The property’s contents, as text.">
+            <cocoa key="AESourceText"/>
+            <type type="text"/>
+        </property>
+        <property name="container" code="ctnr" description="The object containing this object." access="r">
+            <cocoa key="AEContainer"/>
+            <synonym name="parent" code="pare" hidden="yes"/>
+            <type type="specifier"/>
+        </property>
+        <property name="type" code="type" description="The type of data stored in the property." access="r" hidden="yes">
+            <!-- deprecated - retained for backward compatibility -->
+            <cocoa key="AEType"/>
+            <type type="type"/>
+        </property>
+        <property name="content type" code="cTYp" description="The type of data stored in the property." access="r">
+            <cocoa key="AEType"/>
+            <type type="type"/>
+        </property>
+        <property name="properties" code="pALL" description="All the object&#8217;s properties returned as a record." access="r">
+            <type type="record"/>
+            <cocoa key="scriptingProperties"/>
+        </property>
+        <element type="script property">
+            <cocoa key="orderedScriptProperties"/>
+            <accessor style="index | name | range | relative | test"/>
+        </element>
+        <element type="script handler">
+            <cocoa key="orderedScriptHandlers"/>
+            <accessor style="index | name | range | relative | test"/>
+        </element>
+    </class>
+
+    <class name="dictionary window" code="cDCT" inherits="window" description="A dictionary window.">
+      <cocoa class="RKDictionaryWindow"/>
+      <property name="file spec" type="file" code="pFil" description="File URL of the application whose dictionary window this is.">
+        <cocoa key="AEDictionaryFile"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				Set the file spec to specify what application&#8217;s dictionary and object model is being shown. The easiest way is to use the <span class="code">path to application</span> scripting addition command. For example: <span class="code">set file spec of (make new dictionary window) to (get path to application "BBEdit")</span>
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="display mode" type="dictionary view modes" code="pDVW" description="Which mode (Dictionary, Object Model, or Explorer) the window is displaying.">
+        <cocoa key="AEDictionaryView"/>
+      </property>
+      <property name="toolbar visible" type="boolean" code="pTBV" description="Whether the window’s toolbar is visible.">
+        <cocoa key="AEToolbarVisible"/>
+      </property>
+      <property name="dictionaries list visible" type="boolean" code="pALV" description="Whether the dictionaries list is showing at the left of the dictionary window.">
+        <cocoa key="AEApplicationsListVisible"/>
+      </property>
+      <property name="dictionaries list width" type="integer" code="pALW" description="The width of the dictionaries list at the left of the dictionary window.">
+        <cocoa key="AEApplicationsListWidth"/>
+      </property>
+      <property name="search string" type="text" code="seSt" description="The current search string.">
+        <cocoa key="searchString"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				Setting the search string performs the search (and the <span class="code">search results visible</span> property becomes true); setting it to the empty string, or missing value, cancels the search (and the <span class="code">search results visible</span> property becomes false).
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="search string deprecated" type="text" code="pSCH" description="The current search string.">
+        <cocoa key="searchString"/>
+        <documentation>
+            <html>
+                <![CDATA[
+                    <p><strong>This property has been deprecated.</strong>  Please use the `search string` property instead.</p>
+                ]]>
+            </html>
+        </documentation>
+      </property>
+      <property name="search options" code="pSCo" description="The current search options.">
+        <cocoa key="searchOptions"/>
+        <type type="dictionary search options" list="yes"/>
+      </property>
+      <property name="search results visible" type="boolean" code="pSRV" description="Whether there is currently a search (see on the search string property)." access="r">
+        <cocoa key="AESearchResultsVisible"/>
+      </property>
+      <property name="show inherited" code="pSIP" description="Whether inherited properties and elements are included in class descriptions in the info pane.">
+        <cocoa key="showInherited"/>
+        <type type="boolean"/>
+      </property>
+      <property name="show extra documentation" code="pSEd" description="Whether extra documentation is displayed in the info pane.">
+        <cocoa key="showExtraDocumentation"/>
+        <type type="boolean"/>
+      </property>
+      <property name="show raw syntax" code="pSHr" type="boolean" description="Whether Raw (“Chevron”) Syntax is turned on, causing raw Apple event codes to appear in the info pane.">
+        <cocoa key="AEChevronSyntax"/>
+      </property>
+      <property name="diagram hierarchy" code="pDHC" description="Which hierarchy diagram appears in Object Model view.">
+        <cocoa key="AEDictionaryHierarchy"/>
+        <type type="hierarchy types"/>
+      </property>
+      <property name="text scale" code="pTXs" type="real" description="The scaling factor of text in the dictionary window’s info pane (1.0 is “normal”).">
+        <cocoa key="AETextScale"/>
+      </property>
+      <property name="display format" type="explorer view types" code="pRsF" description="Which view (best, source, or AEPrint) the dictionary window’s application explorer displays.">
+        <cocoa key="AEViewerDisplayFormat"/>
+      </property>
+      <property name="wrap lines" code="pWRl" type="boolean" description="Whether line wrapping is turned on in the dictionary window’s application explorer.">
+        <cocoa key="AEWrapLines"/>
+      </property>
+      <property name="show invisibles" code="pSHi" type="boolean" description="Whether invisible characters are displayed in the dictionary window’s application explorer.">
+        <cocoa key="AEShowInvisibles"/>
+      </property>
+      <property name="show tab stops" code="pSHt" type="boolean" description="Whether tab stops are displayed in the dictionary window’s application explorer.">
+        <cocoa key="AEShowTabStops"/>
+      </property>
+      <property name="show spaces" code="pSHs" type="boolean" description="Whether space characters are displayed as dots in the dictionary window’s application explorer (assuming invisible characters are being displayed).">
+        <cocoa key="AEShowSpaces"/>
+      </property>
+      <property name="pretty print" code="pPPR" type="boolean" description="Whether lists and records are pretty-printed in the dictionary window’s application explorer.">
+        <cocoa key="AEPrettyPrint"/>
+      </property>
+    </class>
+    <class name="explorer window" code="cVWN" inherits="window" description="An explorer window.">
+      <cocoa class="RKViewerWindow"/>
+      <property name="contents" code="pcnt" type="any" description="The value being displayed in the explorer window." access="r">
+        <cocoa key="AEViewerContents"/>
+      </property>
+      <!-- commented out by order of Mark
+			<property name="container" code="ctnr" type="specifier" description="The script document, dictionary, event log entry, or explorer that created this explorer window." access="r">
+				<cocoa key="AEViewerContainer"/>
+				<synonym name="parent" code="pare" hidden="yes"/>
+			</property>
+			-->
+      <property name="display format" type="explorer view types" code="pRsF" description="Which view (best, source, or AEPrint) the explorer window displays.">
+        <cocoa key="AEViewerDisplayFormat"/>
+      </property>
+      <property name="wrap lines" code="pWRl" type="boolean" description="Whether line wrapping is turned on in the explorer.">
+        <cocoa key="AEWrapLines"/>
+      </property>
+      <property name="show invisibles" code="pSHi" description="Whether invisible characters are displayed in the explorer.">
+        <cocoa key="AEShowInvisibles"/>
+        <type type="boolean"/>
+      </property>
+      <property name="show tab stops" code="pSHt" type="boolean" description="Whether tab stops are displayed in the explorer.">
+        <cocoa key="AEShowTabStops"/>
+      </property>
+      <property name="show spaces" code="pSHs" type="boolean" description="Whether space characters are displayed as dots in the explorer (assuming invisible characters are being displayed).">
+        <cocoa key="AEShowSpaces"/>
+      </property>
+      <property name="changed" code="pCHX" type="boolean" description="Whether the explorer’s value has changed since it was last produced." access="r">
+        <cocoa key="AEIsChanged"/>
+      </property>
+      <property name="pretty print" code="pPPR" type="boolean" description="Whether lists and records are pretty-printed in the explorer.">
+        <cocoa key="AEPrettyPrint"/>
+      </property>
+      <property name="show raw syntax" code="pSHr" type="boolean" description="Whether raw (“chevron”) Apple event codes are displayed in the explorer.">
+        <cocoa key="AEChevronSyntax"/>
+      </property>
+      <property name="toolbar visible" code="pTBV" type="boolean" description="Whether the window’s toolbar is visible.">
+        <cocoa key="AEToolbarVisible"/>
+      </property>
+    </class>
+    <class name="event log entry" plural="event log entries" code="cELe" description="An event and its reply as recorded in the event log.">
+      <cocoa class="AppleEventProfile"/>
+      <documentation>
+        <html><![CDATA[
+				<p>
+				Logging is always turned on (unless you turn it off in code with the stop log command); the event log needn&#8217;t be visible in order to work with its entries. Each entry in the event log records data about a single Apple event and its reply. Thus, event log entries provide a way to learn about the Apple events performed during script execution.
+				</p>
+				<p>
+				To open an event log entry result as a separate explorer window, open the event log entry; e.g., <span class="code">tell document 2 to open event log entry 1</span>.
+				</p>
+				]]></html>
+      </documentation>
+      <property name="event source" code="pEVS" type="text" access="r" description="The command that generated the event, in source format.">
+        <cocoa key="eventSource"/>
+      </property>
+      <property name="event result" code="pEVR" type="value-object" access="r" description="The result of the event.">
+        <cocoa key="AEResult"/>
+      </property>
+      <property name="event text result" code="pEVr" type="text" access="r" description="The result of the event in text form.">
+        <cocoa key="AEResultText"/>
+      </property>
+      <property name="event target" code="pEVT" type="event log target" access="r" description="The application to which the event was sent.">
+        <cocoa key="AETarget"/>
+      </property>
+      <property name="document" code="docu" type="document" description="The document whose script generated the event." access="r">
+        <cocoa key="AEDocument"/>
+      </property>
+      <property name="event error number" code="pEVe" type="integer" access="r" description="Numeric code of the error returned from the event (or missing value if not an error).">
+        <cocoa key="AEErrorNumber"/>
+      </property>
+      <property name="event error message" code="pEVm" type="text" access="r" description="Text message of the error returned from the event (or missing value if not an error).">
+        <cocoa key="AEErrorMessage"/>
+      </property>
+      <property name="event source text" code="pEVx" type="selection-object" access="r" description="The selection in the script of the text that generated the event, when paused during debugging (missing value otherwise).">
+        <cocoa key="AESourceText"/>
+      </property>
+      <property name="event log level" code="pEVy" type="integer" description="The accumulated sum of start log and stop log commands before this event, when paused during debugging (1 otherwise).">
+        <cocoa key="AELogLevel"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The log level starts out at 1 when a script begins executing. Each <span class="code">stop log</span> command decrements it (and returns the new level); each <span class="code">start log</span> command increments it (and returns the new level). When the log level is 0 or less, no logging takes place.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="event duration" code="pEVd" type="real" access="r" description="The time spent sending this event and receiving the reply. The total of event durations is the Events time in the timer.">
+        <cocoa key="AELogDuration"/>
+      </property>
+      <property name="event percentage" code="pEVp" type="real" access="r" description="The percentage of total script excution time spent sending this event and receiving the reply. The total of event percentages, subtracted from 100, is the AppleScript percentage in the timer.">
+        <cocoa key="AELogPercentage"/>
+      </property>
+      <property name="event start" code="pEVA" type="real" access="r" description="The elapsed script execution time when the event was sent.">
+        <cocoa key="AELogStart"/>
+      </property>
+      <property name="event end" code="pEVZ" type="real" access="r" description="The elapsed script execution time when the reply was received.">
+        <cocoa key="AELogEnd"/>
+      </property>
+      <property name="properties" type="record" code="pALL" description="All the object’s properties returned as a record.">
+        <cocoa key="scriptingProperties"/>
+      </property>
+      <responds-to command="open">
+        <cocoa method="handleOpenScriptCommand:"/>
+      </responds-to>
+    </class>
+    <class name="event log target" code="cELt" description="The application to which an event was sent by a script.">
+      <cocoa class="AppleEventTarget"/>
+      <documentation>
+        <html><![CDATA[
+				<p>
+				A document (or its event log window) has event log targets, the applications targeted by the script; going the other way, an event log target points back to the document through its document property. An event log entry has an event log target, the application targeted by the event; going the other way, an event log target has event log entries, the events sent from that document&#8217;s script to that application.
+				</p>
+				<p>The event log target for a <span class="code">start log</span>, <span class="code">stop log</span>, or <span class="code">log</span> command is <span class="code">"'log' Commands"</span>.
+				</p>
+				]]></html>
+      </documentation>
+      <element type="event log entry" access="r">
+        <cocoa key="orderedEventLogEntries"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <property name="name" code="pnam" type="text" access="r" description="Name of the application (or &quot;'log' Commands&quot;).">
+        <cocoa key="AEName"/>
+      </property>
+      <property name="file spec" type="file" code="pFil" access="r" description="File URL of the application.">
+        <cocoa key="AEFileURL"/>
+      </property>
+      <property name="document" code="docu" type="document" description="The document whose script generated the event targeting the application." access="r">
+        <cocoa key="AEDocument"/>
+      </property>
+      <property name="target duration" code="pETd" type="real" access="r" description="The total duration of all events targeting the application.">
+        <cocoa key="AEDuration"/>
+      </property>
+      <property name="target percentage" code="pETp" type="real" access="r" description="Percentage of total event time spent targeting the application.">
+        <cocoa key="AEPercentage"/>
+      </property>
+      <property name="properties" type="record" code="pALL" description="All the object’s properties returned as a record.">
+        <cocoa key="scriptingProperties"/>
+      </property>
+    </class>
+    <class name="event log window" code="cELw" inherits="window" description="An event log window.">
+      <cocoa class="EventLogWindow"/>
+      <documentation>
+        <html><![CDATA[
+				<p>
+				To open an event log window, tell the document to <span class="code">make new event log window</span>.
+				</p>
+				]]></html>
+      </documentation>
+      <element type="event log entry" access="r">
+        <cocoa key="orderedEventLogEntries"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <element type="event log target" access="r">
+        <cocoa key="orderedEventLogTargets"/>
+        <accessor style="name"/>
+        <accessor style="index"/>
+        <accessor style="range"/>
+        <accessor style="relative"/>
+        <accessor style="test"/>
+      </element>
+      <!-- Generic window properties -->
+      <property name="toolbar visible" code="pTBV" type="boolean" description="Whether the window’s toolbar is visible.">
+        <cocoa key="AEToolbarVisible"/>
+      </property>
+      <property name="document" code="docu" type="document" description="The document whose event log is shown in the window." access="r">
+        <cocoa key="AEEventLogDocument"/>
+      </property>
+      <property name="selected events" code="pLNv" description="The event log entries selected in the window.">
+        <cocoa key="AESelectedEvents"/>
+        <type type="event log entry" list="yes"/>
+      </property>
+      <!-- Event Log properties -->
+      <!-- material repeated in document and script window and event log window -->
+
+      <property name="event log level" code="pEVy" type="integer" description="The accumulated sum of start log and stop log commands.">
+        <cocoa key="AELogLevel"/>
+        <documentation>
+          <html><![CDATA[
+				<p>
+				The log level starts out at 1 when a script begins executing. Each <span class="code">stop log</span> command decrements it (and returns the new level); each <span class="code">start log</span> command increments it (and returns the new level). When the log level is 0 or less, no logging takes place.
+				</p>
+				]]></html>
+        </documentation>
+      </property>
+      <property name="event log scope bar visible" code="pEV3" type="boolean" description="Whether the scope bar is visible in the event log.">
+        <cocoa key="AEEventLogScopeVisible"/>
+      </property>
+      <property name="append to log" code="pLAP" type="boolean" description="Whether logged data should be appended to the current contents of the event log the next time the script runs.">
+        <cocoa key="AEAppendToLog"/>
+      </property>
+      <property name="event log format" code="pLgF" description="Display format for events in the event log (source code, raw code, or AEPrint).">
+        <cocoa key="AEEventLogFormat"/>
+        <type type="log format types"/>
+      </property>
+      <property name="event result explorer visible" code="pRVv" type="boolean" description="Whether the second pane of the event log is open, exploring the result of the selected event.">
+        <cocoa key="AEShowResultViewer"/>
+      </property>
+      <property name="event result explorer width" code="pRVw" type="integer" description="The width of the second pane of the event log, exploring the result of the selected event.">
+        <cocoa key="AEResultViewerWidth"/>
+      </property>
+
+      <!-- end repeated material -->
+    </class>
+<!-- Not in SD8
+    <class name="AppleScript format" code="cASf" description="An AppleScript language element and its associated display formatting. These contain the values for the active color theme.">
+      <cocoa class="AppleScriptFormat"/>
+      <property name="index" type="integer" code="pidx" description="The object’s index. AppleScript formats are arranged in the same order in which they appear in Script Debugger’s Fonts &amp; Colors preference pane." access="r">
+        <cocoa key="AEIndex"/>
+      </property>
+      <property name="name" type="text" code="pnam" description="The name of the AppleScript language element." access="r">
+        <cocoa key="AEName"/>
+      </property>
+      <property name="color" code="colr" type="color" description="The color of the AppleScript language element." access="r">
+        <cocoa key="AEColor"/>
+      </property>
+      <property name="font" code="font" type="text" description="The name of the font of the AppleScript language element." access="r">
+        <cocoa key="AEFontName"/>
+      </property>
+      <property name="size" code="ptsz" type="integer" description="The size in points of the AppleScript language element." access="r">
+        <cocoa key="AEFontSize"/>
+      </property>
+      <property name="properties" code="pALL" type="record" description="All the object’s properties returned as a record." access="r">
+        <cocoa key="scriptingProperties"/>
+      </property>
+    </class>
+-->
+    <command name="compile" code="asDBCOMP" description="Compile a script (document).">
+      <cocoa class="CompileCommand"/>
+      <direct-parameter type="specifier" description="The script (document) to compile."/>
+      <parameter name="showing errors" type="boolean" optional="yes" code="xSHe" description="Whether the script error sheet should be displayed if there is a compilation error (the default is false).">
+        <cocoa key="ShowErrors"/>
+      </parameter>
+      <result description="Whether the script compiled successfully. If not, your code can probe the various document “last error...” properties to learn what went wrong." type="boolean"/>
+    </command>
+    <command name="execute" code="asDBRUN " description="Begin or resume running a script (document).">
+      <cocoa class="ExecuteCommand"/>
+      <direct-parameter type="specifier" description="The script (document) to execute."/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			Execution causes compilation. After calling <span class="code">execute</span>, you can check whether compilation succeeded by examining the document&#8217;s <span class="code">compiled</span> property.
+			</p>
+			<p>
+			The <span class="code">execute</span> command can return before execution is complete (because of Script Debugger&#8217;s multi-threaded architecture). Therefore, to await the outcome after calling <span class="code">execute</span>, you must poll the document&#8217;s <span class="code">execution state</span> until execution has stopped.
+			</p>
+			<p>The following code example illustrates both these points, providing a general utility handler, <span class="code">waitUntilReady()</span>, that you can use in your scripts.
+			</p>
+<pre><span class="code">on waitUntilReady(d)
+    repeat while execution state of d is not in {stopped, paused}
+        delay 0.2
+    end repeat
+end waitUntilReady
+<i>-- and here's how to use it</i>
+tell application "Script Debugger"
+    set d to document "myDocument"
+    tell d
+        execute
+        my waitUntilReady(d)
+        if not compiled then return last error message
+        return last result
+    end tell
+end tell</span></pre>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="halt" code="asDBSTOP" description="Abort running a script (document).">
+      <cocoa class="HaltCommand"/>
+      <direct-parameter type="specifier" description="The script (document) to stop running."/>
+    </command>
+    <command name="refresh" code="asDBREFR" description="Reload a value displayed by an explorer.">
+      <cocoa class="NSScriptCommand"/>
+      <direct-parameter type="specifier" description="The value to refresh."/>
+    </command>
+    <command name="pause" code="asDBPAUS" description="Pause a script (document) at the next statement (in debug mode).">
+      <cocoa class="PauseCommand"/>
+      <direct-parameter type="specifier" description="The script (document) to pause."/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			This command can return before execution is complete (because of Script Debugger&#8217;s multi-threaded architecture). Therefore, after calling it, you must poll the document&#8217;s <span class="code">execution state</span> until execution has stopped. See on the <a class="internal" href="ref:///execute">execute</a> command for a utility handler showing how to do this.
+			</p>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="step into" code="asDBSTPi" description="Step a script (document) into a handler call (in debug mode).">
+      <cocoa class="StepIntoCommand"/>
+      <direct-parameter type="specifier" description="The script (document) in which to step."/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			This command can return before execution is complete (because of Script Debugger&#8217;s multi-threaded architecture). Therefore, after calling it, you must poll the document&#8217;s <span class="code">execution state</span> until execution has stopped. See on the <a class="internal" href="ref:///execute">execute</a> command for a utility handler showing how to do this.
+			</p>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="step over" code="asDBSTPo" description="Step a script (document) over a handler call (in debug mode).">
+      <cocoa class="StepOverCommand"/>
+      <direct-parameter type="specifier" description="The script (document) in which to step."/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			This command can return before execution is complete (because of Script Debugger&#8217;s multi-threaded architecture). Therefore, after calling it, you must poll the document&#8217;s <span class="code">execution state</span> until execution has stopped. See on the <a class="internal" href="ref:///execute">execute</a> command for a utility handler showing how to do this.
+			</p>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="step out" code="asDBSTPx" description="Step a script (document) out of the current handler (in debug mode).">
+      <cocoa class="StepOutCommand"/>
+      <direct-parameter type="specifier" description="The script (document) in which to step."/>
+      <documentation>
+        <html><![CDATA[
+			<p>
+			This command can return before execution is complete (because of Script Debugger&#8217;s multi-threaded architecture). Therefore, after calling it, you must poll the document&#8217;s <span class="code">execution state</span> until execution has stopped. See on the <a class="internal" href="ref:///execute">execute</a> command for a utility handler showing how to do this.
+			</p>
+			]]></html>
+      </documentation>
+    </command>
+    <command name="direct export" code="asDBexDi" description="Export a run-only copy of a document.">
+      <cocoa class="DirectExportCommand"/>
+      <direct-parameter type="specifier" description="The document to export."/>
+      <parameter name="as" code="fltp" type="script types" optional="yes" description="The format for the saved file. The default is the same format as the file, or as an Apple Applet for .applescript files.">
+        <cocoa key="FileType"/>
+      </parameter>
+      <result description="The exported run-only file." type="file"/>
+    </command>
+    
+    <enumeration name="search types" code="seTy" description="The type of search to conduct.">
+      <enumerator name="find first" code="seFi" description="Find the first match in the document."/>
+      <enumerator name="find next" code="seFn" description="Find the next match after the selection in the document."/>
+      <enumerator name="find previous" code="seFp" description="Find the first match before the selection in the document."/>
+      <enumerator name="find last" code="seFl" description="Find the last match in the document."/>
+      <enumerator name="replace and find" code="seRf" description="Replace the selection and find the next match in the document."/>
+      <enumerator name="replace all" code="seRa" description="Replace all matches in the document, from the selection to the end, or in the entire document if the application property ‘search wraps’ is true."/>
+    </enumeration>
+    <command name="search" code="asDBfiNd" description="Search the contents of a document, with the option to replace. The search string and other parameters are set as properties of the application.">
+      <cocoa class="SearchCommand"/>
+      <direct-parameter type="specifier" description="The document to search."/>
+      <parameter name="with action" type="search types" optional="yes" code="seTy" description="The type of search to conduct. The default is ‘find next’.">
+        <cocoa key="SearchType"/>
+      </parameter>
+      <result description="Returns the selection range of the found match expressed as a list, {character offset, length}, or missing value if not found. It also selects the found text. When performing ‘replace all’ it returns the number of replacements made.">
+          <type type="integer" list="yes"/>
+          <type type="integer"/>
+    </result>
+  </command>
+
+  </suite>
+  <!--
+	<suite name="External Editor Suite" code="edit" description="external script editor interface">
+		<command name="OM edit script" code="editedit" description="edit an external script">
+			<result description="reference to the new external editor window" type="specifier"/>
+			<direct-parameter description="object refering to the script to be edited" type="specifier"/>
+			<parameter name="titled" code="ASwt" description="external editor window title" optional="yes" type="string"/>
+			<parameter name="notify close" code="ASnc" description="notify client applicaiton when window is closed?" optional="yes" type="boolean"/>
+			<parameter name="in background" code="ASna" description="keep Script Debugger in the abckground?" optional="yes" type="boolean"/>
+		</command>
+		<command name="NOM edit script" code="editEDIT" description="edit an external script">
+			<result description="reference to the new external editor window" type="specifier"/>
+			<parameter name="script" code="ASse" description="the script to edit" type="scpt"/>
+			<parameter name="session" code="ASid" description="unique editor session ID" type="any"/>
+			<parameter name="titled" code="ASwt" description="external editor window title" optional="yes" type="string"/>
+			<parameter name="notify close" code="ASnc" description="notify client applicaiton when window is closed?" optional="yes" type="boolean"/>
+			<parameter name="in background" code="ASna" description="keep Script Debugger in the abckground?" optional="yes" type="boolean"/>
+			<parameter name="using client terminology" code="ASct" description="make client application the default target?" optional="yes" type="boolean"/>
+		</command>
+	</suite>
+-->
+  <suite name="Hidden Suite" code="tpnm" description="hidden definitions" hidden="yes">
+    <class name="reference" code="obj ">
+      <cocoa class="NSScriptObjectSpecifier"/>
+      <synonym name="specifier"/>
+    </class>
+    <!-- supports ASObjC compilation -->
+    <class name="class" code="pcls" description="A class" plural="classes">
+      <cocoa class="NSObject"/>
+      <property name="name" code="pnam" description="The title of the class." type="text">
+        <cocoa key="className"/>
+      </property>
+    </class>
+  </suite>
+</dictionary>

@@ -26,6 +26,21 @@ import * as SystemEvents from "./core/SystemEvents";
 import * as Terminal from "./core/Terminal";
 import * as TextEdit from "./core/TextEdit";
 import * as VoiceOver from "./core/VoiceOver";
+import * as AdobeIllustrator from "./core/AdobeIllustrator";
+import * as AdobePhotoshop2025 from "./core/AdobePhotoshop2025";
+import * as Automator from "./core/Automator";
+import * as HapiGo from "./core/HapiGo";
+import * as MicrosoftEdge from "./core/MicrosoftEdge";
+import * as MicrosoftExcel from "./core/MicrosoftExcel";
+import * as MicrosoftPowerPoint from "./core/MicrosoftPowerPoint";
+import * as MicrosoftWord from "./core/MicrosoftWord";
+import * as Music from "./core/Music";
+import * as Preview from "./core/Preview";
+import * as ScriptDebugger from "./core/ScriptDebugger";
+import * as Shortcuts from "./core/Shortcuts";
+import * as SystemInformation from "./core/SystemInformation";
+import * as TickTick from "./core/TickTick";
+import * as VLC from "./core/VLC";
 
 export {
     Calendar,
@@ -52,6 +67,21 @@ export {
     SystemEvents,
     Terminal,
     TextEdit,
-    VoiceOver
+    VoiceOver,
+    AdobeIllustrator,
+    AdobePhotoshop2025,
+    Automator,
+    HapiGo,
+    MicrosoftEdge,
+    MicrosoftExcel,
+    MicrosoftPowerPoint,
+    MicrosoftWord,
+    Music,
+    Preview,
+    ScriptDebugger,
+    Shortcuts,
+    SystemInformation,
+    TickTick,
+    VLC
 }
 export { Application, Automation, ObjectSpecifier };
