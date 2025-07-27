@@ -216,6 +216,8 @@ export namespace QSpacePro {
     */
    rootItem(): any;
  }
+  
+  export interface Item { }
     
     // CLass Extension
     
